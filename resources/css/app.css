@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+  --color-medieval-gold: #D4AF37;
+  --color-medieval-bronze: #CD7F32;
+  --color-medieval-dark: #2C1810;
+  --color-medieval-brown: #8B4513;
+  --color-medieval-stone: #8B8680;
+  
+  --font-family-medieval: 'Cinzel', serif;
+  --font-family-medieval-decorative: 'Cinzel Decorative', cursive;
+  --font-family-medieval-gothic: 'UnifrakturMaguntia', cursive;
+}
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-amber-50 to-amber-100;
+    font-family: 'Cinzel', serif;
+  }
+}
+
+@layer components {
+  .btn-medieval {
+    @apply bg-medieval-gold hover:bg-medieval-bronze text-medieval-dark font-semibold py-2 px-4 rounded-lg border-2 border-medieval-bronze transition-colors duration-200;
+  }
+  
+  .card-medieval {
+    @apply bg-amber-50 border-2 border-medieval-bronze rounded-lg shadow-lg p-6;
+  }
+  
+  .title-medieval {
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700;
+    color: #2C1810;
+  }
+  
+  .subtitle-medieval {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    color: #8B4513;
+  }
+  
+  .text-medieval {
+    font-family: 'Cinzel', serif;
+    color: #8B4513;
+  }
+  
+  .gothic-text {
+    font-family: 'UnifrakturMaguntia', cursive;
+    color: #2C1810;
+  }
+}
