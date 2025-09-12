@@ -1,21 +1,8 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
 
-@theme {
-  --color-medieval-gold: #D4AF37;
-  --color-medieval-bronze: #CD7F32;
-  --color-medieval-dark: #2C1810;
-  --color-medieval-brown: #8B4513;
-  --color-medieval-stone: #8B8680;
-  
-  --font-family-medieval: 'Cinzel', serif;
-  --font-family-medieval-decorative: 'Cinzel Decorative', cursive;
-  --font-family-medieval-gothic: 'UnifrakturMaguntia', cursive;
-}
 
 @layer base {
   body {
