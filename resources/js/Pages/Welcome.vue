@@ -1,90 +1,110 @@
 <template>
-  <AppLayout :user="user">
-    <div class="max-w-4xl mx-auto">
-      <!-- Hero Section -->
-      <div class="text-center mb-12">
-        <h1 class="text-6xl title-medieval mb-6">
-          Chronicles of Eldoria
-        </h1>
-        <p class="text-xl subtitle-medieval mb-8">
-          Um MMORPG épico onde heróis nascem e lendas são forjadas
-        </p>
-        
-        <div v-if="!user" class="space-x-4">
-          <Link href="/register" class="btn-medieval text-lg px-8 py-3">
-            Começar Jornada
-          </Link>
-          <Link href="/login" class="btn-medieval text-lg px-8 py-3 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark">
-            Entrar
-          </Link>
-        </div>
-        
-        <div v-else class="space-x-4">
-          <Link href="/dashboard" class="btn-medieval text-lg px-8 py-3">
-            Continuar Aventura
-          </Link>
-          <Link href="/character" class="btn-medieval text-lg px-8 py-3 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark">
-            Meu Personagem
-          </Link>
-        </div>
+  <div class="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+    <!-- Header -->
+    <header class="bg-medieval-dark text-medieval-gold shadow-lg">
+      <div class="container mx-auto px-4 py-4 text-center">
+        <h1 class="text-2xl font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
       </div>
+    </header>
 
-      <!-- Features Section -->
-      <div class="grid md:grid-cols-3 gap-8 mb-12">
-        <div class="card-medieval text-center">
-          <div class="text-4xl mb-4">⚔️</div>
-          <h3 class="text-xl subtitle-medieval mb-2">Combate Épico</h3>
-          <p class="text-medieval">
-            Enfrente monstros temíveis e outros jogadores em batalhas estratégicas em tempo real.
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+          <h1 class="text-6xl title-medieval mb-6">
+            Chronicles of Eldoria
+          </h1>
+          <p class="text-xl subtitle-medieval mb-8">
+            Um MMORPG épico onde heróis nascem e lendas são forjadas
           </p>
+          
+          <div v-if="!user" class="space-x-4">
+            <Link href="/register" class="btn-medieval text-lg px-8 py-3">
+              Começar Jornada
+            </Link>
+            <Link href="/login" class="btn-medieval text-lg px-8 py-3 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark">
+              Entrar
+            </Link>
+          </div>
+          
+          <div v-else-if="user && (!user.characters || user.characters.length === 0)" class="space-x-4">
+            <Link href="/characters/create" class="btn-medieval text-lg px-8 py-3">
+              Criar Primeiro Personagem
+            </Link>
+          </div>
+          
+          <div v-else-if="user && user.characters && user.characters.length > 0" class="space-x-4">
+            <Link href="/home" class="btn-medieval text-lg px-8 py-3">
+              Continuar Jornada
+            </Link>
+            <Link href="/characters/create" class="btn-medieval text-lg px-8 py-3 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark">
+              Criar Novo Personagem
+            </Link>
+          </div>
         </div>
-        
-        <div class="card-medieval text-center">
-          <div class="text-4xl mb-4">🏰</div>
-          <h3 class="text-xl subtitle-medieval mb-2">Progressão de Personagem</h3>
-          <p class="text-medieval">
-            Desenvolva seus atributos, colete equipamentos lendários e torne-se o herói mais poderoso.
-          </p>
-        </div>
-        
-        <div class="card-medieval text-center">
-          <div class="text-4xl mb-4">🗺️</div>
-          <h3 class="text-xl subtitle-medieval mb-2">Exploração</h3>
-          <p class="text-medieval">
-            Explore o vasto reino de Eldoria, descubra tesouros e complete missões épicas.
-          </p>
-        </div>
-      </div>
 
-      <!-- Game Stats -->
-      <div class="card-medieval text-center">
-        <h2 class="text-2xl title-medieval mb-6">Estatísticas do Jogo</h2>
-        <div class="grid md:grid-cols-4 gap-6">
-          <div>
-            <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalPlayers || 0 }}</div>
-            <div class="text-medieval-brown">Jogadores Ativos</div>
+        <!-- Features Section -->
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <div class="card-medieval text-center">
+            <div class="text-4xl mb-4">⚔️</div>
+            <h3 class="text-xl subtitle-medieval mb-2">Combate Épico</h3>
+            <p class="text-medieval">
+              Enfrente monstros temíveis e outros jogadores em batalhas estratégicas em tempo real.
+            </p>
           </div>
-          <div>
-            <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalCharacters || 0 }}</div>
-            <div class="text-medieval-brown">Personagens Criados</div>
+          
+          <div class="card-medieval text-center">
+            <div class="text-4xl mb-4">🏰</div>
+            <h3 class="text-xl subtitle-medieval mb-2">Progressão de Personagem</h3>
+            <p class="text-medieval">
+              Desenvolva seus atributos, colete equipamentos lendários e torne-se o herói mais poderoso.
+            </p>
           </div>
-          <div>
-            <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalBattles || 0 }}</div>
-            <div class="text-medieval-brown">Batalhas Realizadas</div>
+          
+          <div class="card-medieval text-center">
+            <div class="text-4xl mb-4">🗺️</div>
+            <h3 class="text-xl subtitle-medieval mb-2">Exploração</h3>
+            <p class="text-medieval">
+              Explore o vasto reino de Eldoria, descubra tesouros e complete missões épicas.
+            </p>
           </div>
-          <div>
-            <div class="text-3xl font-bold text-medieval-gold">{{ stats.highestLevel || 0 }}</div>
-            <div class="text-medieval-brown">Maior Nível</div>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="card-medieval text-center">
+          <h2 class="text-2xl title-medieval mb-6">Estatísticas do Jogo</h2>
+          <div class="grid md:grid-cols-4 gap-6">
+            <div>
+              <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalPlayers || 0 }}</div>
+              <div class="text-medieval-brown">Jogadores Ativos</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalCharacters || 0 }}</div>
+              <div class="text-medieval-brown">Personagens Criados</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-medieval-gold">{{ stats.totalBattles || 0 }}</div>
+              <div class="text-medieval-brown">Batalhas Realizadas</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-medieval-gold">{{ stats.highestLevel || 0 }}</div>
+              <div class="text-medieval-brown">Maior Nível</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </AppLayout>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-medieval-dark text-medieval-stone text-center py-4 mt-8">
+      <p>&copy; 2025 Chronicles of Eldoria. Todos os direitos reservados.</p>
+    </footer>
+  </div>
 </template>
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import AppLayout from '@/Layouts/AppLayout.vue'
 
 defineProps({
   user: Object,

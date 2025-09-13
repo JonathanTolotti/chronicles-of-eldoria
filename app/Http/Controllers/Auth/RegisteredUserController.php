@@ -13,6 +13,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Mail\EmailVerificationMedieval;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class RegisteredUserController extends Controller
 {
@@ -46,8 +49,23 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        // Enviar email de verificação personalizado
+        $verificationUrl = URL::signedRoute('verification.verify', [
+            'id' => $user->id,
+            'hash' => sha1($user->email)
+        ]);
+        
+        try {
+            Mail::to($user->email)->send(new EmailVerificationMedieval($verificationUrl));
+        } catch (\Exception $e) {
+            // Se falhar o envio, usar o sistema padrão do Laravel
+            $user->sendEmailVerificationNotification();
+        }
+
+        // Fazer login para acessar a página de verificação
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('verification.notice')
+            ->with('message', 'Verifique seu email para ativar sua conta!');
     }
 }
