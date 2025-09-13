@@ -56,6 +56,12 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
     $character = $user->activeCharacter;
     
+    // Se não há personagem ativo, redirecionar para seleção
+    if (!$character) {
+        return redirect()->route('characters.select')
+            ->with('error', 'Você precisa selecionar um personagem para acessar o dashboard.');
+    }
+    
     return Inertia::render('Dashboard', [
         'user' => $user,
         'character' => $character,
@@ -108,6 +114,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/characters/create', [App\Http\Controllers\CharacterController::class, 'create'])->name('characters.create');
     Route::post('/characters', [App\Http\Controllers\CharacterController::class, 'store'])->name('characters.store');
     Route::post('/characters/select', [App\Http\Controllers\CharacterController::class, 'confirmSelection'])->name('characters.confirm');
+    
+    // Training routes
+    Route::get('/training', [App\Http\Controllers\TrainingController::class, 'index'])->name('training.index');
+    Route::post('/training/start', [App\Http\Controllers\TrainingController::class, 'start'])->name('training.start');
+    Route::post('/training/complete', [App\Http\Controllers\TrainingController::class, 'complete'])->name('training.complete');
+    
+    // Character stats routes
+    Route::get('/character/stats', [App\Http\Controllers\CharacterStatsController::class, 'index'])->name('character.stats.index');
+    Route::post('/character/stats/distribute', [App\Http\Controllers\CharacterStatsController::class, 'distributePoints'])->name('character.stats.distribute');
     
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');

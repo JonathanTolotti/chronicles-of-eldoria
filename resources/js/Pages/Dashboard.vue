@@ -47,7 +47,7 @@
               <h4 class="text-lg font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>
               <p class="text-medieval-brown">{{ getClassName(character?.class) || 'Guerreiro' }}</p>
               <p class="text-medieval">Nível {{ character?.level || 1 }}</p>
-              <p class="text-green-600 font-semibold">CP: {{ character?.power || 150 }}</p>
+              <p class="text-green-600 font-semibold">CP: {{ character?.power || 0 }}</p>
             </div>
 
             <!-- Barras de Progresso -->
@@ -56,11 +56,11 @@
               <div>
                 <div class="flex justify-between text-sm mb-1">
                   <span class="text-medieval">HP:</span>
-                  <span class="text-red-600 font-semibold">{{ character?.current_hp || 100 }}/{{ character?.max_hp || 100 }}</span>
+                  <span class="text-red-600 font-semibold">{{ character?.current_hp || 0 }}/{{ character?.max_hp || 0 }}</span>
                 </div>
                 <div class="w-full bg-gray-300 rounded-full h-3">
                   <div class="bg-red-500 h-3 rounded-full transition-all duration-300" 
-                       :style="{ width: `${((character?.current_hp || 100) / (character?.max_hp || 100)) * 100}%` }"></div>
+                       :style="{ width: character?.max_hp ? `${((character?.current_hp || 0) / character.max_hp) * 100}%` : '0%' }"></div>
                 </div>
               </div>
 
@@ -68,11 +68,11 @@
               <div>
                 <div class="flex justify-between text-sm mb-1">
                   <span class="text-medieval">MP:</span>
-                  <span class="text-blue-600 font-semibold">{{ character?.current_mp || 50 }}/{{ character?.max_mp || 50 }}</span>
+                  <span class="text-blue-600 font-semibold">{{ character?.current_mp || 0 }}/{{ character?.max_mp || 0 }}</span>
                 </div>
                 <div class="w-full bg-gray-300 rounded-full h-3">
                   <div class="bg-blue-500 h-3 rounded-full transition-all duration-300" 
-                       :style="{ width: `${((character?.current_mp || 50) / (character?.max_mp || 50)) * 100}%` }"></div>
+                       :style="{ width: character?.max_mp ? `${((character?.current_mp || 0) / character.max_mp) * 100}%` : '0%' }"></div>
                 </div>
               </div>
 
@@ -80,11 +80,11 @@
               <div>
                 <div class="flex justify-between text-sm mb-1">
                   <span class="text-medieval">EXP:</span>
-                  <span class="text-yellow-600 font-semibold">{{ character?.current_exp || 0 }}/{{ character?.exp_to_next_level || 100 }}</span>
+                  <span class="text-green-600 font-semibold">{{ character?.experience || 0 }}/{{ character?.experience_to_next_level || 100 }}</span>
                 </div>
                 <div class="w-full bg-gray-300 rounded-full h-3">
-                  <div class="bg-yellow-500 h-3 rounded-full transition-all duration-300" 
-                       :style="{ width: `${((character?.current_exp || 0) / (character?.exp_to_next_level || 100)) * 100}%` }"></div>
+                  <div class="bg-green-500 h-3 rounded-full transition-all duration-300" 
+                       :style="{ width: character?.experience_to_next_level ? `${((character?.experience || 0) / character.experience_to_next_level) * 100}%` : '0%' }"></div>
                 </div>
               </div>
             </div>
@@ -95,23 +95,23 @@
               <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
                   <span class="text-medieval">Força:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.strength || 15 }}</span>
+                  <span class="font-semibold text-medieval-gold">{{ character?.strength || 0 }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Destreza:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.dexterity || 10 }}</span>
+                  <span class="font-semibold text-medieval-gold">{{ character?.dexterity || 0 }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Constituição:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.constitution || 14 }}</span>
+                  <span class="font-semibold text-medieval-gold">{{ character?.constitution || 0 }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Inteligência:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.intelligence || 8 }}</span>
+                  <span class="font-semibold text-medieval-gold">{{ character?.intelligence || 0 }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Sorte:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.luck || 10 }}</span>
+                  <span class="font-semibold text-medieval-gold">{{ character?.luck || 0 }}</span>
                 </div>
               </div>
             </div>
@@ -120,8 +120,32 @@
             <div class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Treinamento</h4>
               <div class="bg-amber-50 p-3 rounded-lg">
-                <p class="text-sm text-medieval">Nenhum treinamento ativo</p>
-                <button class="btn-medieval text-xs px-3 py-1 mt-2">Iniciar Treino</button>
+                <p v-if="!character?.training_stat" class="text-sm text-medieval">Nenhum treinamento ativo</p>
+                <div v-else class="text-sm text-medieval">
+                  <p class="font-semibold">Treinando: {{ getStatName(character.training_stat) }}</p>
+                  <p class="text-xs">Tempo restante: {{ getTimeRemaining() }}</p>
+                  <p class="text-xs text-green-600">+{{ character.training_points || 0 }} pontos</p>
+                </div>
+                <Link 
+                  :href="route('training.index')" 
+                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block"
+                >
+                  {{ character?.training_stat ? 'Ver Treinamento' : 'Iniciar Treino' }}
+                </Link>
+              </div>
+            </div>
+
+            <!-- Pontos de Atributo -->
+            <div v-if="character?.stat_points > 0" class="mb-6">
+              <h4 class="subtitle-medieval mb-3 text-medieval-gold">Pontos Livres</h4>
+              <div class="bg-amber-50 p-3 rounded-lg">
+                <p class="text-sm text-medieval">Você tem {{ character?.stat_points || 0 }} pontos para distribuir</p>
+                <Link 
+                  :href="route('character.stats.index')" 
+                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block"
+                >
+                  Distribuir Pontos
+                </Link>
               </div>
             </div>
 
@@ -312,12 +336,16 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
   user: Object,
   character: Object,
 });
+
+const currentTime = ref(new Date());
+let timeInterval = null;
 
 const getClassName = (className) => {
   switch (className) {
@@ -328,4 +356,52 @@ const getClassName = (className) => {
     default: return 'Guerreiro';
   }
 };
+
+const getStatName = (stat) => {
+  switch (stat) {
+    case 'strength': return 'Força';
+    case 'dexterity': return 'Destreza';
+    case 'constitution': return 'Constituição';
+    case 'intelligence': return 'Inteligência';
+    case 'luck': return 'Sorte';
+    default: return stat;
+  }
+};
+
+const getTimeRemaining = () => {
+  if (!props.character?.training_ends_at) return '0 minutos';
+  
+  const now = currentTime.value;
+  const endTime = new Date(props.character.training_ends_at);
+  const diff = endTime - now;
+  
+  if (diff <= 0) return 'Pronto!';
+  
+  const minutes = Math.floor(diff / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  
+  return `${minutes}m ${seconds}s`;
+};
+
+// Update time every second for real-time display
+onMounted(() => {
+  timeInterval = setInterval(() => {
+    currentTime.value = new Date();
+    
+    // Check if training is complete
+    if (props.character?.training_stat) {
+      const endTime = new Date(props.character.training_ends_at);
+      if (currentTime.value >= endTime) {
+        // Training is complete, refresh the page
+        router.reload();
+      }
+    }
+  }, 1000);
+});
+
+onUnmounted(() => {
+  if (timeInterval) {
+    clearInterval(timeInterval);
+  }
+});
 </script>

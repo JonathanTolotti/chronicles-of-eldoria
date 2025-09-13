@@ -65,6 +65,31 @@ class CharacterService
         return $character;
     }
 
+    public function distributeStatPoints(Character $character, string $stat, int $points): void
+    {
+        if ($character->stat_points < $points) {
+            throw new \InvalidArgumentException('Not enough stat points available');
+        }
+
+        // Add points to the stat
+        $character->{$stat} += $points;
+        $character->stat_points -= $points;
+
+        // Recalculate stats based on new attributes
+        $this->recalculateStats($character);
+
+        // Update in database
+        $this->characterRepository->update($character, [
+            $stat => $character->{$stat},
+            'stat_points' => $character->stat_points,
+            'max_hp' => $character->max_hp,
+            'current_hp' => $character->current_hp,
+            'max_mp' => $character->max_mp,
+            'current_mp' => $character->current_mp,
+            'power' => $character->power,
+        ]);
+    }
+
     public function levelUp(Character $character): void
     {
         $character->level++;
@@ -130,16 +155,31 @@ class CharacterService
             return;
         }
 
-        $character->{$character->training_stat} += $character->training_points;
+        // Get the current value and add training points
+        $currentValue = $character->{$character->training_stat};
+        $newValue = $currentValue + $character->training_points;
+        $trainingStat = $character->training_stat;
         
+        // Update the character with new stat value
         $this->characterRepository->update($character, [
-            $character->training_stat => $character->{$character->training_stat},
+            $trainingStat => $newValue,
             'training_stat' => null,
             'training_ends_at' => null,
             'training_points' => 0,
         ]);
         
+        // Update the character object for recalculation
+        $character->{$trainingStat} = $newValue;
         $this->recalculateStats($character);
+        
+        // Save the recalculated stats
+        $this->characterRepository->update($character, [
+            'max_hp' => $character->max_hp,
+            'current_hp' => $character->current_hp,
+            'max_mp' => $character->max_mp,
+            'current_mp' => $character->current_mp,
+            'power' => $character->power,
+        ]);
     }
 
     public function isTraining(Character $character): bool
@@ -187,7 +227,7 @@ class CharacterService
 
     private function calculateTrainingPoints(int $duration): int
     {
-        // 1 point per 30 minutes of training
-        return (int) ($duration / 30);
+        // 2 points per hour of training (1 point per 30 minutes)
+        return max(1, (int) ($duration / 30));
     }
 }
