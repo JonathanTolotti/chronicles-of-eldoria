@@ -69,15 +69,15 @@
                       </div>
                     </div>
                     
-                    <!-- MP Bar -->
+                    <!-- Stamina Bar -->
                     <div>
                       <div class="flex justify-between text-xs mb-1">
-                        <span class="text-medieval">MP:</span>
-                        <span class="text-blue-600 font-semibold">{{ character?.current_mp }}/{{ character?.max_mp }}</span>
+                        <span class="text-medieval">Stamina:</span>
+                        <span class="text-blue-600 font-semibold">{{ character?.current_stamina }}/{{ character?.max_stamina }}</span>
                       </div>
                       <div class="w-full bg-gray-300 rounded-full h-2 shadow-inner">
                         <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
-                             :style="{ width: character?.max_mp ? `${((character?.current_mp || 0) / character.max_mp) * 100}%` : '0%' }"></div>
+                             :style="{ width: character?.max_stamina ? `${((character?.current_stamina || 0) / character.max_stamina) * 100}%` : '0%' }"></div>
                       </div>
                     </div>
                     
@@ -171,13 +171,34 @@
           <div v-if="!battleOver" class="border-t border-gray-200 pt-3">
             <div class="text-center">
               <h3 class="text-base subtitle-medieval mb-3 text-medieval-gold">Escolha sua Ação</h3>
+              
+              <!-- Aviso de Vida Baixa -->
+              <div v-if="(character?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                <p class="text-sm text-red-800">
+                  💀 Você está morto! Precisa ser revivido para batalhar.
+                </p>
+              </div>
+              
+              <!-- Checkbox de Batalha Automática -->
+              <div v-if="(character?.current_hp || 0) > 0" class="flex items-center justify-center mb-4">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    v-model="autoBattle"
+                    @change="toggleAutoBattle"
+                    class="w-4 h-4 text-medieval-gold bg-gray-100 border-gray-300 rounded focus:ring-medieval-gold focus:ring-2"
+                  >
+                  <span class="text-sm text-medieval font-medium">Batalha Automática</span>
+                </label>
+              </div>
+              
               <div class="flex justify-center space-x-4">
                 <button 
                   @click="attack"
-                  :disabled="isAttacking"
+                  :disabled="isAttacking || (character?.current_hp || 0) <= 0 || autoBattle"
                   class="btn-medieval px-6 py-2 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
                 >
-                  {{ isAttacking ? 'Atacando...' : 'Atacar' }}
+                  {{ isAttacking ? 'Atacando...' : autoBattle ? '🤖 Automático' : 'Atacar' }}
                 </button>
                 <button 
                   @click="flee"
@@ -244,8 +265,8 @@
             </div>
             <div class="text-center">
               <div class="text-2xl mb-2">⚡</div>
-              <h4 class="font-semibold text-blue-600">{{ character?.current_mp }}/{{ character?.max_mp }}</h4>
-              <p class="text-sm text-medieval-stone">Pontos de Mana</p>
+              <h4 class="font-semibold text-blue-600">{{ character?.current_stamina }}/{{ character?.max_stamina }}</h4>
+              <p class="text-sm text-medieval-stone">Pontos de Stamina</p>
             </div>
           </div>
         </div>
@@ -298,7 +319,7 @@
                 </div>
               </div>
               
-              <!-- Recompensas -->
+              <!-- Recompensas e Custo -->
               <div class="bg-gray-50 p-2 rounded mb-3">
                 <div class="text-xs text-center space-y-1">
                   <div class="flex justify-between">
@@ -309,16 +330,25 @@
                     <span class="text-blue-600">⭐ EXP:</span>
                     <span class="font-semibold">{{ formatNumber(monster.exp_reward) }}</span>
                   </div>
+                  <div class="flex justify-between">
+                    <span class="text-purple-600">⚡ Stamina:</span>
+                    <span class="font-semibold">{{ monster.stamina_cost || 10 }}</span>
+                  </div>
                 </div>
               </div>
               
               <!-- Botão de Batalha -->
               <button 
                 @click="startBattle(monster)"
-                :disabled="monster.level > (character?.level || 0) + 2"
+                :disabled="monster.level > (character?.level || 0) + 2 || (character?.current_stamina || 0) < (monster.stamina_cost || 10) || (character?.current_hp || 0) <= 0"
                 class="w-full btn-medieval text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ monster.level > (character?.level || 0) + 2 ? 'Muito Forte' : 'Batalhar' }}
+                {{ 
+                  monster.level > (character?.level || 0) + 2 ? 'Muito Forte' : 
+                  (character?.current_hp || 0) <= 0 ? 'Morto' :
+                  (character?.current_stamina || 0) < (monster.stamina_cost || 10) ? 'Sem Stamina' : 
+                  'Batalhar' 
+                }}
               </button>
             </div>
           </div>
@@ -335,7 +365,7 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 
 const props = defineProps({
   character: Object,
@@ -344,10 +374,13 @@ const props = defineProps({
 
 const showBattleModal = ref(false);
 const selectedMonster = ref(null);
+const battleInstanceId = ref(null);
 const battleLog = ref([]);
 const battleOver = ref(false);
 const battleResult = ref(null);
 const isAttacking = ref(false);
+const autoBattle = ref(false);
+const autoBattleInterval = ref(null);
 
 const formatNumber = (num) => {
   if (num >= 1000000) {
@@ -358,38 +391,83 @@ const formatNumber = (num) => {
   return num.toString();
 };
 
-const startBattle = (monster) => {
-  selectedMonster.value = { ...monster };
-  showBattleModal.value = true;
-  battleLog.value = [];
-  battleOver.value = false;
-  battleResult.value = null;
-  isAttacking.value = false;
-  
-  // Reset monster HP
-  selectedMonster.value.current_hp = selectedMonster.value.max_hp;
-  
-  addToLog(`Batalha iniciada contra ${monster.name}!`);
-};
-
-const closeBattleModal = () => {
-  showBattleModal.value = false;
-  selectedMonster.value = null;
-  battleLog.value = [];
-  battleOver.value = false;
-  battleResult.value = null;
-  isAttacking.value = false;
-};
-
-const startNewBattle = () => {
-  if (selectedMonster.value) {
-    // Reset monster HP
-    selectedMonster.value.current_hp = selectedMonster.value.max_hp;
+const startBattle = async (monster) => {
+  try {
+    const response = await fetch(route('battle.start'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        monster_id: monster.id
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Erro ao iniciar batalha:', errorData);
+      
+      if (errorData.error) {
+        addToLog(`❌ ${errorData.error}`);
+        return;
+      }
+      
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Update character data
+    Object.assign(props.character, data.character);
+    
+    // Set up battle
+    selectedMonster.value = data.monster;
+    battleInstanceId.value = data.battle_instance_id;
+    showBattleModal.value = true;
     battleLog.value = [];
     battleOver.value = false;
     battleResult.value = null;
     isAttacking.value = false;
-    addToLog(`Nova batalha iniciada contra ${selectedMonster.value.name}!`);
+    
+    console.log('Battle setup:', {
+      battle_instance_id: data.battle_instance_id,
+      monster_hp: data.monster.current_hp,
+      is_continuing: data.is_continuing_battle
+    });
+    
+    // Verificar se é uma batalha nova ou continuação
+    if (data.is_continuing_battle) {
+      addToLog(`Continuando batalha contra ${monster.name}! (HP: ${data.monster.current_hp}/${data.monster.max_hp})`);
+    } else {
+      addToLog(`Batalha iniciada contra ${monster.name}!`);
+    }
+    
+  } catch (error) {
+    console.error('Erro ao iniciar batalha:', error);
+    addToLog('❌ Erro ao iniciar batalha!');
+  }
+};
+
+const closeBattleModal = () => {
+  // Parar batalha automática
+  stopAutoBattle();
+  
+  showBattleModal.value = false;
+  selectedMonster.value = null;
+  battleInstanceId.value = null;
+  battleLog.value = [];
+  battleOver.value = false;
+  battleResult.value = null;
+  isAttacking.value = false;
+  autoBattle.value = false;
+};
+
+const startNewBattle = async () => {
+  if (selectedMonster.value) {
+    // Start a new battle with the same monster
+    await startBattle(selectedMonster.value);
   }
 };
 
@@ -408,6 +486,41 @@ const addToLog = (message) => {
       logContainer.scrollTop = logContainer.scrollHeight;
     }
   }, 100);
+};
+
+const toggleAutoBattle = () => {
+  if (autoBattle.value) {
+    startAutoBattle();
+  } else {
+    stopAutoBattle();
+  }
+};
+
+const startAutoBattle = () => {
+  if (autoBattleInterval.value) {
+    clearInterval(autoBattleInterval.value);
+  }
+  
+  addToLog('🤖 Batalha automática ativada!');
+  
+  autoBattleInterval.value = setInterval(() => {
+    if (!battleOver.value && !isAttacking.value && (props.character?.current_hp || 0) > 0) {
+      attack();
+    } else if (battleOver.value) {
+      stopAutoBattle();
+    }
+  }, 3000); // 3 segundos
+};
+
+const stopAutoBattle = () => {
+  if (autoBattleInterval.value) {
+    clearInterval(autoBattleInterval.value);
+    autoBattleInterval.value = null;
+  }
+  
+  if (autoBattle.value) {
+    addToLog('⏹️ Batalha automática desativada!');
+  }
 };
 
 const attack = async () => {
@@ -433,16 +546,22 @@ const attack = async () => {
         'X-Requested-With': 'XMLHttpRequest'
       },
       body: JSON.stringify({
-        monster_id: selectedMonster.value.id
+        battle_instance_id: battleInstanceId.value
       })
     });
     
     console.log('Resposta recebida:', response.status, response.statusText);
     
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Erro na resposta:', errorText);
-      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+      const errorData = await response.json();
+      console.error('Erro na resposta:', errorData);
+      
+      if (errorData.error && errorData.error.includes('Stamina insuficiente')) {
+        addToLog(`❌ ${errorData.error}`);
+        return;
+      }
+      
+      throw new Error(`HTTP error! status: ${response.status} - ${errorData.error || 'Erro desconhecido'}`);
     }
     
     const data = await response.json();
@@ -498,7 +617,10 @@ const flee = async () => {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
         'X-Requested-With': 'XMLHttpRequest'
-      }
+      },
+      body: JSON.stringify({
+        battle_instance_id: battleInstanceId.value
+      })
     });
     
     if (!response.ok) {
@@ -527,4 +649,9 @@ const handleImageError = (event) => {
     fallback.style.display = 'flex';
   }
 };
+
+onUnmounted(() => {
+  // Limpar intervalo de batalha automática
+  stopAutoBattle();
+});
 </script>

@@ -126,6 +126,7 @@ Route::middleware('auth')->group(function () {
 
     // Battle routes
     Route::get('/battle', [App\Http\Controllers\BattleController::class, 'index'])->name('battle.index');
+    Route::post('/battle/start', [App\Http\Controllers\BattleController::class, 'startBattle'])->name('battle.start');
     Route::post('/battle/attack', [App\Http\Controllers\BattleController::class, 'attack'])->name('battle.attack');
     Route::post('/battle/flee', [App\Http\Controllers\BattleController::class, 'flee'])->name('battle.flee');
     

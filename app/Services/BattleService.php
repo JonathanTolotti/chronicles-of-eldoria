@@ -84,8 +84,8 @@ class BattleService
 
         $result['damage'] = $damage;
 
-        // Apply damage
-        $monster->takeDamage($damage);
+        // Apply damage (don't save to database)
+        $monster->current_hp = max(0, $monster->current_hp - $damage);
         $result['defender_hp_after'] = $monster->current_hp;
 
         // Create message
@@ -131,9 +131,8 @@ class BattleService
 
         $result['damage'] = $damage;
 
-        // Apply damage to character
+        // Apply damage to character (don't save to database)
         $character->current_hp = max(0, $character->current_hp - $damage);
-        $character->save();
         $result['defender_hp_after'] = $character->current_hp;
 
         // Create message

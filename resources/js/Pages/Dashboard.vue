@@ -104,15 +104,15 @@
                 </div>
               </div>
 
-              <!-- MP -->
+              <!-- Stamina -->
               <div>
                 <div class="flex justify-between text-sm mb-1">
-                  <span class="text-medieval">MP:</span>
-                  <span class="text-blue-600 font-semibold">{{ character?.current_mp || 0 }}/{{ character?.max_mp || 0 }}</span>
+                  <span class="text-medieval">Stamina:</span>
+                  <span class="text-blue-600 font-semibold">{{ character?.current_stamina || 0 }}/{{ character?.max_stamina || 0 }}</span>
                 </div>
                 <div class="w-full bg-gray-300 rounded-full h-3 shadow-inner">
                   <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm" 
-                       :style="{ width: character?.max_mp ? `${((character?.current_mp || 0) / character.max_mp) * 100}%` : '0%' }"></div>
+                       :style="{ width: character?.max_stamina ? `${((character?.current_stamina || 0) / character.max_stamina) * 100}%` : '0%' }"></div>
                 </div>
               </div>
 

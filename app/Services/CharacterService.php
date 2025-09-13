@@ -57,8 +57,8 @@ class CharacterService
             'stat_points' => $character->stat_points,
             'max_hp' => $character->max_hp,
             'current_hp' => $character->current_hp,
-            'max_mp' => $character->max_mp,
-            'current_mp' => $character->current_mp,
+            'max_stamina' => $character->max_stamina,
+            'current_stamina' => $character->current_stamina,
             'power' => $character->power,
         ]);
         
@@ -84,8 +84,8 @@ class CharacterService
             'stat_points' => $character->stat_points,
             'max_hp' => $character->max_hp,
             'current_hp' => $character->current_hp,
-            'max_mp' => $character->max_mp,
-            'current_mp' => $character->current_mp,
+            'max_stamina' => $character->max_stamina,
+            'current_stamina' => $character->current_stamina,
             'power' => $character->power,
         ]);
     }
@@ -124,7 +124,7 @@ class CharacterService
         return 100 + ($character->constitution * 10);
     }
 
-    public function calculateMaxMp(Character $character): int
+    public function calculateMaxStamina(Character $character): int
     {
         return 50 + ($character->intelligence * 5);
     }
@@ -133,8 +133,8 @@ class CharacterService
     {
         $character->max_hp = $this->calculateMaxHp($character);
         $character->current_hp = $character->max_hp;
-        $character->max_mp = $this->calculateMaxMp($character);
-        $character->current_mp = $character->max_mp;
+        $character->max_stamina = $this->calculateMaxStamina($character);
+        $character->current_stamina = $character->max_stamina;
         $character->power = $this->calculatePower($character);
     }
 
@@ -176,8 +176,8 @@ class CharacterService
         $this->characterRepository->update($character, [
             'max_hp' => $character->max_hp,
             'current_hp' => $character->current_hp,
-            'max_mp' => $character->max_mp,
-            'current_mp' => $character->current_mp,
+            'max_stamina' => $character->max_stamina,
+            'current_stamina' => $character->current_stamina,
             'power' => $character->power,
         ]);
     }

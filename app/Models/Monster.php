@@ -19,6 +19,7 @@ class Monster extends Model
         'speed',
         'gold_reward',
         'exp_reward',
+        'stamina_cost',
         'image',
         'image_path',
         'is_active',

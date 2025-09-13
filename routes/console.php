@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Schedule training processing every minute
 Schedule::command('training:process')->everyMinute();
+
+// Schedule stamina regeneration every minute
+Schedule::command('game:regenerate-stamina')->everyMinute();
