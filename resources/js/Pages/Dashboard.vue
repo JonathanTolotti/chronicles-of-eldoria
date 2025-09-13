@@ -10,7 +10,47 @@
           <div class="flex-1 text-center">
             <h2 class="text-lg font-medieval">Dashboard</h2>
           </div>
-          <div class="flex-1 flex justify-end space-x-4">
+          <div class="flex-1 flex justify-end items-center space-x-4">
+            <!-- Recursos do Jogador -->
+            <div class="flex items-center space-x-4 mr-4">
+              <!-- Gold -->
+              <div class="flex items-center space-x-1 relative group">
+                <span class="text-lg">🪙</span>
+                <span class="text-sm font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
+                <!-- Tooltip Gold -->
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                  <div class="text-center">
+                    <div class="font-semibold mb-1">Gold</div>
+                    <div>• Moeda do jogo</div>
+                    <div>• Ganha derrotando monstros</div>
+                    <div>• Usa para comprar itens</div>
+                    <div>• Individual por personagem</div>
+                  </div>
+                  <!-- Seta do tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-medieval-dark"></div>
+                </div>
+              </div>
+              
+              <!-- Coin -->
+              <div class="flex items-center space-x-1 relative group">
+                <span class="text-lg">💎</span>
+                <span class="text-sm font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
+                <!-- Tooltip Coin -->
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                  <div class="text-center">
+                    <div class="font-semibold mb-1">Coin</div>
+                    <div>• Moeda premium</div>
+                    <div>• Comprada com dinheiro real</div>
+                    <div>• Usa para itens especiais</div>
+                    <div>• Compartilhada entre personagens</div>
+                  </div>
+                  <!-- Seta do tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-medieval-dark"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Botões -->
             <Link 
               :href="route('characters.select')" 
               class="btn-medieval text-sm px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
@@ -41,8 +81,8 @@
             
             <!-- Avatar -->
             <div class="text-center mb-4">
-              <div class="w-20 h-20 bg-medieval-bronze rounded-lg mx-auto mb-2 flex items-center justify-center">
-                <span class="text-4xl">⚔️</span>
+              <div class="w-20 h-20 bg-medieval-bronze rounded-lg mx-auto mb-2 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                <span class="text-4xl animate-pulse">⚔️</span>
               </div>
               <h4 class="text-lg font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>
               <p class="text-medieval-brown">{{ getClassName(character?.class) || 'Guerreiro' }}</p>
@@ -58,8 +98,8 @@
                   <span class="text-medieval">HP:</span>
                   <span class="text-red-600 font-semibold">{{ character?.current_hp || 0 }}/{{ character?.max_hp || 0 }}</span>
                 </div>
-                <div class="w-full bg-gray-300 rounded-full h-3">
-                  <div class="bg-red-500 h-3 rounded-full transition-all duration-300" 
+                <div class="w-full bg-gray-300 rounded-full h-3 shadow-inner">
+                  <div class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm" 
                        :style="{ width: character?.max_hp ? `${((character?.current_hp || 0) / character.max_hp) * 100}%` : '0%' }"></div>
                 </div>
               </div>
@@ -70,8 +110,8 @@
                   <span class="text-medieval">MP:</span>
                   <span class="text-blue-600 font-semibold">{{ character?.current_mp || 0 }}/{{ character?.max_mp || 0 }}</span>
                 </div>
-                <div class="w-full bg-gray-300 rounded-full h-3">
-                  <div class="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+                <div class="w-full bg-gray-300 rounded-full h-3 shadow-inner">
+                  <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm" 
                        :style="{ width: character?.max_mp ? `${((character?.current_mp || 0) / character.max_mp) * 100}%` : '0%' }"></div>
                 </div>
               </div>
@@ -82,8 +122,8 @@
                   <span class="text-medieval">EXP:</span>
                   <span class="text-green-600 font-semibold">{{ character?.experience || 0 }}/{{ character?.experience_to_next_level || 100 }}</span>
                 </div>
-                <div class="w-full bg-gray-300 rounded-full h-3">
-                  <div class="bg-green-500 h-3 rounded-full transition-all duration-300" 
+                <div class="w-full bg-gray-300 rounded-full h-3 shadow-inner">
+                  <div class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm" 
                        :style="{ width: character?.experience_to_next_level ? `${((character?.experience || 0) / character.experience_to_next_level) * 100}%` : '0%' }"></div>
                 </div>
               </div>
@@ -119,16 +159,19 @@
             <!-- Treinamento -->
             <div class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Treinamento</h4>
-              <div class="bg-amber-50 p-3 rounded-lg">
+              <div class="bg-amber-50 p-3 rounded-lg hover:bg-amber-100 transition-colors duration-200">
                 <p v-if="!character?.training_stat" class="text-sm text-medieval">Nenhum treinamento ativo</p>
                 <div v-else class="text-sm text-medieval">
-                  <p class="font-semibold">Treinando: {{ getStatName(character.training_stat) }}</p>
+                  <p class="font-semibold flex items-center">
+                    <span class="animate-spin mr-2">⚔️</span>
+                    Treinando: {{ getStatName(character.training_stat) }}
+                  </p>
                   <p class="text-xs">Tempo restante: {{ getTimeRemaining() }}</p>
-                  <p class="text-xs text-green-600">+{{ character.training_points || 0 }} pontos</p>
+                  <p class="text-xs text-green-600 font-semibold">+{{ character.training_points || 0 }} pontos</p>
                 </div>
                 <Link 
                   :href="route('training.index')" 
-                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block"
+                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200"
                 >
                   {{ character?.training_stat ? 'Ver Treinamento' : 'Iniciar Treino' }}
                 </Link>
@@ -138,11 +181,14 @@
             <!-- Pontos de Atributo -->
             <div v-if="character?.stat_points > 0" class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Pontos Livres</h4>
-              <div class="bg-amber-50 p-3 rounded-lg">
-                <p class="text-sm text-medieval">Você tem {{ character?.stat_points || 0 }} pontos para distribuir</p>
+              <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-3 rounded-lg border-2 border-yellow-300 hover:border-yellow-400 transition-all duration-200">
+                <p class="text-sm text-medieval flex items-center">
+                  <span class="animate-bounce mr-2">✨</span>
+                  Você tem <span class="font-bold text-yellow-600">{{ character?.stat_points || 0 }}</span> pontos para distribuir
+                </p>
                 <Link 
                   :href="route('character.stats.index')" 
-                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block"
+                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200"
                 >
                   Distribuir Pontos
                 </Link>
@@ -166,92 +212,97 @@
             <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Mundo de Eldoria</h3>
             
             <!-- Área Principal do Jogo -->
-            <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg h-96 flex items-center justify-center mb-4">
+            <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg h-96 flex items-center justify-center mb-4 shadow-2xl hover:shadow-3xl transition-all duration-300">
               <div class="text-center text-gray-300">
-                <div class="text-6xl mb-4">🏰</div>
-                <p class="text-lg">Área de Jogo Principal</p>
-                <p class="text-sm">(Mapa, Batalha, Chat)</p>
+                <div class="text-6xl mb-4 animate-pulse">🏰</div>
+                <p class="text-lg font-semibold">Área de Jogo Principal</p>
+                <p class="text-sm opacity-75">(Mapa, Batalha, Chat)</p>
+                <div class="mt-4 flex justify-center space-x-2">
+                  <div class="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                  <div class="w-2 h-2 bg-yellow-400 rounded-full animate-ping" style="animation-delay: 0.2s"></div>
+                  <div class="w-2 h-2 bg-yellow-400 rounded-full animate-ping" style="animation-delay: 0.4s"></div>
+                </div>
               </div>
             </div>
 
             <!-- Menu de Funcionalidades -->
             <div class="grid grid-cols-2 gap-4">
               <!-- Explorar - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">🗺️</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🗺️</div>
                 <h4 class="subtitle-medieval text-gray-500">Explorar</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Chat - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">💬</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">💬</div>
                 <h4 class="subtitle-medieval text-gray-500">Chat</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Missões - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">📜</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">📜</div>
                 <h4 class="subtitle-medieval text-gray-500">Missões</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Batalha - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">⚔️</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">⚔️</div>
                 <h4 class="subtitle-medieval text-gray-500">Batalha</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Inventário - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">🎒</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🎒</div>
                 <h4 class="subtitle-medieval text-gray-500">Inventário</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Loja - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">🏪</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🏪</div>
                 <h4 class="subtitle-medieval text-gray-500">Loja</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Guilda - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">🏰</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🏰</div>
                 <h4 class="subtitle-medieval text-gray-500">Guilda</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
 
               <!-- Configurações - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative">
+              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg">🔒</span>
+                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500">⚙️</div>
+                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">⚙️</div>
                 <h4 class="subtitle-medieval text-gray-500">Configurações</h4>
                 <p class="text-sm text-gray-500">Em breve</p>
               </div>
@@ -366,6 +417,15 @@ const getStatName = (stat) => {
     case 'luck': return 'Sorte';
     default: return stat;
   }
+};
+
+const formatNumber = (number) => {
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(1) + 'M';
+  } else if (number >= 1000) {
+    return (number / 1000).toFixed(1) + 'K';
+  }
+  return number.toString();
 };
 
 const getTimeRemaining = () => {

@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_vip',
         'vip_expires_at',
         'active_character_id',
+        'coin',
     ];
 
     /**
