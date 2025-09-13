@@ -25,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'uuid',
         'is_vip',
         'vip_expires_at',
+        'active_character_id',
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'is_vip' => 'boolean',
             'vip_expires_at' => 'datetime',
+            'active_character_id' => 'integer',
         ];
     }
 
@@ -58,6 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function characters()
     {
         return $this->hasMany(Character::class);
+    }
+
+    /**
+     * Get the active character for the user.
+     */
+    public function activeCharacter()
+    {
+        return $this->belongsTo(Character::class, 'active_character_id');
     }
 
     /**

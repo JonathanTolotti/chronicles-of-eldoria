@@ -98,8 +98,10 @@ Route::middleware('auth')->group(function () {
 // Rotas do JOGO - TODAS precisam de verificação de email (middleware global cuida disso)
 Route::middleware('auth')->group(function () {
     // Character routes
+    Route::get('/characters/select', [App\Http\Controllers\CharacterController::class, 'select'])->name('characters.select');
     Route::get('/characters/create', [App\Http\Controllers\CharacterController::class, 'create'])->name('characters.create');
     Route::post('/characters', [App\Http\Controllers\CharacterController::class, 'store'])->name('characters.store');
+    Route::post('/characters/select', [App\Http\Controllers\CharacterController::class, 'confirmSelection'])->name('characters.confirm');
     
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');

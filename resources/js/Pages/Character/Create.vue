@@ -9,23 +9,40 @@
             <div class="grid md:grid-cols-2 gap-8">
                 <!-- Seleção de Classe -->
                 <div class="card-medieval">
-                    <h2 class="text-2xl subtitle-medieval mb-6">Escolha sua Classe</h2>
+                    <h2 class="text-2xl subtitle-medieval mb-4">Escolha sua Classe</h2>
+                    <p class="text-medieval mb-6 text-sm">
+                        <span class="font-semibold">Nota:</span> No momento, apenas a classe <strong>Guerreiro</strong> está disponível. 
+                        As outras classes serão liberadas em futuras atualizações do jogo.
+                    </p>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div 
                             v-for="classInfo in classes" 
                             :key="classInfo.id"
-                            @click="selectedClass = classInfo.id"
+                            @click="!classInfo.locked && (selectedClass = classInfo.id)"
                             :class="[
-                                'p-4 border-2 rounded-lg cursor-pointer transition-all',
-                                selectedClass === classInfo.id 
+                                'p-4 border-2 rounded-lg transition-all relative',
+                                classInfo.locked 
+                                    ? 'border-gray-300 bg-gray-100 cursor-not-allowed opacity-50' 
+                                    : 'cursor-pointer',
+                                !classInfo.locked && selectedClass === classInfo.id 
                                     ? 'border-medieval-gold bg-amber-100' 
-                                    : 'border-medieval-bronze hover:border-medieval-gold'
+                                    : !classInfo.locked 
+                                        ? 'border-medieval-bronze hover:border-medieval-gold' 
+                                        : ''
                             ]"
                         >
-                            <h3 class="text-lg font-semibold text-medieval-dark mb-2">{{ classInfo.name }}</h3>
-                            <p class="text-sm text-medieval mb-3">{{ classInfo.description }}</p>
-                            <div class="text-xs text-medieval">
+                            <div v-if="classInfo.locked" class="absolute top-2 right-2">
+                                <span class="text-gray-500 text-lg">🔒</span>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2" :class="classInfo.locked ? 'text-gray-500' : 'text-medieval-dark'">
+                                {{ classInfo.name }}
+                                <span v-if="classInfo.locked" class="text-sm text-gray-500">(Bloqueada)</span>
+                            </h3>
+                            <p class="text-sm mb-3" :class="classInfo.locked ? 'text-gray-500' : 'text-medieval'">
+                                {{ classInfo.description }}
+                            </p>
+                            <div class="text-xs" :class="classInfo.locked ? 'text-gray-500' : 'text-medieval'">
                                 <div>Força: {{ classInfo.stats.strength }}</div>
                                 <div>Destreza: {{ classInfo.stats.dexterity }}</div>
                                 <div>Constituição: {{ classInfo.stats.constitution }}</div>
@@ -122,25 +139,29 @@ const classes = [
         id: 'warrior',
         name: 'Guerreiro',
         description: 'Especialista em combate corpo a corpo',
-        stats: { strength: 15, dexterity: 10, constitution: 14, intelligence: 8, luck: 10 }
+        stats: { strength: 15, dexterity: 10, constitution: 14, intelligence: 8, luck: 10 },
+        locked: false
     },
     {
         id: 'mage',
         name: 'Mago',
         description: 'Mestre das artes arcanas',
-        stats: { strength: 8, dexterity: 10, constitution: 10, intelligence: 16, luck: 12 }
+        stats: { strength: 8, dexterity: 10, constitution: 10, intelligence: 16, luck: 12 },
+        locked: true
     },
     {
         id: 'archer',
         name: 'Arqueiro',
         description: 'Especialista em combate à distância',
-        stats: { strength: 10, dexterity: 16, constitution: 12, intelligence: 10, luck: 14 }
+        stats: { strength: 10, dexterity: 16, constitution: 12, intelligence: 10, luck: 14 },
+        locked: true
     },
     {
         id: 'rogue',
         name: 'Ladino',
         description: 'Mestre da furtividade e agilidade',
-        stats: { strength: 10, dexterity: 15, constitution: 10, intelligence: 12, luck: 16 }
+        stats: { strength: 10, dexterity: 15, constitution: 10, intelligence: 12, luck: 16 },
+        locked: true
     }
 ];
 

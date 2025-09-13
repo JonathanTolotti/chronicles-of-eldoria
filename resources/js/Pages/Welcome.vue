@@ -49,8 +49,8 @@
           </div>
           
           <div v-else-if="user && user.characters && user.characters.length > 0" class="space-x-4">
-            <Link href="/home" class="btn-medieval text-lg px-8 py-3">
-              Continuar Jornada
+            <Link href="/characters/select" class="btn-medieval text-lg px-8 py-3">
+              Selecionar Personagem
             </Link>
             <Link href="/characters/create" class="btn-medieval text-lg px-8 py-3 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark">
               Criar Novo Personagem
