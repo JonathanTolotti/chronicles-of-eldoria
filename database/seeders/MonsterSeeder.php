@@ -26,6 +26,7 @@ class MonsterSeeder extends Seeder
                 'gold_reward' => 15,
                 'exp_reward' => 25,
                 'image' => '👹',
+                'image_path' => '/images/monsters/goblin.png',
                 'is_active' => true,
             ],
             [
@@ -40,6 +41,7 @@ class MonsterSeeder extends Seeder
                 'gold_reward' => 45,
                 'exp_reward' => 75,
                 'image' => '👹',
+                'image_path' => '/images/monsters/orc.png',
                 'is_active' => true,
             ],
             [
@@ -54,6 +56,7 @@ class MonsterSeeder extends Seeder
                 'gold_reward' => 80,
                 'exp_reward' => 150,
                 'image' => '💀',
+                'image_path' => '/images/monsters/skeleton.png',
                 'is_active' => true,
             ],
             [
@@ -68,6 +71,7 @@ class MonsterSeeder extends Seeder
                 'gold_reward' => 200,
                 'exp_reward' => 400,
                 'image' => '🐉',
+                'image_path' => '/images/monsters/dragon.png',
                 'is_active' => true,
             ],
         ];

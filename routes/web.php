@@ -123,6 +123,11 @@ Route::middleware('auth')->group(function () {
     // Character stats routes
     Route::get('/character/stats', [App\Http\Controllers\CharacterStatsController::class, 'index'])->name('character.stats.index');
     Route::post('/character/stats/distribute', [App\Http\Controllers\CharacterStatsController::class, 'distributePoints'])->name('character.stats.distribute');
+
+    // Battle routes
+    Route::get('/battle', [App\Http\Controllers\BattleController::class, 'index'])->name('battle.index');
+    Route::post('/battle/attack', [App\Http\Controllers\BattleController::class, 'attack'])->name('battle.attack');
+    Route::post('/battle/flee', [App\Http\Controllers\BattleController::class, 'flee'])->name('battle.flee');
     
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');

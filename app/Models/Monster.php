@@ -20,6 +20,7 @@ class Monster extends Model
         'gold_reward',
         'exp_reward',
         'image',
+        'image_path',
         'is_active',
     ];
 
