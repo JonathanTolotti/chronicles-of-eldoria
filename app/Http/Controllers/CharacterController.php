@@ -55,7 +55,7 @@ class CharacterController extends Controller
         
         $user->update(['active_character_id' => $character->id]);
 
-        return redirect()->route('welcome')
+        return redirect()->route('dashboard')
             ->with('success', "Agora você está jogando com {$character->name}!");
     }
 }

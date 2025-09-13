@@ -53,8 +53,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
 
 // Dashboard do jogo - precisa de verificação de email
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware('auth')->name('dashboard');
+    $user = auth()->user();
+    $character = $user->activeCharacter;
+    
+    return Inertia::render('Dashboard', [
+        'user' => $user,
+        'character' => $character,
+    ]);
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Email verification
 Route::get('/email/verify', function () {
