@@ -219,22 +219,21 @@ const getTimeRemaining = () => {
 };
 
 const getTrainingProgress = () => {
-  if (!props.character?.training_ends_at) return 0;
+  if (!props.character?.training_ends_at || !props.character?.training_started_at) return 0;
   
   const now = currentTime.value;
+  const startTime = new Date(props.character.training_started_at);
   const endTime = new Date(props.character.training_ends_at);
-  
-  // Calculate start time based on training duration
-  // Each training point takes 30 minutes, so calculate start time
-  const durationMinutes = props.character.training_points * 30;
-  const startTime = new Date(endTime.getTime() - (durationMinutes * 60 * 1000));
   
   const total = endTime - startTime;
   const elapsed = now - startTime;
   
   if (total <= 0) return 100;
   
-  return Math.min(100, Math.max(0, (elapsed / total) * 100));
+  // Ensure progress starts at 0 and goes to 100
+  const progress = Math.min(100, Math.max(0, (elapsed / total) * 100));
+  
+  return progress;
 };
 
 const startTraining = () => {
@@ -245,6 +244,7 @@ const startTraining = () => {
   });
 };
 
+
 // Update time every second for real-time display
 onMounted(() => {
   timeInterval = setInterval(() => {
@@ -254,16 +254,33 @@ onMounted(() => {
     if (props.character?.training_stat) {
       const endTime = new Date(props.character.training_ends_at);
       if (currentTime.value >= endTime) {
-        // Training is complete, refresh the page
+        // Training is complete, refresh the page to get updated data
         router.reload();
       }
     }
   }, 1000);
+  
+  // Also check every 30 seconds if training was processed by backend
+  const backendCheckInterval = setInterval(() => {
+    if (props.character?.training_stat) {
+      const endTime = new Date(props.character.training_ends_at);
+      if (currentTime.value >= endTime) {
+        // Training should be complete, check with backend
+        router.reload();
+      }
+    }
+  }, 30000); // Check every 30 seconds
+  
+  // Store interval for cleanup
+  window.backendCheckInterval = backendCheckInterval;
 });
 
 onUnmounted(() => {
   if (timeInterval) {
     clearInterval(timeInterval);
+  }
+  if (window.backendCheckInterval) {
+    clearInterval(window.backendCheckInterval);
   }
 });
 </script>

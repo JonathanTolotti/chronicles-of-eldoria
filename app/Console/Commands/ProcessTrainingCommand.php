@@ -42,9 +42,13 @@ class ProcessTrainingCommand extends Command
         foreach ($characters as $character) {
             $this->info("Processing training for character: {$character->name}");
             
+            // Store training info before completion
+            $trainingStat = $character->training_stat;
+            $trainingPoints = $character->training_points;
+            
             $characterService->completeTraining($character);
             
-            $this->info("Training completed for {$character->name}. Added {$character->training_points} points to {$character->training_stat}.");
+            $this->info("Training completed for {$character->name}. Added {$trainingPoints} points to {$trainingStat}.");
         }
 
         $this->info('All training sessions processed successfully!');

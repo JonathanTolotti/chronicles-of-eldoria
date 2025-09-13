@@ -31,6 +31,7 @@ class Character extends Model
         'gold',
         'stat_points',
         'training_stat',
+        'training_started_at',
         'training_ends_at',
         'training_points',
     ];
@@ -38,6 +39,7 @@ class Character extends Model
     protected function casts(): array
     {
         return [
+            'training_started_at' => 'datetime',
             'training_ends_at' => 'datetime',
         ];
     }

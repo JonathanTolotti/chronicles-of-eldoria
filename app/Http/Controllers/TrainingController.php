@@ -27,7 +27,7 @@ class TrainingController extends Controller
         }
 
         return Inertia::render('Training/Index', [
-            'character' => $character,
+            'character' => $character->fresh(),
         ]);
     }
 

@@ -144,6 +144,7 @@ class CharacterService
         
         $this->characterRepository->update($character, [
             'training_stat' => $stat,
+            'training_started_at' => now(),
             'training_ends_at' => now()->addMinutes($duration),
             'training_points' => $trainingPoints,
         ]);
@@ -151,7 +152,7 @@ class CharacterService
 
     public function completeTraining(Character $character): void
     {
-        if (!$this->isTraining($character)) {
+        if (!$this->isTrainingComplete($character)) {
             return;
         }
 
@@ -164,6 +165,7 @@ class CharacterService
         $this->characterRepository->update($character, [
             $trainingStat => $newValue,
             'training_stat' => null,
+            'training_started_at' => null,
             'training_ends_at' => null,
             'training_points' => 0,
         ]);
@@ -187,6 +189,13 @@ class CharacterService
         return $character->training_stat !== null && 
                $character->training_ends_at !== null && 
                $character->training_ends_at->isFuture();
+    }
+    
+    public function isTrainingComplete(Character $character): bool
+    {
+        return $character->training_stat !== null && 
+               $character->training_ends_at !== null && 
+               $character->training_ends_at->isPast();
     }
 
     private function getBaseStat(string $stat, string $class): int
