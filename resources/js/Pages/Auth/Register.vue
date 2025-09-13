@@ -95,14 +95,7 @@ const submit = () => {
                     />
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Link
-                        :href="route('login')"
-                        class="text-medieval-brown hover:text-medieval-gold transition-colors"
-                    >
-                        Já tem uma conta?
-                    </Link>
-
+                <div class="text-center">
                     <PrimaryButton
                         class="btn-medieval text-lg px-8 py-3"
                         :class="{ 'opacity-25': form.processing }"

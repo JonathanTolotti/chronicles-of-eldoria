@@ -18,7 +18,7 @@ class EmailVerificationController extends Controller
         $user = $request->user();
 
         if ($user->hasVerifiedEmail()) {
-            return redirect()->route('home')
+            return redirect()->route('welcome')
                 ->with('success', 'Email já verificado!');
         }
 
@@ -34,7 +34,7 @@ class EmailVerificationController extends Controller
     public function resend(Request $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->route('home');
+            return redirect()->route('welcome');
         }
 
         $request->user()->sendEmailVerificationNotification();

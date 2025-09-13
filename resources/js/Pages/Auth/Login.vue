@@ -78,22 +78,26 @@ const submit = () => {
                     <span class="text-medieval">Lembrar de mim</span>
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Link
-                        v-if="canResetPassword"
-                        :href="route('password.request')"
-                        class="text-medieval-brown hover:text-medieval-gold transition-colors"
-                    >
-                        Esqueceu sua senha?
-                    </Link>
+                <div class="space-y-4">
+                    <div class="text-center">
+                        <PrimaryButton
+                            class="btn-medieval text-lg px-8 py-3"
+                            :class="{ 'opacity-25': form.processing }"
+                            :disabled="form.processing"
+                        >
+                            Entrar
+                        </PrimaryButton>
+                    </div>
 
-                    <PrimaryButton
-                        class="btn-medieval text-lg px-8 py-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
-                        Entrar
-                    </PrimaryButton>
+                    <div class="text-center">
+                        <Link
+                            v-if="canResetPassword"
+                            :href="route('password.request')"
+                            class="text-medieval hover:text-medieval-gold transition-colors text-sm"
+                        >
+                            Esqueceu sua senha?
+                        </Link>
+                    </div>
                 </div>
             </form>
         </div>

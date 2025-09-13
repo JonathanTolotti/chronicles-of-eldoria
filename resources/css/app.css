@@ -18,6 +18,17 @@
     font-weight: 600;
   }
   
+  .btn-medieval.bg-transparent {
+    background-color: transparent;
+    border-color: #D4AF37;
+    color: #D4AF37;
+  }
+  
+  .btn-medieval.bg-transparent:hover {
+    background-color: #D4AF37;
+    color: #2C1810;
+  }
+  
   .card-medieval {
     @apply bg-amber-50 border-2 border-medieval-bronze rounded-lg shadow-lg p-6;
   }

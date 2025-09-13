@@ -2,8 +2,22 @@
   <div class="min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
     <!-- Header -->
     <header class="bg-medieval-dark text-medieval-gold shadow-lg">
-      <div class="container mx-auto px-4 py-4 text-center">
-        <h1 class="text-2xl font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <div class="flex-1"></div>
+          <h1 class="text-2xl font-bold font-medieval-decorative text-center flex-1">Chronicles of Eldoria</h1>
+          <div class="flex-1 flex justify-end">
+            <Link 
+              v-if="user" 
+              :href="route('logout')" 
+              method="post" 
+              as="button"
+              class="btn-medieval text-sm px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
+            >
+              Sair
+            </Link>
+          </div>
+        </div>
       </div>
     </header>
 
