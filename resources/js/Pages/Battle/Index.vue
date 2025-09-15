@@ -23,15 +23,15 @@
     </header>
 
     <!-- Battle Modal -->
-    <div v-if="showBattleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
-      <div class="bg-white rounded-lg shadow-2xl max-w-6xl w-full h-[95vh] flex flex-col">
+    <div v-if="showBattleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div class="bg-white rounded-lg shadow-2xl max-w-6xl w-full h-[95vh] sm:h-[90vh] flex flex-col">
         <!-- Modal Header -->
-        <div class="bg-medieval-dark text-medieval-gold p-4 rounded-t-lg">
+        <div class="bg-medieval-dark text-medieval-gold p-3 sm:p-4 rounded-t-lg">
           <div class="flex justify-between items-center">
-            <h3 class="text-xl font-bold title-medieval">Combate</h3>
+            <h3 class="text-lg sm:text-xl font-bold title-medieval">Combate</h3>
             <button 
               @click="closeBattleModal"
-              class="text-medieval-gold hover:text-white text-2xl"
+              class="text-medieval-gold hover:text-white text-xl sm:text-2xl p-1"
             >
               ×
             </button>
@@ -39,32 +39,32 @@
         </div>
 
         <!-- Modal Content -->
-        <div class="p-4 flex-1 flex flex-col overflow-hidden">
+        <div class="p-2 sm:p-4 flex-1 flex flex-col overflow-hidden">
           <!-- Battle Arena -->
-          <div class="mb-4">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="mb-2 sm:mb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-4">
               <!-- Personagem -->
-              <div class="bg-gray-50 rounded-lg p-4">
-                <h4 class="subtitle-medieval text-medieval-gold mb-3 text-center">{{ character?.name }}</h4>
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-4">
+                <h4 class="subtitle-medieval text-medieval-gold mb-2 sm:mb-3 text-center text-sm sm:text-base">{{ character?.name }}</h4>
                 
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 sm:space-x-4">
                   <!-- Imagem do Personagem -->
                   <div class="flex-shrink-0">
-                    <div class="w-16 h-16 bg-medieval-bronze rounded-lg flex items-center justify-center text-2xl">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-medieval-bronze rounded-lg flex items-center justify-center text-lg sm:text-2xl">
                       ⚔️
                     </div>
                   </div>
                   
                   <!-- Stats Compactos -->
-                  <div class="flex-1 space-y-2">
+                  <div class="flex-1 space-y-1 sm:space-y-2">
                     <!-- HP Bar -->
                     <div>
                       <div class="flex justify-between text-xs mb-1">
                         <span class="text-medieval">HP:</span>
-                        <span class="text-red-600 font-semibold">{{ character?.current_hp }}/{{ character?.max_hp }}</span>
+                        <span class="text-red-600 font-semibold text-xs">{{ character?.current_hp }}/{{ character?.max_hp }}</span>
                       </div>
-                      <div class="w-full bg-gray-300 rounded-full h-2 shadow-inner">
-                        <div class="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
+                      <div class="w-full bg-gray-300 rounded-full h-1.5 sm:h-2 shadow-inner">
+                        <div class="bg-gradient-to-r from-red-500 to-red-600 h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
                              :style="{ width: character?.max_hp ? `${((character?.current_hp || 0) / character.max_hp) * 100}%` : '0%' }"></div>
                       </div>
                     </div>
@@ -73,10 +73,10 @@
                     <div>
                       <div class="flex justify-between text-xs mb-1">
                         <span class="text-medieval">Stamina:</span>
-                        <span class="text-blue-600 font-semibold">{{ character?.current_stamina }}/{{ character?.max_stamina }}</span>
+                        <span class="text-blue-600 font-semibold text-xs">{{ character?.current_stamina }}/{{ character?.max_stamina }}</span>
                       </div>
-                      <div class="w-full bg-gray-300 rounded-full h-2 shadow-inner">
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
+                      <div class="w-full bg-gray-300 rounded-full h-1.5 sm:h-2 shadow-inner">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
                              :style="{ width: character?.max_stamina ? `${((character?.current_stamina || 0) / character.max_stamina) * 100}%` : '0%' }"></div>
                       </div>
                     </div>
@@ -97,34 +97,34 @@
               </div>
 
               <!-- Monstro -->
-              <div class="bg-red-50 rounded-lg p-4">
-                <h4 class="subtitle-medieval text-medieval-gold mb-3 text-center">{{ selectedMonster?.name }}</h4>
+              <div class="bg-red-50 rounded-lg p-2 sm:p-4">
+                <h4 class="subtitle-medieval text-medieval-gold mb-2 sm:mb-3 text-center text-sm sm:text-base">{{ selectedMonster?.name }}</h4>
                 
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 sm:space-x-4">
                   <!-- Imagem do Monstro -->
                   <div class="flex-shrink-0">
                     <img 
                       v-if="selectedMonster?.image_path" 
                       :src="selectedMonster.image_path" 
                       :alt="selectedMonster.name"
-                      class="w-16 h-16 object-contain"
+                      class="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                       @error="handleImageError"
                     />
-                    <div v-else class="w-16 h-16 bg-gray-300 rounded-lg flex items-center justify-center text-2xl">
+                    <div v-else class="w-12 h-12 sm:w-16 sm:h-16 bg-gray-300 rounded-lg flex items-center justify-center text-lg sm:text-2xl">
                       {{ selectedMonster?.image }}
                     </div>
                   </div>
                   
                   <!-- Stats Compactos -->
-                  <div class="flex-1 space-y-2">
+                  <div class="flex-1 space-y-1 sm:space-y-2">
                     <!-- HP Bar -->
                     <div>
                       <div class="flex justify-between text-xs mb-1">
                         <span class="text-medieval">HP:</span>
-                        <span class="text-red-600 font-semibold">{{ selectedMonster?.current_hp }}/{{ selectedMonster?.max_hp }}</span>
+                        <span class="text-red-600 font-semibold text-xs">{{ selectedMonster?.current_hp }}/{{ selectedMonster?.max_hp }}</span>
                       </div>
-                      <div class="w-full bg-gray-300 rounded-full h-2 shadow-inner">
-                        <div class="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
+                      <div class="w-full bg-gray-300 rounded-full h-1.5 sm:h-2 shadow-inner">
+                        <div class="bg-gradient-to-r from-red-500 to-red-600 h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
                              :style="{ width: selectedMonster?.max_hp ? `${((selectedMonster?.current_hp || 0) / selectedMonster.max_hp) * 100}%` : '0%' }"></div>
                       </div>
                     </div>
@@ -155,10 +155,10 @@
           </div>
 
           <!-- Battle Log -->
-          <div class="mb-4 flex-1 flex flex-col min-h-0">
-            <h3 class="text-base subtitle-medieval mb-2 text-medieval-gold">Log de Combate</h3>
-            <div class="bg-gray-900 text-green-400 p-3 rounded-lg flex-1 overflow-y-auto font-mono text-xs battle-log min-h-0">
-              <div v-for="(message, index) in battleLog" :key="index" class="mb-1">
+          <div class="mb-2 sm:mb-4 flex-1 flex flex-col min-h-0">
+            <h3 class="text-sm sm:text-base subtitle-medieval mb-1 sm:mb-2 text-medieval-gold">Log de Combate</h3>
+            <div class="bg-gray-900 text-green-400 p-2 sm:p-3 rounded-lg flex-1 overflow-y-auto font-mono text-xs battle-log min-h-0">
+              <div v-for="(message, index) in battleLog" :key="index" class="mb-1 break-words">
                 {{ message }}
               </div>
               <div v-if="battleLog.length === 0" class="text-gray-500">
@@ -168,19 +168,19 @@
           </div>
 
           <!-- Battle Actions -->
-          <div v-if="!battleOver" class="border-t border-gray-200 pt-3">
+          <div v-if="!battleOver" class="border-t border-gray-200 pt-2 sm:pt-3">
             <div class="text-center">
-              <h3 class="text-base subtitle-medieval mb-3 text-medieval-gold">Escolha sua Ação</h3>
+              <h3 class="text-sm sm:text-base subtitle-medieval mb-2 sm:mb-3 text-medieval-gold">Escolha sua Ação</h3>
               
               <!-- Aviso de Vida Baixa -->
-              <div v-if="(character?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                <p class="text-sm text-red-800">
+              <div v-if="(character?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4">
+                <p class="text-xs sm:text-sm text-red-800">
                   💀 Você está morto! Precisa ser revivido para batalhar.
                 </p>
               </div>
               
               <!-- Checkbox de Batalha Automática -->
-              <div v-if="(character?.current_hp || 0) > 0" class="flex items-center justify-center mb-4">
+              <div v-if="(character?.current_hp || 0) > 0" class="flex items-center justify-center mb-3 sm:mb-4">
                 <label class="flex items-center space-x-2 cursor-pointer">
                   <input 
                     type="checkbox" 
@@ -188,22 +188,22 @@
                     @change="toggleAutoBattle"
                     class="w-4 h-4 text-medieval-gold bg-gray-100 border-gray-300 rounded focus:ring-medieval-gold focus:ring-2"
                   >
-                  <span class="text-sm text-medieval font-medium">Batalha Automática</span>
+                  <span class="text-xs sm:text-sm text-medieval font-medium">Batalha Automática</span>
                 </label>
               </div>
               
-              <div class="flex justify-center space-x-4">
+              <div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
                 <button 
                   @click="attack"
                   :disabled="isAttacking || (character?.current_hp || 0) <= 0 || autoBattle"
-                  class="btn-medieval px-6 py-2 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
                 >
                   {{ isAttacking ? 'Atacando...' : autoBattle ? '🤖 Automático' : 'Atacar' }}
                 </button>
                 <button 
                   @click="flee"
                   :disabled="isAttacking"
-                  class="btn-medieval px-6 py-2 text-base font-semibold bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
                 >
                   Fugir
                 </button>
@@ -212,29 +212,28 @@
           </div>
 
           <!-- Battle Result -->
-          <div v-if="battleOver" class="border-t border-gray-200 pt-4">
+          <div v-if="battleOver" class="border-t border-gray-200 pt-3 sm:pt-4">
             <div class="text-center">
-              <div class="text-4xl mb-3">{{ battleResult?.winner === 'character' ? '🏆' : '💀' }}</div>
-              <p class="text-lg text-medieval mb-4 font-semibold">{{ battleResult?.message }}</p>
+              <p class="text-base sm:text-lg text-medieval mb-3 sm:mb-4 font-semibold">{{ battleResult?.message }}</p>
               
-              <div v-if="battleResult?.winner === 'character'" class="bg-green-50 border border-green-200 p-4 rounded-lg mb-4">
-                <h4 class="font-bold text-green-800 mb-2 text-base">Recompensas Obtidas:</h4>
-                <div class="flex justify-center space-x-6 text-sm">
+              <div v-if="battleResult?.winner === 'character'" class="bg-green-50 border border-green-200 p-2 sm:p-4 rounded-lg mb-3 sm:mb-4">
+                <h4 class="font-bold text-green-800 mb-2 text-sm sm:text-base">Recompensas Obtidas:</h4>
+                <div class="flex justify-center space-x-4 sm:space-x-6 text-xs sm:text-sm">
                   <span class="text-yellow-600 font-semibold">🪙 +{{ battleResult?.gold_reward || 0 }} Gold</span>
                   <span class="text-blue-600 font-semibold">⭐ +{{ battleResult?.exp_reward || 0 }} EXP</span>
                 </div>
               </div>
               
-              <div class="flex justify-center space-x-4">
+              <div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
                 <button 
                   @click="startNewBattle"
-                  class="btn-medieval px-6 py-2 text-base font-semibold transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold transform hover:scale-105 transition-transform"
                 >
                   Batalhar Novamente
                 </button>
                 <button 
                   @click="closeBattleModal"
-                  class="btn-medieval px-6 py-2 text-base font-semibold bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark transform hover:scale-105 transition-transform"
                 >
                   Fechar
                 </button>
@@ -587,11 +586,11 @@ const attack = async () => {
       battleResult.value = data.result;
       
       if (data.result.winner === 'character') {
-        addToLog(`🏆 Vitória! Ganhou ${data.result.gold_reward} gold e ${data.result.exp_reward} EXP!`);
+        addToLog(`[VITÓRIA] Você derrotou o monstro! Ganhou ${data.result.gold_reward} gold e ${data.result.exp_reward} EXP!`);
       } else if (data.result.winner === 'monster') {
-        addToLog('💀 Derrota! Você foi derrotado!');
+        addToLog('[DERROTA] Você foi derrotado pelo monstro!');
       } else if (data.result.winner === 'fled') {
-        addToLog('🏃 Você fugiu da batalha!');
+        addToLog('[FUGA] Você fugiu da batalha!');
       }
     }
     

@@ -75,25 +75,11 @@ Route::get('/email/verify', function () {
     ]);
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'verify'])
-    ->middleware(['auth', 'signed', 'throttle:6,1'])
-    ->name('verification.verify');
+// Rota removida - usando a do auth.php
 
 Route::get('/email/verified', function () {
     return Inertia::render('Auth/EmailVerified');
 })->name('email.verified');
-
-// Reenvio de email
-Route::post('/email/resend', function (Request $request) {
-    $user = $request->user();
-    
-    if ($user->hasVerifiedEmail()) {
-        return redirect()->route('dashboard');
-    }
-    
-    $user->sendEmailVerificationNotification();
-    return back()->with('message', 'Email de verificação reenviado!');
-})->middleware('auth')->name('verification.resend');
 
 // Rotas que NÃO precisam de verificação de email
 Route::middleware('auth')->group(function () {

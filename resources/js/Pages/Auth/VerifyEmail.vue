@@ -75,6 +75,6 @@ const props = defineProps({
 const form = useForm({});
 
 const resend = () => {
-    form.post(route('verification.resend'));
+    form.post(route('verification.send'));
 };
 </script>
