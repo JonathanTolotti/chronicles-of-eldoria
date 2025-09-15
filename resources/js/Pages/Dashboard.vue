@@ -3,7 +3,8 @@
     <!-- Header -->
     <header class="bg-medieval-dark text-medieval-gold shadow-lg">
       <div class="container mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
+        <!-- Desktop Header -->
+        <div class="hidden md:flex justify-between items-center">
           <div class="flex-1">
             <h1 class="text-2xl font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
           </div>
@@ -67,15 +68,68 @@
             </Link>
           </div>
         </div>
+
+        <!-- Mobile Header -->
+        <div class="md:hidden">
+          <div class="flex justify-between items-center mb-3">
+            <h1 class="text-lg font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
+            <button 
+              @click="mobileMenuOpen = !mobileMenuOpen"
+              class="p-2 text-medieval-gold hover:bg-medieval-bronze rounded-lg transition-colors duration-200"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Recursos Mobile -->
+          <div class="flex justify-center items-center space-x-6 mb-3">
+            <!-- Gold -->
+            <div class="flex items-center space-x-1">
+              <span class="text-lg">🪙</span>
+              <span class="text-sm font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
+            </div>
+            
+            <!-- Coin -->
+            <div class="flex items-center space-x-1">
+              <span class="text-lg">💎</span>
+              <span class="text-sm font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
+            </div>
+          </div>
+
+          <!-- Menu Mobile -->
+          <div v-show="mobileMenuOpen" class="bg-medieval-bronze rounded-lg p-4 space-y-3">
+            <h3 class="text-center text-medieval-gold font-semibold mb-3">Menu</h3>
+            
+            <Link 
+              :href="route('characters.select')" 
+              class="block w-full btn-medieval text-center py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
+              @click="mobileMenuOpen = false"
+            >
+              🔄 Trocar Personagem
+            </Link>
+            
+            <Link 
+              :href="route('logout')" 
+              method="post" 
+              as="button"
+              class="block w-full btn-medieval text-center py-2 bg-transparent border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
+              @click="mobileMenuOpen = false"
+            >
+              🚪 Sair
+            </Link>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-1 p-4">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 h-full">
         
         <!-- Coluna Esquerda - Herói -->
-        <div class="lg:col-span-3">
+        <div class="md:col-span-1 lg:col-span-3">
           <div class="card-medieval h-full">
             <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Herói</h3>
             
@@ -182,13 +236,13 @@
             <div v-if="character?.stat_points > 0" class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Pontos Livres</h4>
               <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-3 rounded-lg border-2 border-yellow-300 hover:border-yellow-400 transition-all duration-200">
-                <p class="text-sm text-medieval flex items-center">
+                <p class="text-sm text-medieval flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
                   <span class="animate-bounce mr-2">✨</span>
-                  Você tem <span class="font-bold text-yellow-600">{{ character?.stat_points || 0 }}</span> pontos para distribuir
+                  <span>Você tem <span class="font-bold text-yellow-600">{{ character?.stat_points || 0 }}</span> pontos para distribuir</span>
                 </p>
                 <Link 
                   :href="route('character.stats.index')" 
-                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200"
+                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200 w-full sm:w-auto text-center"
                 >
                   Distribuir Pontos
                 </Link>
@@ -207,7 +261,7 @@
         </div>
 
         <!-- Coluna Centro - Mundo de Eldoria -->
-        <div class="lg:col-span-6">
+        <div class="md:col-span-1 lg:col-span-6">
           <div class="card-medieval h-full">
             <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Mundo de Eldoria</h3>
             
@@ -311,7 +365,7 @@
         </div>
 
         <!-- Coluna Direita - Itens -->
-        <div class="lg:col-span-3">
+        <div class="md:col-span-2 lg:col-span-3">
           <div class="card-medieval h-full">
             <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Itens</h3>
             
@@ -396,6 +450,7 @@ const props = defineProps({
 });
 
 const currentTime = ref(new Date());
+const mobileMenuOpen = ref(false);
 let timeInterval = null;
 
 const getClassName = (className) => {

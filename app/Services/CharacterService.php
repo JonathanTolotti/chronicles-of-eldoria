@@ -132,9 +132,9 @@ class CharacterService
     public function recalculateStats(Character $character): void
     {
         $character->max_hp = $this->calculateMaxHp($character);
-        $character->current_hp = $character->max_hp;
+        $character->current_hp = $character->current_hp;
         $character->max_stamina = $this->calculateMaxStamina($character);
-        $character->current_stamina = $character->max_stamina;
+        $character->current_stamina = $character->current_stamina;
         $character->power = $this->calculatePower($character);
     }
 

@@ -13,3 +13,6 @@ Schedule::command('training:process')->everyMinute();
 
 // Schedule stamina regeneration every minute
 Schedule::command('game:regenerate-stamina')->everyMinute();
+
+// Schedule HP regeneration every minute
+Schedule::command('game:regenerate-hp')->everyMinute();

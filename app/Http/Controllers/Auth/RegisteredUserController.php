@@ -54,9 +54,15 @@ class RegisteredUserController extends Controller
         
         try {
             Mail::to($user->email)->send(new EmailVerificationMedieval($verificationUrl));
+            \Log::info('Email de verificação enviado com sucesso', ['user_id' => $user->id, 'email' => $user->email]);
         } catch (\Exception $e) {
-            // Se falhar o envio, usar o sistema padrão do Laravel
-            $user->sendEmailVerificationNotification();
+            \Log::error('Erro ao enviar email de verificação personalizado', [
+                'user_id' => $user->id, 
+                'email' => $user->email,
+                'error' => $e->getMessage()
+            ]);
+            // Não usar o sistema padrão do Laravel - apenas logar o erro
+            throw new \Exception('Falha ao enviar email de verificação: ' . $e->getMessage());
         }
 
         // Fazer login para acessar a página de verificação

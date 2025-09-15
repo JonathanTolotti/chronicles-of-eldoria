@@ -520,6 +520,7 @@ const stopAutoBattle = () => {
   
   if (autoBattle.value) {
     addToLog('⏹️ Batalha automática desativada!');
+    autoBattle.value = false;
   }
 };
 

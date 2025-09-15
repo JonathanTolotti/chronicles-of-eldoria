@@ -48,9 +48,15 @@ class EmailVerificationController extends Controller
         
         try {
             Mail::to($request->user()->email)->send(new EmailVerificationMedieval($verificationUrl));
+            \Log::info('Email de verificação reenviado com sucesso', ['user_id' => $request->user()->id, 'email' => $request->user()->email]);
         } catch (\Exception $e) {
-            // Se falhar o envio, usar o sistema padrão do Laravel
-            $request->user()->sendEmailVerificationNotification();
+            \Log::error('Erro ao reenviar email de verificação personalizado', [
+                'user_id' => $request->user()->id, 
+                'email' => $request->user()->email,
+                'error' => $e->getMessage()
+            ]);
+            // Não usar o sistema padrão do Laravel - apenas logar o erro
+            return back()->with('error', 'Falha ao enviar email de verificação: ' . $e->getMessage());
         }
 
         return back()->with('message', 'Email de verificação reenviado!');
