@@ -363,13 +363,15 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { ref, onUnmounted } from 'vue';
 
 const props = defineProps({
   character: Object,
   monsters: Array,
 });
+
+const page = usePage();
 
 const showBattleModal = ref(false);
 const selectedMonster = ref(null);
@@ -392,12 +394,15 @@ const formatNumber = (num) => {
 
 const startBattle = async (monster) => {
   try {
+    const csrfToken = page.props.csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    
     const response = await fetch(route('battle.start'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-CSRF-TOKEN': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         monster_id: monster.id
@@ -530,27 +535,20 @@ const attack = async () => {
   addToLog('Você atacou!');
   
   try {
-    console.log('Iniciando ataque...', {
-      monster_id: selectedMonster.value.id,
-      route: route('battle.attack')
-    });
-    
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-    console.log('CSRF Token:', csrfToken);
+    const csrfToken = page.props.csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     
     const response = await fetch(route('battle.attack'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         battle_instance_id: battleInstanceId.value
       })
     });
-    
-    console.log('Resposta recebida:', response.status, response.statusText);
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -584,6 +582,7 @@ const attack = async () => {
     if (data.battle_over) {
       battleOver.value = true;
       battleResult.value = data.result;
+      autoBattle.value = false; // Desmarcar checkbox quando batalha termina
       
       if (data.result.winner === 'character') {
         addToLog(`[VITÓRIA] Você derrotou o monstro! Ganhou ${data.result.gold_reward} gold e ${data.result.exp_reward} EXP!`);
@@ -608,15 +607,15 @@ const flee = async () => {
   isAttacking.value = true;
   
   try {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-    console.log('Fugindo... CSRF Token:', csrfToken);
+    const csrfToken = page.props.csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     
     const response = await fetch(route('battle.flee'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         battle_instance_id: battleInstanceId.value

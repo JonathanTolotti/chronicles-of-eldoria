@@ -44,6 +44,7 @@ class BattleController extends Controller
         return Inertia::render('Battle/Index', [
             'character' => $character,
             'monsters' => $monsters,
+            'csrf_token' => csrf_token(),
         ]);
     }
 
