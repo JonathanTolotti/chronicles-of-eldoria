@@ -37,7 +37,7 @@ class CharacterService
         $character = $this->characterRepository->create($characterData);
         
         // Calculate initial stats
-        $this->recalculateStats($character);
+        $this->recalculateStats($character, false); // false = não restaurar vida e stamina
         
         return $character;
     }
@@ -76,7 +76,7 @@ class CharacterService
         $character->stat_points -= $points;
 
         // Recalculate stats based on new attributes
-        $this->recalculateStats($character);
+        $this->recalculateStats($character, false); // false = não restaurar vida e stamina
 
         // Update in database
         $this->characterRepository->update($character, [
@@ -97,7 +97,7 @@ class CharacterService
         $character->experience_to_next_level = (int) ($character->experience_to_next_level * 1.2);
         $character->stat_points += 5; // 5 points per level
         
-        $this->recalculateStats($character);
+        $this->recalculateStats($character, true); // true = restaurar vida e stamina
     }
 
     public function canLevelUp(Character $character): bool
@@ -129,13 +129,21 @@ class CharacterService
         return 50 + ($character->intelligence * 5);
     }
 
-    public function recalculateStats(Character $character): void
+    public function recalculateStats(Character $character, bool $restoreHealthAndStamina = false): void
     {
         $character->max_hp = $this->calculateMaxHp($character);
-        $character->current_hp = $character->current_hp;
         $character->max_stamina = $this->calculateMaxStamina($character);
-        $character->current_stamina = $character->current_stamina;
         $character->power = $this->calculatePower($character);
+        
+        if ($restoreHealthAndStamina) {
+            // Restaurar vida e stamina quando sobe de nível
+            $character->current_hp = $character->max_hp;
+            $character->current_stamina = $character->max_stamina;
+        } else {
+            // Manter valores atuais quando não é level up
+            $character->current_hp = $character->current_hp;
+            $character->current_stamina = $character->current_stamina;
+        }
     }
 
     public function startTraining(Character $character, string $stat, int $duration): void
@@ -172,7 +180,7 @@ class CharacterService
         
         // Update the character object for recalculation
         $character->{$trainingStat} = $newValue;
-        $this->recalculateStats($character);
+        $this->recalculateStats($character, false); // false = não restaurar vida e stamina
         
         // Save the recalculated stats
         $this->characterRepository->update($character, [
