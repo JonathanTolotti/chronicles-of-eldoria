@@ -21,7 +21,7 @@ class RegenerateHpCommand extends Command
         $regenerated = 0;
         
         foreach ($characters as $character) {
-            $character->current_hp = min($character->current_hp + 10, $character->max_hp);
+            $character->current_hp = min($character->current_hp + 60, $character->max_hp);
             $character->save();
             $regenerated++;
         }

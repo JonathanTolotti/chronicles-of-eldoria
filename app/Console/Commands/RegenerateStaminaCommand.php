@@ -31,7 +31,7 @@ class RegenerateStaminaCommand extends Command
         
         foreach ($characters as $character) {
             // Regenera 1 ponto de stamina por minuto
-            $character->current_stamina = min($character->current_stamina + 1, $character->max_stamina);
+            $character->current_stamina = min($character->current_stamina + 30, $character->max_stamina);
             $character->save();
             $regenerated++;
         }
