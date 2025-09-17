@@ -23,8 +23,8 @@
     </header>
 
     <!-- Battle Modal -->
-    <div v-if="showBattleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div class="bg-white rounded-lg shadow-2xl max-w-6xl w-full h-[95vh] sm:h-[90vh] flex flex-col">
+    <div v-if="showBattleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-1 sm:p-4">
+      <div class="bg-white rounded-lg shadow-2xl max-w-6xl w-full h-[98vh] sm:h-[90vh] flex flex-col">
         <!-- Modal Header -->
         <div class="bg-medieval-dark text-medieval-gold p-2 rounded-t-lg">
           <div class="flex justify-between items-center">
@@ -39,18 +39,18 @@
         </div>
 
         <!-- Modal Content -->
-        <div class="p-2 sm:p-4 flex-1 flex flex-col overflow-hidden">
+        <div class="p-1 sm:p-4 flex-1 flex flex-col overflow-hidden">
           <!-- Battle Arena -->
           <div class="mb-2">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-1 sm:gap-2">
               <!-- Personagem -->
-              <div class="bg-gray-50 rounded-lg p-3">
-                <h4 class="subtitle-medieval text-medieval-gold mb-2 text-center text-sm">{{ characterData?.name }}</h4>
+              <div class="bg-gray-50 rounded-lg p-2 sm:p-3">
+                <h4 class="subtitle-medieval text-medieval-gold mb-1 sm:mb-2 text-center text-xs sm:text-sm">{{ characterData?.name }}</h4>
                 
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                   <!-- Imagem do Personagem -->
                   <div class="flex-shrink-0">
-                    <div class="w-14 h-14 bg-medieval-bronze rounded-lg flex items-center justify-center text-xl">
+                    <div class="w-10 h-10 sm:w-14 sm:h-14 bg-medieval-bronze rounded-lg flex items-center justify-center text-lg sm:text-xl">
                       ⚔️
                     </div>
                   </div>
@@ -97,20 +97,20 @@
               </div>
 
               <!-- Monstro -->
-              <div class="bg-red-50 rounded-lg p-3">
-                <h4 class="subtitle-medieval text-medieval-gold mb-2 text-center text-sm">{{ selectedMonster?.name }}</h4>
+              <div class="bg-red-50 rounded-lg p-2 sm:p-3">
+                <h4 class="subtitle-medieval text-medieval-gold mb-1 sm:mb-2 text-center text-xs sm:text-sm">{{ selectedMonster?.name }}</h4>
                 
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                   <!-- Imagem do Monstro -->
                   <div class="flex-shrink-0">
                     <img 
                       v-if="selectedMonster?.image_path" 
                       :src="selectedMonster.image_path" 
                       :alt="selectedMonster.name"
-                      class="w-14 h-14 object-contain"
+                      class="w-10 h-10 sm:w-14 sm:h-14 object-contain"
                       @error="handleImageError"
                     />
-                    <div v-else class="w-14 h-14 bg-gray-300 rounded-lg flex items-center justify-center text-xl">
+                    <div v-else class="w-10 h-10 sm:w-14 sm:h-14 bg-gray-300 rounded-lg flex items-center justify-center text-lg sm:text-xl">
                       {{ selectedMonster?.image }}
                     </div>
                   </div>
@@ -155,9 +155,9 @@
           </div>
 
           <!-- Battle Log -->
-          <div class="mb-2 flex-1 flex flex-col min-h-0 max-h-48">
-            <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold">Log de Combate</h3>
-            <div class="bg-gray-900 text-green-400 p-4 rounded-lg flex-1 overflow-y-auto font-mono text-sm battle-log min-h-0">
+          <div class="mb-1 sm:mb-2 flex-1 flex flex-col min-h-0 max-h-32 sm:max-h-48">
+            <h3 class="text-xs sm:text-sm subtitle-medieval mb-1 sm:mb-2 text-medieval-gold">Log de Combate</h3>
+            <div class="bg-gray-900 text-green-400 p-2 sm:p-4 rounded-lg flex-1 overflow-y-auto font-mono text-xs sm:text-sm battle-log min-h-0">
               <div v-for="(message, index) in battleLog" :key="index" class="mb-1 break-words">
                 {{ message }}
               </div>
@@ -168,42 +168,42 @@
           </div>
 
           <!-- Battle Actions -->
-          <div v-if="!battleOver" class="border-t border-gray-200 pt-2">
+          <div v-if="!battleOver" class="border-t border-gray-200 pt-1 sm:pt-2">
             <div class="text-center">
               <h3 class="text-xs subtitle-medieval mb-1 text-medieval-gold">Escolha sua Ação</h3>
               
               <!-- Aviso de Vida Baixa -->
-              <div v-if="(characterData?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-2 mb-3">
+              <div v-if="(characterData?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-1 sm:p-2 mb-2 sm:mb-3">
                 <p class="text-xs text-red-800">
                   💀 Você está morto! Precisa ser revivido para batalhar.
                 </p>
               </div>
               
               <!-- Checkbox de Batalha Automática -->
-              <div v-if="(characterData?.current_hp || 0) > 0" class="flex items-center justify-center mb-3">
-                <label class="flex items-center space-x-2 cursor-pointer">
+              <div v-if="(characterData?.current_hp || 0) > 0" class="flex items-center justify-center mb-2 sm:mb-3">
+                <label class="flex items-center space-x-1 sm:space-x-2 cursor-pointer">
                   <input 
                     type="checkbox" 
                     v-model="autoBattle"
                     @change="toggleAutoBattle"
-                    class="w-4 h-4 text-medieval-gold bg-gray-100 border-gray-300 rounded focus:ring-medieval-gold focus:ring-2"
+                    class="w-3 h-3 sm:w-4 sm:h-4 text-medieval-gold bg-gray-100 border-gray-300 rounded focus:ring-medieval-gold focus:ring-2"
                   >
                   <span class="text-xs text-medieval font-medium">Batalha Automática</span>
                 </label>
               </div>
               
-              <div class="flex flex-col sm:flex-row justify-center gap-2">
+              <div class="flex flex-row justify-center gap-1 sm:gap-2">
                 <button 
                   @click="attack"
                   :disabled="isAttacking || (characterData?.current_hp || 0) <= 0 || autoBattle"
-                  class="btn-medieval px-3 py-1 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-2 sm:px-3 py-1 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
                 >
                   {{ isAttacking ? 'Atacando...' : autoBattle ? '🤖 Automático' : 'Atacar' }}
                 </button>
                 <button 
                   @click="flee"
                   :disabled="isAttacking"
-                  class="btn-medieval px-3 py-1 text-xs font-semibold bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
+                  class="btn-medieval px-2 sm:px-3 py-1 text-xs font-semibold bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-transform"
                 >
                   Fugir
                 </button>
@@ -212,7 +212,7 @@
           </div>
           
           <!-- Espaço após ações -->
-          <div class="mb-3"></div>
+          <div class="mb-1 sm:mb-3"></div>
 
           <!-- Battle Result -->
           <div v-if="battleOver" class="border-t border-gray-200 pt-3 sm:pt-4">
@@ -246,11 +246,11 @@
 
           <!-- Poções e Habilidades -->
           <div v-if="!battleOver" class="border-t border-medieval-bronze pt-3">
-            <div class="flex justify-between items-start gap-4">
+            <div class="flex flex-col sm:flex-row gap-3">
               <!-- Poções -->
               <div class="flex-1">
                 <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold text-center">Poções</h3>
-                <div class="flex justify-center gap-2">
+                <div class="flex justify-center gap-1 sm:gap-2">
                   <div 
                     v-for="slot in 4" 
                     :key="slot"
@@ -260,14 +260,14 @@
                       :data-slot="slot"
                       @click="useHotkeyPotion(slot)"
                       :disabled="isAttacking || !hotkeyItems[slot - 1]"
-                      class="bg-white rounded-lg border-2 border-medieval-bronze w-16 h-16 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      class="bg-white rounded-lg border-2 border-medieval-bronze w-12 h-12 sm:w-16 sm:h-16 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       :class="{ 
                         'border-medieval-gold bg-medieval-bronze shadow-md': hotkeyItems[slot - 1],
                         'border-medieval-bronze bg-white': !hotkeyItems[slot - 1]
                       }"
                     >
                       <div v-if="hotkeyItems[slot - 1]" class="flex flex-col items-center justify-center h-full">
-                        <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-6 h-6 mb-1" />
+                        <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-4 h-4 sm:w-6 sm:h-6 mb-1" />
                         <span class="text-xs text-medieval font-semibold">{{ hotkeyItems[slot - 1].quantity }}x</span>
                         <div class="text-xs text-medieval-gold font-semibold">[F{{ slot }}]</div>
                       </div>
@@ -298,10 +298,10 @@
               <div class="flex-1">
                 <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold text-center">Habilidades</h3>
                 <div class="flex justify-center">
-                  <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-3 text-center opacity-75 h-16 flex items-center justify-center" style="width: calc(4 * 4rem + 3 * 0.5rem);">
+                  <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-2 sm:p-3 text-center opacity-75 h-12 sm:h-16 flex items-center justify-center w-full max-w-xs">
                     <div class="text-gray-500">
-                      <div class="text-lg mb-1">🚧</div>
-                      <div class="font-medium text-sm">Em Breve</div>
+                      <div class="text-sm sm:text-lg mb-1">🚧</div>
+                      <div class="font-medium text-xs sm:text-sm">Em Breve</div>
                     </div>
                   </div>
                 </div>
@@ -669,6 +669,7 @@ const startBattle = async (monster) => {
     
     // Update character data
     Object.assign(props.character, data.character);
+    Object.assign(characterData.value, data.character);
     
     // Set up battle
     selectedMonster.value = data.monster;
@@ -811,6 +812,7 @@ const attack = async () => {
     
     // Update character and monster data
     Object.assign(props.character, data.character);
+    Object.assign(characterData.value, data.character);
     Object.assign(selectedMonster.value, data.monster);
     
     // Add attack results to log
