@@ -52,21 +52,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
     ->name('home');
 
 // Dashboard do jogo - precisa de verificação de email
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    $character = $user->activeCharacter;
-    
-    // Se não há personagem ativo, redirecionar para seleção
-    if (!$character) {
-        return redirect()->route('characters.select')
-            ->with('error', 'Você precisa selecionar um personagem para acessar o dashboard.');
-    }
-    
-    return Inertia::render('Dashboard', [
-        'user' => $user,
-        'character' => $character,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Email verification
 Route::get('/email/verify', function () {
@@ -115,12 +103,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/battle/start', [App\Http\Controllers\BattleController::class, 'startBattle'])->name('battle.start');
     Route::post('/battle/attack', [App\Http\Controllers\BattleController::class, 'attack'])->name('battle.attack');
     Route::post('/battle/flee', [App\Http\Controllers\BattleController::class, 'flee'])->name('battle.flee');
-    
-    // Inventory routes
-    Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/api/inventory', [App\Http\Controllers\InventoryController::class, 'getInventory'])->name('inventory.get');
-    Route::post('/api/inventory/equip', [App\Http\Controllers\InventoryController::class, 'equipItem'])->name('inventory.equip');
-    Route::post('/api/inventory/unequip', [App\Http\Controllers\InventoryController::class, 'unequipItem'])->name('inventory.unequip');
     
     // Item routes (hotkeys)
     Route::post('/api/items/use-hotkey', [App\Http\Controllers\ItemController::class, 'useHotkeyItem'])->name('items.use-hotkey');

@@ -240,6 +240,31 @@
               </div>
             </div>
           </div>
+
+          <!-- Hotkeys de Poções -->
+          <div v-if="!battleOver" class="border-t border-gray-200 pt-3 sm:pt-4">
+            <h3 class="text-sm sm:text-base subtitle-medieval mb-2 sm:mb-3 text-medieval-gold text-center">Poções</h3>
+            <div class="grid grid-cols-4 gap-2 sm:gap-3">
+              <button 
+                v-for="slot in 4" 
+                :key="slot"
+                @click="useHotkeyPotion(slot)"
+                :disabled="isAttacking || !hotkeyItems[slot - 1]"
+                class="bg-gray-100 rounded-lg border-2 border-gray-300 aspect-square flex flex-col items-center justify-center p-1 sm:p-2 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                :class="{ 'border-medieval-gold bg-medieval-bronze': hotkeyItems[slot - 1] }"
+              >
+                <div v-if="hotkeyItems[slot - 1]" class="text-center">
+                  <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-4 h-4 sm:w-6 sm:h-6 mb-1 mx-auto" />
+                  <span class="text-xs text-gray-600">{{ hotkeyItems[slot - 1].quantity }}x</span>
+                  <div class="text-xs text-gray-500">F{{ slot }}</div>
+                </div>
+                <div v-else class="text-center">
+                  <span class="text-gray-400 text-xs">F{{ slot }}</span>
+                  <span class="text-gray-400 text-xs">Vazio</span>
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -364,7 +389,7 @@
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { ref, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
   character: Object,
@@ -383,6 +408,9 @@ const isAttacking = ref(false);
 const autoBattle = ref(false);
 const autoBattleInterval = ref(null);
 
+// Hotkeys de poções
+const hotkeyItems = ref([null, null, null, null]);
+
 const formatNumber = (num) => {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1) + 'M';
@@ -390,6 +418,65 @@ const formatNumber = (num) => {
     return (num / 1000).toFixed(1) + 'K';
   }
   return num.toString();
+};
+
+// Carregar hotkeys de poções
+const loadHotkeyItems = async () => {
+  try {
+    const response = await fetch('/api/items/hotkeys', {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      hotkeyItems.value = data.hotkeys || [null, null, null, null];
+    }
+  } catch (error) {
+    console.error('Erro ao carregar hotkeys:', error);
+  }
+};
+
+// Usar poção do hotkey
+const useHotkeyPotion = async (slot) => {
+  if (!hotkeyItems.value[slot - 1] || isAttacking.value) return;
+  
+  try {
+    const response = await fetch('/api/items/use-hotkey', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': page.props.csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        slot: slot
+      })
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      
+      if (data.success) {
+        // Atualizar dados do personagem
+        Object.assign(props.character, data.character);
+        
+        // Atualizar hotkeys
+        await loadHotkeyItems();
+        
+        // Adicionar mensagem ao log
+        addToLog(`🧪 ${data.message}`);
+      } else {
+        addToLog(`❌ ${data.message}`);
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao usar poção:', error);
+    addToLog('❌ Erro ao usar poção');
+  }
 };
 
 const startBattle = async (monster) => {
@@ -648,6 +735,11 @@ const handleImageError = (event) => {
     fallback.style.display = 'flex';
   }
 };
+
+onMounted(() => {
+  // Carregar hotkeys de poções
+  loadHotkeyItems();
+});
 
 onUnmounted(() => {
   // Limpar intervalo de batalha automática

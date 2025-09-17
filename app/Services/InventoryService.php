@@ -20,10 +20,10 @@ class InventoryService
             ->get();
 
         return [
-            'potions' => $items->filter(fn($item) => $item->item->type === 'potion'),
-            'equipment' => $items->filter(fn($item) => in_array($item->item->type, ['weapon', 'armor', 'accessory'])),
-            'materials' => $items->filter(fn($item) => $item->item->type === 'material'),
-            'other' => $items->filter(fn($item) => !in_array($item->item->type, ['potion', 'weapon', 'armor', 'accessory', 'material'])),
+            'potions' => $items->filter(fn($item) => $item->item->type === 'potion')->values()->toArray(),
+            'equipment' => $items->filter(fn($item) => in_array($item->item->type, ['weapon', 'armor', 'accessory']))->values()->toArray(),
+            'materials' => $items->filter(fn($item) => $item->item->type === 'material')->values()->toArray(),
+            'other' => $items->filter(fn($item) => !in_array($item->item->type, ['potion', 'weapon', 'armor', 'accessory', 'material']))->values()->toArray(),
         ];
     }
 
@@ -119,8 +119,6 @@ class InventoryService
             ->get();
 
         return [
-            'total_items' => $items->count(),
-            'total_quantity' => $items->sum('quantity'),
             'potions_count' => $items->where('item.type', 'potion')->count(),
             'equipment_count' => $items->whereIn('item.type', ['weapon', 'armor', 'accessory'])->count(),
             'materials_count' => $items->where('item.type', 'material')->count(),

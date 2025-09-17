@@ -417,14 +417,90 @@
             <!-- Inventário -->
             <div>
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Inventário</h4>
-              <div class="grid grid-cols-4 gap-1">
-                <!-- Slots do inventário -->
-                <div v-for="i in 20" :key="i" 
-                     class="bg-gray-100 rounded border-2 border-dashed border-gray-300 aspect-square flex items-center justify-center">
-                  <span v-if="i <= 3" class="text-xs text-gray-600">
-                    {{ i === 1 ? 'Po x3' : i === 2 ? 'Ru x1' : 'Flr x5' }}
-                  </span>
-                  <span v-else class="text-gray-400 text-xs">+</span>
+              
+              <!-- Abas do inventário -->
+              <div class="flex">
+                <button 
+                  @click="activeInventoryTab = 'potions'"
+                  class="px-3 py-1 text-xs rounded-tl-lg transition-colors border-2 border-medieval-bronze border-b-0 border-r-0"
+                  :class="activeInventoryTab === 'potions' ? 'bg-medieval-gold text-medieval-dark font-semibold border-medieval-gold' : 'bg-medieval-dark text-medieval-gold hover:bg-medieval-bronze'"
+                >
+                  Poções
+                </button>
+                <button 
+                  disabled
+                  class="px-3 py-1 text-xs transition-colors border-2 border-medieval-bronze border-b-0 border-r-0 opacity-50 cursor-not-allowed bg-medieval-dark text-medieval-stone"
+                >
+                  Equipamentos 🔒
+                </button>
+                <button 
+                  disabled
+                  class="px-3 py-1 text-xs rounded-tr-lg transition-colors border-2 border-medieval-bronze border-b-0 opacity-50 cursor-not-allowed bg-medieval-dark text-medieval-stone"
+                >
+                  Materiais 🔒
+                </button>
+              </div>
+              
+              <!-- Conteúdo das abas -->
+              <div class="bg-amber-50 rounded-b-lg border-2 border-medieval-bronze border-t-0 p-2">
+                <!-- Aba Poções -->
+                <div v-if="activeInventoryTab === 'potions'" class="grid grid-cols-4 gap-1">
+                  <div v-for="(item, index) in inventory?.potions?.slice(0, 8)" :key="item.id" 
+                       class="bg-white rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-amber-100 transition-colors cursor-pointer"
+                       @click="setHotkeyFromInventory(item)">
+                    <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
+                    <span class="text-xs text-medieval-dark">{{ item.quantity }}x</span>
+                    
+                    <!-- Label do Hotkey -->
+                    <div v-if="item.slot_position" class="text-xs text-medieval-gold font-bold">
+                      [F{{ item.slot_position }}]
+                    </div>
+                  </div>
+                  
+                  <!-- Slots vazios -->
+                  <div v-for="i in Math.max(0, 8 - (inventory?.potions?.length || 0))" :key="`empty-${i}`" 
+                       class="bg-white rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
+                    <span class="text-gray-400 text-xs">+</span>
+                  </div>
+                </div>
+                
+                <!-- Aba Equipamentos -->
+                <div v-else-if="activeInventoryTab === 'equipment'" class="grid grid-cols-4 gap-1">
+                  <div v-for="(item, index) in inventory?.equipment?.slice(0, 8)" :key="item.id" 
+                       class="bg-medieval-dark rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-medieval-bronze transition-colors cursor-pointer">
+                    <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
+                    <span class="text-xs text-medieval-gold">{{ item.quantity }}x</span>
+                  </div>
+                  
+                  <!-- Slots vazios -->
+                  <div v-for="i in Math.max(0, 8 - (inventory?.equipment?.length || 0))" :key="`empty-${i}`" 
+                       class="bg-medieval-dark rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
+                    <span class="text-medieval-stone text-xs">+</span>
+                  </div>
+                </div>
+                
+                <!-- Aba Materiais -->
+                <div v-else-if="activeInventoryTab === 'materials'" class="grid grid-cols-4 gap-1">
+                  <div v-for="(item, index) in inventory?.materials?.slice(0, 8)" :key="item.id" 
+                       class="bg-medieval-dark rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-medieval-bronze transition-colors cursor-pointer">
+                    <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
+                    <span class="text-xs text-medieval-gold">{{ item.quantity }}x</span>
+                  </div>
+                  
+                  <!-- Slots vazios -->
+                  <div v-for="i in Math.max(0, 8 - (inventory?.materials?.length || 0))" :key="`empty-${i}`" 
+                       class="bg-medieval-dark rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
+                    <span class="text-medieval-stone text-xs">+</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Estatísticas do inventário -->
+              <div v-if="stats" class="mt-3 text-xs text-medieval-stone">
+                <div class="flex justify-between">
+                  <span v-if="activeInventoryTab === 'potions'" class="text-medieval-gold">Poções: {{ stats.potions_count || 0 }}</span>
+                  <span v-else-if="activeInventoryTab === 'equipment'" class="text-medieval-gold">Equipamentos: {{ stats.equipment_count || 0 }}</span>
+                  <span v-else-if="activeInventoryTab === 'materials'" class="text-medieval-gold">Materiais: {{ stats.materials_count || 0 }}</span>
                 </div>
                     </div>
                 </div>
@@ -437,21 +513,183 @@
     <footer class="bg-medieval-dark text-medieval-stone text-center py-4">
       <p>&copy; 2025 Chronicles of Eldoria. Todos os direitos reservados.</p>
     </footer>
+
+    <!-- Modal de Seleção de Hotkey -->
+    <div v-if="showHotkeyModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+      <div class="card-medieval max-w-sm w-full shadow-2xl">
+        <!-- Header do Modal -->
+        <div class="bg-medieval-dark text-medieval-gold p-4 rounded-t-lg border-b-2 border-medieval-bronze">
+          <div class="flex items-center justify-center space-x-2">
+            <span class="text-xl">⚔️</span>
+            <h3 class="text-lg font-bold title-medieval">Escolher Hotkey</h3>
+            <span class="text-xl">⚔️</span>
+          </div>
+        </div>
+        
+        <!-- Conteúdo do Modal -->
+        <div class="p-4 bg-amber-50">
+          <div class="text-center mb-4">
+            <p class="text-sm text-medieval mb-1">Selecione em qual slot deseja colocar:</p>
+            <div class="flex items-center justify-center space-x-2">
+              <img :src="selectedItem?.item?.image_path" :alt="selectedItem?.item?.name" class="w-5 h-5" />
+              <span class="text-sm text-medieval-dark font-semibold">{{ selectedItem?.item?.name }}</span>
+            </div>
+          </div>
+          
+          <!-- Slots de Hotkey -->
+          <div class="grid grid-cols-4 gap-2 mb-4">
+            <button 
+              v-for="slot in 4" 
+              :key="slot"
+              @click="assignToHotkey(slot)"
+              class="group relative p-2 border-2 border-medieval-bronze rounded-lg hover:border-medieval-gold hover:bg-amber-100 transition-all duration-200 bg-white shadow-sm"
+              :class="{ 
+                'border-medieval-gold bg-medieval-bronze shadow-md scale-105': selectedHotkey === slot,
+                'hover:scale-105': selectedHotkey !== slot
+              }"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-medieval-dark mb-1">F{{ slot }}</div>
+                
+                <!-- Mostrar poção atual no slot -->
+                <div v-if="currentHotkeys[slot - 1]" class="space-y-1">
+                  <img :src="currentHotkeys[slot - 1].item.image_path" :alt="currentHotkeys[slot - 1].item.name" class="w-4 h-4 mx-auto" />
+                  <div class="text-xs text-medieval-stone">
+                    {{ currentHotkeys[slot - 1].quantity }}x
+                  </div>
+                </div>
+                <div v-else class="text-xs text-gray-400 mt-2">
+                  Vazio
+                </div>
+              </div>
+              
+              <!-- Indicador de seleção -->
+              <div v-if="selectedHotkey === slot" class="absolute -top-1 -right-1 w-3 h-3 bg-medieval-gold rounded-full flex items-center justify-center">
+                <span class="text-xs text-medieval-dark">✓</span>
+              </div>
+            </button>
+          </div>
+          
+          <!-- Botões de Ação -->
+          <div class="flex justify-center space-x-3">
+            <button 
+              @click="cancelHotkeySelection"
+              class="btn-medieval px-4 py-2 bg-transparent border-2 border-medieval-bronze text-medieval-bronze hover:bg-medieval-bronze hover:text-medieval-dark transition-all duration-200"
+            >
+              Cancelar
+            </button>
+            <button 
+              @click="confirmHotkeySelection"
+              class="btn-medieval px-4 py-2 bg-medieval-gold text-medieval-dark hover:bg-yellow-500 transition-all duration-200 shadow-md"
+              :disabled="!selectedHotkey"
+              :class="{ 'opacity-50 cursor-not-allowed': !selectedHotkey }"
+            >
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
   user: Object,
   character: Object,
+  inventory: Object,
+  equipped: Object,
+  stats: Object,
 });
 
 const currentTime = ref(new Date());
 const mobileMenuOpen = ref(false);
 let timeInterval = null;
+
+// Modal de seleção de hotkey
+const showHotkeyModal = ref(false);
+const selectedHotkey = ref(null);
+const selectedItem = ref(null);
+
+// Abas do inventário
+const activeInventoryTab = ref('potions');
+
+// Hotkeys atuais
+const currentHotkeys = ref([null, null, null, null]);
+
+// Carregar hotkeys atuais
+const loadCurrentHotkeys = async () => {
+  try {
+    const response = await axios.get('/api/items/hotkeys');
+    console.log('Resposta completa da API:', response.data);
+    
+    if (response.data.success) {
+      console.log('Hotkeys recebidos:', response.data.hotkeys);
+      // A API retorna um objeto com chaves 1-4, converter para array 0-3
+      const hotkeysArray = [null, null, null, null];
+      if (response.data.hotkeys) {
+        // response.data.hotkeys é um objeto {1: item, 2: item, 3: item, 4: item}
+        for (let slot = 1; slot <= 4; slot++) {
+          if (response.data.hotkeys[slot]) {
+            console.log(`Colocando item no slot ${slot - 1}:`, response.data.hotkeys[slot]);
+            hotkeysArray[slot - 1] = response.data.hotkeys[slot];
+          }
+        }
+      }
+      currentHotkeys.value = hotkeysArray;
+      console.log('Hotkeys processados:', currentHotkeys.value);
+    } else {
+      console.log('API retornou success: false');
+    }
+  } catch (error) {
+    console.error('Erro ao carregar hotkeys:', error);
+  }
+};
+
+// Função para definir hotkey a partir do inventário
+const setHotkeyFromInventory = async (item) => {
+  await loadCurrentHotkeys();
+  selectedItem.value = item;
+  showHotkeyModal.value = true;
+};
+
+// Função para selecionar hotkey no modal
+const assignToHotkey = (slot) => {
+  selectedHotkey.value = slot;
+};
+
+// Função para cancelar seleção
+const cancelHotkeySelection = () => {
+  showHotkeyModal.value = false;
+  selectedHotkey.value = null;
+  selectedItem.value = null;
+};
+
+// Função para confirmar seleção
+const confirmHotkeySelection = async () => {
+  if (!selectedHotkey.value || !selectedItem.value) return;
+  
+  try {
+    const response = await axios.post('/api/items/set-hotkey', {
+      character_item_id: selectedItem.value.id,
+      slot: selectedHotkey.value
+    });
+    
+    if (response.data.success) {
+      await loadCurrentHotkeys();
+      router.reload();
+    }
+  } catch (error) {
+    console.error('Erro ao definir hotkey:', error);
+  }
+  
+  cancelHotkeySelection();
+};
 
 const getClassName = (className) => {
   switch (className) {
