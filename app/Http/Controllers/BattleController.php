@@ -8,6 +8,7 @@ use App\Models\BattleInstance;
 use App\Models\Monster;
 use App\Services\BattleService;
 use App\Services\CharacterService;
+use App\Services\EventService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,11 +19,13 @@ class BattleController extends Controller
 {
     protected BattleService $battleService;
     protected CharacterService $characterService;
+    protected EventService $eventService;
 
     public function __construct()
     {
         $this->battleService = app(BattleService::class);
         $this->characterService = app(CharacterService::class);
+        $this->eventService = app(EventService::class);
     }
     /**
      * Show the battle selection page.
@@ -223,9 +226,12 @@ class BattleController extends Controller
 
         // Check if battle is over (monster defeated)
         if ($tempMonster->current_hp <= 0) {
-            // Character won - give rewards
-            $character->gold += $monster->gold_reward;
-            $this->characterService->addExperience($character, $monster->exp_reward);
+            // Character won - give rewards with event multipliers
+            $goldReward = (int) round($this->eventService->applyMultiplier($monster->gold_reward, 'gold'));
+            $expReward = (int) round($this->eventService->applyMultiplier($monster->exp_reward, 'exp'));
+            
+            $character->gold += $goldReward;
+            $this->characterService->addExperience($character, $expReward);
             $character->save();
 
             // Finalizar batalha
@@ -236,8 +242,11 @@ class BattleController extends Controller
                 'result' => [
                     'winner' => 'character',
                     'message' => "Você derrotou {$monster->name}!",
-                    'gold_reward' => $monster->gold_reward,
-                    'exp_reward' => $monster->exp_reward
+                    'gold_reward' => $goldReward,
+                    'exp_reward' => $expReward,
+                    'base_gold_reward' => $monster->gold_reward,
+                    'base_exp_reward' => $monster->exp_reward,
+                    'active_events' => $this->eventService->getActiveEvents()
                 ],
                 'character' => $character->fresh(),
                 'monster' => [

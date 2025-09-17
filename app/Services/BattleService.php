@@ -9,18 +9,39 @@ use App\Models\Monster;
 
 class BattleService
 {
+    protected EventService $eventService;
+
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
     /**
      * Calculate damage dealt by attacker to defender.
      */
     public function calculateDamage(int $attackPower, int $defense): int
     {
-        $baseDamage = max(1, $attackPower - $defense);
+        // Get configuration values
+        $attackMultiplier = config('battle.damage.attack_multiplier');
+        $defenseReduction = config('battle.damage.defense_reduction');
+        $minRandom = config('battle.damage.randomization_min');
+        $maxRandom = config('battle.damage.randomization_max');
+        $minDamage = config('battle.damage.minimum_damage');
         
-        // Add some randomness (±20%)
-        $randomFactor = 0.8 + (mt_rand(0, 40) / 100); // 0.8 to 1.2
+        // Calculate base damage
+        $baseDamage = ($attackPower * $attackMultiplier) - ($defense * $defenseReduction);
+        
+        // Ensure minimum damage
+        $baseDamage = max($minDamage, $baseDamage);
+        
+        // Add randomness
+        $randomFactor = $minRandom + (mt_rand(0, (int)(($maxRandom - $minRandom) * 100)) / 100);
         $damage = (int) round($baseDamage * $randomFactor);
         
-        return max(1, $damage);
+        // Apply event multiplier
+        $damage = $this->eventService->applyMultiplier($damage, 'damage');
+        
+        return max($minDamage, (int) round($damage));
     }
 
     /**
@@ -28,14 +49,19 @@ class BattleService
      */
     public function doesAttackHit(int $attackerSpeed, int $defenderSpeed): bool
     {
-        $hitChance = 0.8; // Base 80% hit chance
+        $baseChance = config('battle.hit_chance.base_chance');
+        $speedMultiplier = config('battle.hit_chance.speed_multiplier');
+        $minChance = config('battle.hit_chance.min_chance');
+        $maxChance = config('battle.hit_chance.max_chance');
+        
+        $hitChance = $baseChance;
         
         // Speed difference affects hit chance
         $speedDiff = $attackerSpeed - $defenderSpeed;
-        $hitChance += $speedDiff * 0.05; // 5% per speed point difference
+        $hitChance += $speedDiff * $speedMultiplier;
         
-        // Clamp between 10% and 95%
-        $hitChance = max(0.1, min(0.95, $hitChance));
+        // Clamp between min and max
+        $hitChance = max($minChance, min($maxChance, $hitChance));
         
         return mt_rand(1, 100) <= ($hitChance * 100);
     }
@@ -45,8 +71,11 @@ class BattleService
      */
     public function isCriticalHit(int $luck): bool
     {
-        $critChance = $luck * 0.01; // 1% per luck point
-        $critChance = min(0.5, $critChance); // Max 50% crit chance
+        $luckMultiplier = config('battle.critical_hit.luck_multiplier');
+        $maxChance = config('battle.critical_hit.max_chance');
+        
+        $critChance = $luck * $luckMultiplier;
+        $critChance = min($maxChance, $critChance);
         
         return mt_rand(1, 100) <= ($critChance * 100);
     }
@@ -78,7 +107,8 @@ class BattleService
         
         // Check for critical hit
         if ($this->isCriticalHit($character->luck)) {
-            $damage = (int) round($damage * 1.5);
+            $critMultiplier = config('battle.critical_hit.multiplier');
+            $damage = (int) round($damage * $critMultiplier);
             $result['critical'] = true;
         }
 
@@ -124,8 +154,10 @@ class BattleService
         $damage = $this->calculateDamage($monster->attack_power, 0); // Characters don't have defense yet
         
         // Check for critical hit (monsters have low crit chance)
-        if (mt_rand(1, 100) <= 5) { // 5% crit chance for monsters
-            $damage = (int) round($damage * 1.5);
+        $monsterCritChance = config('battle.critical_hit.monster_chance');
+        if (mt_rand(1, 100) <= ($monsterCritChance * 100)) {
+            $critMultiplier = config('battle.critical_hit.multiplier');
+            $damage = (int) round($damage * $critMultiplier);
             $result['critical'] = true;
         }
 
