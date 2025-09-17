@@ -230,9 +230,15 @@ class BattleController extends Controller
             $goldReward = (int) round($this->eventService->applyMultiplier($monster->gold_reward, 'gold'));
             $expReward = (int) round($this->eventService->applyMultiplier($monster->exp_reward, 'exp'));
             
+            // Store level before adding experience
+            $levelBefore = $character->level;
+            
             $character->gold += $goldReward;
             $this->characterService->addExperience($character, $expReward);
             $character->save();
+            
+            // Check if character leveled up
+            $leveledUp = $character->level > $levelBefore;
 
             // Finalizar batalha
             $battleInstance->endBattle();
@@ -261,7 +267,9 @@ class BattleController extends Controller
                     'image' => $monster->image,
                     'image_path' => $monster->image_path,
                 ],
-                'attack_result' => $attackResult
+                'attack_result' => $attackResult,
+                'leveled_up' => $leveledUp,
+                'new_level' => $leveledUp ? $character->level : null
             ]);
         }
 

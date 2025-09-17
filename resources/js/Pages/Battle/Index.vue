@@ -24,6 +24,89 @@
 
     <!-- Battle Modal -->
     <div v-if="showBattleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-1 sm:p-4">
+      <!-- Level Up Overlay -->
+      <div v-if="showLevelUpEffect" class="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto">
+        <div class="bg-gradient-to-br from-medieval-gold via-yellow-400 to-medieval-bronze text-medieval-dark px-8 py-8 rounded-xl shadow-2xl max-w-2xl w-full mx-4 border-4 border-medieval-dark transform transition-all duration-1000 ease-out animate-level-up">
+          <!-- Decorative border -->
+          <div class="absolute inset-0 rounded-xl border-2 border-medieval-gold/50"></div>
+          
+          <!-- Header -->
+          <div class="text-center mb-6 relative z-10">
+            <div class="text-3xl sm:text-4xl font-bold text-medieval whitespace-nowrap">
+              {{ levelUpMessage }}
+            </div>
+          </div>
+          
+          <!-- Decorative line -->
+          <div class="w-full h-1 bg-gradient-to-r from-transparent via-medieval-dark to-transparent mb-6"></div>
+          
+          <!-- Locked items section -->
+          <div class="bg-medieval-dark/30 rounded-xl p-6 border-2 border-medieval-bronze/50 relative z-10 mb-6">
+            <h4 class="text-2xl font-bold text-medieval-dark mb-6 text-center">
+              🏰 Recompensas de Nível 🏰
+            </h4>
+            <div class="grid grid-cols-4 gap-4 mb-6">
+              <div class="bg-gray-500 rounded-xl p-4 text-center opacity-70 border-2 border-gray-600 relative">
+                <div class="text-4xl mb-2">⚔️</div>
+                <div class="text-sm font-semibold text-gray-900">Arma Épica</div>
+                <!-- Lock overlay -->
+                <div class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                  <div class="text-3xl text-white">🔒</div>
+                </div>
+              </div>
+              <div class="bg-gray-500 rounded-xl p-4 text-center opacity-70 border-2 border-gray-600 relative">
+                <div class="text-4xl mb-2">🛡️</div>
+                <div class="text-sm font-semibold text-gray-900">Armadura</div>
+                <!-- Lock overlay -->
+                <div class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                  <div class="text-3xl text-white">🔒</div>
+                </div>
+              </div>
+              <div class="bg-gray-500 rounded-xl p-4 text-center opacity-70 border-2 border-gray-600 relative">
+                <div class="text-4xl mb-2">💎</div>
+                <div class="text-sm font-semibold text-gray-900">Gema Rara</div>
+                <!-- Lock overlay -->
+                <div class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                  <div class="text-3xl text-white">🔒</div>
+                </div>
+              </div>
+              <div class="bg-gray-500 rounded-xl p-4 text-center opacity-70 border-2 border-gray-600 relative">
+                <div class="text-4xl mb-2">📜</div>
+                <div class="text-sm font-semibold text-gray-900">Pergaminho</div>
+                <!-- Lock overlay -->
+                <div class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                  <div class="text-3xl text-white">🔒</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <p class="text-lg text-medieval-dark font-semibold mb-2">
+                🚧 Sistema em Desenvolvimento 🚧
+              </p>
+              <p class="text-sm text-medieval-dark">
+                Em breve você receberá recompensas especiais ao subir de nível!
+              </p>
+            </div>
+          </div>
+          
+          <!-- Footer with close button -->
+          <div class="text-center relative z-10">
+            <button 
+              @click="showLevelUpEffect = false"
+              class="bg-medieval-dark hover:bg-medieval-bronze text-medieval-gold font-bold py-3 px-8 rounded-lg border-2 border-medieval-bronze transition-all duration-200 hover:scale-105 shadow-lg"
+            >
+              Fechar
+            </button>
+          </div>
+          
+          <!-- Decorative corners -->
+          <div class="absolute top-2 left-2 w-6 h-6 border-l-4 border-t-4 border-medieval-dark rounded-tl-lg"></div>
+          <div class="absolute top-2 right-2 w-6 h-6 border-r-4 border-t-4 border-medieval-dark rounded-tr-lg"></div>
+          <div class="absolute bottom-2 left-2 w-6 h-6 border-l-4 border-b-4 border-medieval-dark rounded-bl-lg"></div>
+          <div class="absolute bottom-2 right-2 w-6 h-6 border-r-4 border-b-4 border-medieval-dark rounded-br-lg"></div>
+        </div>
+      </div>
+      
       <div class="bg-white rounded-lg shadow-2xl max-w-6xl w-full h-[98vh] sm:h-[90vh] flex flex-col">
         <!-- Modal Header -->
         <div class="bg-medieval-dark text-medieval-gold p-2 rounded-t-lg">
@@ -486,6 +569,16 @@ const toastType = ref('success'); // success, error, info
 // Dados do personagem reativos para atualização em tempo real
 const characterData = ref({ ...props.character });
 
+// Level up effect
+const showLevelUpEffect = ref(false);
+const levelUpMessage = ref('');
+
+// Função para mostrar efeito de level up
+const showLevelUpAnimation = (newLevel) => {
+  levelUpMessage.value = `🎉 NOVO NÍVEL ${newLevel}! 🎉`;
+  showLevelUpEffect.value = true;
+};
+
 // Debug inicial
 console.log('Props character inicial:', props.character);
 console.log('CharacterData inicial:', characterData.value);
@@ -830,6 +923,12 @@ const attack = async () => {
       battleResult.value = data.result;
       autoBattle.value = false; // Desmarcar checkbox quando batalha termina
       
+      // Check for level up
+      if (data.leveled_up && data.new_level) {
+        showLevelUpAnimation(data.new_level);
+        addToLog(`🎉 LEVEL UP! Você subiu para o nível ${data.new_level}! 🎉`);
+      }
+      
       if (data.result.winner === 'character') {
         addToLog(`[VITÓRIA] Você derrotou o monstro! Ganhou ${data.result.gold_reward} gold e ${data.result.exp_reward} EXP!`);
       } else if (data.result.winner === 'monster') {
@@ -958,7 +1057,26 @@ onUnmounted(() => {
   }
 }
 
+@keyframes level-up {
+  0% { 
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+  }
+  50% { 
+    transform: translateY(0px) scale(1.05);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+.animate-level-up {
+  animation: level-up 1.2s ease-out forwards;
 }
 </style>
