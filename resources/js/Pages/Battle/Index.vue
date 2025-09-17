@@ -260,14 +260,14 @@
                       :data-slot="slot"
                       @click="useHotkeyPotion(slot)"
                       :disabled="isAttacking || !hotkeyItems[slot - 1]"
-                      class="bg-white rounded-lg border-2 border-medieval-bronze w-12 h-12 sm:w-16 sm:h-16 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      class="bg-white rounded-lg border-2 border-medieval-bronze w-14 h-14 sm:w-20 sm:h-20 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       :class="{ 
                         'border-medieval-gold bg-medieval-bronze shadow-md': hotkeyItems[slot - 1],
                         'border-medieval-bronze bg-white': !hotkeyItems[slot - 1]
                       }"
                     >
                       <div v-if="hotkeyItems[slot - 1]" class="flex flex-col items-center justify-center h-full">
-                        <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-4 h-4 sm:w-6 sm:h-6 mb-1" />
+                        <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-6 h-6 sm:w-8 sm:h-8 mb-1" />
                         <span class="text-xs text-medieval font-semibold">{{ hotkeyItems[slot - 1].quantity }}x</span>
                         <div class="text-xs text-medieval-gold font-semibold">[F{{ slot }}]</div>
                       </div>

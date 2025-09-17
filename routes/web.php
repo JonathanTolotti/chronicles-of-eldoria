@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
+// Maintenance mode route (uncomment to enable maintenance mode)
+Route::get('/maintenance', function () {
+    return Inertia::render('Maintenance', [
+        'message' => 'Nossos artesãos estão trabalhando arduamente para melhorar sua experiência!',
+        'estimatedTime' => '15-30 minutos'
+    ]);
+})->name('maintenance');
+
 /*
 |--------------------------------------------------------------------------
 | ESTRUTURA DE ROTAS - CHRONICLES OF ELDORIA

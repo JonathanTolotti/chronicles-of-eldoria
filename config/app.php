@@ -43,6 +43,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Maintenance Mode
+    |--------------------------------------------------------------------------
+    |
+    | When the application is in maintenance mode, all requests will be
+    | redirected to the maintenance page.
+    |
+    */
+
+    'maintenance_mode' => (bool) env('APP_MAINTENANCE_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
     |

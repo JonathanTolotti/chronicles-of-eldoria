@@ -23,11 +23,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'email.verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'maintenance' => \App\Http\Middleware\MaintenanceMode::class,
         ]);
 
         // Aplicar middleware global de verificação de email
         $middleware->web(append: [
             \App\Http\Middleware\EnsureEmailIsVerified::class,
+        ]);
+
+        // Aplicar middleware global de manutenção
+        $middleware->web(append: [
+            \App\Http\Middleware\MaintenanceMode::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
