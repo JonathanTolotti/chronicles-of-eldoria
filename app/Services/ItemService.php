@@ -46,11 +46,22 @@ class ItemService
         // Use the item (decrease quantity)
         $characterItem->useItem();
 
+        // Refresh character data to get updated values
+        $character->refresh();
+
         return [
             'success' => true,
             'message' => 'Item usado com sucesso',
             'effects' => $results,
-            'remaining_quantity' => $characterItem->quantity
+            'remaining_quantity' => $characterItem->quantity,
+            'character' => [
+                'current_hp' => $character->current_hp,
+                'max_hp' => $character->max_hp,
+                'current_stamina' => $character->current_stamina,
+                'max_stamina' => $character->max_stamina,
+                'current_mp' => $character->current_mp,
+                'max_mp' => $character->max_mp,
+            ]
         ];
     }
 
