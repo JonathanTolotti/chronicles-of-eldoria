@@ -50,7 +50,7 @@
                 <div class="flex items-center space-x-2">
                   <!-- Imagem do Personagem -->
                   <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-medieval-bronze rounded-lg flex items-center justify-center text-xl">
+                    <div class="w-14 h-14 bg-medieval-bronze rounded-lg flex items-center justify-center text-xl">
                       ⚔️
                     </div>
                   </div>
@@ -62,7 +62,6 @@
                       <div class="flex justify-between text-xs mb-1">
                         <span class="text-medieval">HP:</span>
                         <span class="text-red-600 font-semibold text-xs">{{ characterData?.current_hp }}/{{ characterData?.max_hp }}</span>
-                      
                       </div>
                       <div class="w-full bg-gray-300 rounded-full h-1.5 shadow-inner">
                         <div class="bg-gradient-to-r from-red-500 to-red-600 h-1.5 rounded-full transition-all duration-500 ease-out shadow-sm" 
@@ -76,8 +75,8 @@
                         <span class="text-medieval">Stamina:</span>
                         <span class="text-blue-600 font-semibold text-xs">{{ characterData?.current_stamina }}/{{ characterData?.max_stamina }}</span>
                       </div>
-                      <div class="w-full bg-gray-300 rounded-full h-1.5 sm:h-2 shadow-inner">
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out shadow-sm" 
+                      <div class="w-full bg-gray-300 rounded-full h-1.5 shadow-inner">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 rounded-full transition-all duration-500 ease-out shadow-sm" 
                              :style="{ width: characterData?.max_stamina ? `${((characterData?.current_stamina || 0) / characterData.max_stamina) * 100}%` : '0%' }"></div>
                       </div>
                     </div>
@@ -108,10 +107,10 @@
                       v-if="selectedMonster?.image_path" 
                       :src="selectedMonster.image_path" 
                       :alt="selectedMonster.name"
-                      class="w-12 h-12 object-contain"
+                      class="w-14 h-14 object-contain"
                       @error="handleImageError"
                     />
-                    <div v-else class="w-12 h-12 bg-gray-300 rounded-lg flex items-center justify-center text-xl">
+                    <div v-else class="w-14 h-14 bg-gray-300 rounded-lg flex items-center justify-center text-xl">
                       {{ selectedMonster?.image }}
                     </div>
                   </div>
@@ -156,9 +155,9 @@
           </div>
 
           <!-- Battle Log -->
-          <div class="mb-1 flex-1 flex flex-col min-h-0 max-h-32">
-            <h3 class="text-xs subtitle-medieval mb-1 text-medieval-gold">Log de Combate</h3>
-            <div class="bg-gray-900 text-green-400 p-2 rounded-lg flex-1 overflow-y-auto font-mono text-xs battle-log min-h-0">
+          <div class="mb-2 flex-1 flex flex-col min-h-0 max-h-48">
+            <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold">Log de Combate</h3>
+            <div class="bg-gray-900 text-green-400 p-4 rounded-lg flex-1 overflow-y-auto font-mono text-sm battle-log min-h-0">
               <div v-for="(message, index) in battleLog" :key="index" class="mb-1 break-words">
                 {{ message }}
               </div>
@@ -174,14 +173,14 @@
               <h3 class="text-xs subtitle-medieval mb-1 text-medieval-gold">Escolha sua Ação</h3>
               
               <!-- Aviso de Vida Baixa -->
-              <div v-if="(characterData?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-2 sm:p-3 mb-3 sm:mb-4">
-                <p class="text-xs sm:text-sm text-red-800">
+              <div v-if="(characterData?.current_hp || 0) <= 0" class="bg-red-50 border border-red-200 rounded-lg p-2 mb-3">
+                <p class="text-xs text-red-800">
                   💀 Você está morto! Precisa ser revivido para batalhar.
                 </p>
               </div>
               
               <!-- Checkbox de Batalha Automática -->
-              <div v-if="(characterData?.current_hp || 0) > 0" class="flex items-center justify-center mb-3 sm:mb-4">
+              <div v-if="(characterData?.current_hp || 0) > 0" class="flex items-center justify-center mb-3">
                 <label class="flex items-center space-x-2 cursor-pointer">
                   <input 
                     type="checkbox" 
@@ -189,7 +188,7 @@
                     @change="toggleAutoBattle"
                     class="w-4 h-4 text-medieval-gold bg-gray-100 border-gray-300 rounded focus:ring-medieval-gold focus:ring-2"
                   >
-                  <span class="text-xs sm:text-sm text-medieval font-medium">Batalha Automática</span>
+                  <span class="text-xs text-medieval font-medium">Batalha Automática</span>
                 </label>
               </div>
               
@@ -213,7 +212,7 @@
           </div>
           
           <!-- Espaço após ações -->
-          <div class="mb-2"></div>
+          <div class="mb-3"></div>
 
           <!-- Battle Result -->
           <div v-if="battleOver" class="border-t border-gray-200 pt-3 sm:pt-4">
@@ -245,35 +244,69 @@
             </div>
           </div>
 
-          <!-- Hotkeys de Poções -->
-          <div v-if="!battleOver" class="border-t border-medieval-bronze pt-2">
-            <h3 class="text-xs subtitle-medieval mb-1 text-medieval-gold text-center">Poções</h3>
-            <div class="flex justify-center gap-2">
-              <button 
-                v-for="slot in 4" 
-                :key="slot"
-                :data-slot="slot"
-                @click="useHotkeyPotion(slot)"
-                :disabled="isAttacking || !hotkeyItems[slot - 1]"
-                class="group relative bg-white rounded-lg border-2 border-medieval-bronze w-20 h-20 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                :class="{ 
-                  'border-medieval-gold bg-medieval-bronze shadow-md': hotkeyItems[slot - 1],
-                  'border-medieval-bronze bg-white': !hotkeyItems[slot - 1]
-                }"
-              >
-                <div v-if="hotkeyItems[slot - 1]" class="flex flex-col items-center justify-center h-full">
-                  <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-7 h-7 mb-1" />
-                  <span class="text-xs text-medieval font-semibold">{{ hotkeyItems[slot - 1].quantity }}x</span>
-                  <div class="text-xs text-medieval-gold font-semibold">[F{{ slot }}]</div>
+          <!-- Poções e Habilidades -->
+          <div v-if="!battleOver" class="border-t border-medieval-bronze pt-3">
+            <div class="flex justify-between items-start gap-4">
+              <!-- Poções -->
+              <div class="flex-1">
+                <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold text-center">Poções</h3>
+                <div class="flex justify-center gap-2">
+                  <div 
+                    v-for="slot in 4" 
+                    :key="slot"
+                    class="relative group"
+                  >
+                    <button 
+                      :data-slot="slot"
+                      @click="useHotkeyPotion(slot)"
+                      :disabled="isAttacking || !hotkeyItems[slot - 1]"
+                      class="bg-white rounded-lg border-2 border-medieval-bronze w-16 h-16 flex flex-col items-center justify-center hover:bg-amber-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      :class="{ 
+                        'border-medieval-gold bg-medieval-bronze shadow-md': hotkeyItems[slot - 1],
+                        'border-medieval-bronze bg-white': !hotkeyItems[slot - 1]
+                      }"
+                    >
+                      <div v-if="hotkeyItems[slot - 1]" class="flex flex-col items-center justify-center h-full">
+                        <img :src="hotkeyItems[slot - 1].item.image_path" :alt="hotkeyItems[slot - 1].item.name" class="w-6 h-6 mb-1" />
+                        <span class="text-xs text-medieval font-semibold">{{ hotkeyItems[slot - 1].quantity }}x</span>
+                        <div class="text-xs text-medieval-gold font-semibold">[F{{ slot }}]</div>
+                      </div>
+                      <div v-else class="flex flex-col items-center justify-center h-full">
+                        <span class="text-medieval-stone text-xs font-semibold">F{{ slot }}</span>
+                        <span class="text-medieval-stone text-xs font-semibold">Vazio</span>
+                      </div>
+                    </button>
+                    
+                    <!-- Tooltip para poções -->
+                    <div 
+                      v-if="hotkeyItems[slot - 1]" 
+                      class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap"
+                    >
+                      <div class="font-semibold text-medieval-gold mb-1">{{ hotkeyItems[slot - 1].item.name }}</div>
+                      <div v-for="effect in hotkeyItems[slot - 1].item.effects" :key="effect.id" class="text-green-400">
+                        {{ getEffectDescription(effect) }}
+                      </div>
+                      <div class="text-gray-400 mt-1">Quantidade: {{ hotkeyItems[slot - 1].quantity }}</div>
+                      <!-- Seta do tooltip -->
+                      <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
                 </div>
-                <div v-else class="flex flex-col items-center justify-center h-full">
-                  <span class="text-medieval-stone text-xs font-semibold">F{{ slot }}</span>
-                  <span class="text-medieval-stone text-xs font-semibold">Vazio</span>
+              </div>
+              
+              <!-- Habilidades (Bloqueado) -->
+              <div class="flex-1">
+                <h3 class="text-sm subtitle-medieval mb-2 text-medieval-gold text-center">Habilidades</h3>
+                <div class="flex justify-center">
+                  <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-3 text-center opacity-75 h-16 flex items-center justify-center" style="width: calc(4 * 4rem + 3 * 0.5rem);">
+                    <div class="text-gray-500">
+                      <div class="text-lg mb-1">🚧</div>
+                      <div class="font-medium text-sm">Em Breve</div>
+                    </div>
+                  </div>
                 </div>
-                
-              </button>
+              </div>
             </div>
-            
           </div>
         </div>
       </div>
@@ -465,6 +498,30 @@ const formatNumber = (num) => {
     return (num / 1000).toFixed(1) + 'K';
   }
   return num.toString();
+};
+
+// Função para converter efeitos em descrições legíveis
+const getEffectDescription = (effect) => {
+  switch (effect.effect_type) {
+    case 'heal_hp':
+      return `+${effect.effect_value} HP`;
+    case 'restore_stamina':
+      return `+${effect.effect_value} Stamina`;
+    case 'restore_mp':
+      return `+${effect.effect_value} MP`;
+    case 'buff_strength':
+      return `+${effect.effect_value} Força`;
+    case 'buff_dexterity':
+      return `+${effect.effect_value} Destreza`;
+    case 'buff_constitution':
+      return `+${effect.effect_value} Constituição`;
+    case 'buff_intelligence':
+      return `+${effect.effect_value} Inteligência`;
+    case 'buff_luck':
+      return `+${effect.effect_value} Sorte`;
+    default:
+      return `${effect.effect_type}: +${effect.effect_value}`;
+  }
 };
 
 // Função para mostrar toast
