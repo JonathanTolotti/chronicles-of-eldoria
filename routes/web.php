@@ -116,10 +116,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/battle/attack', [App\Http\Controllers\BattleController::class, 'attack'])->name('battle.attack');
     Route::post('/battle/flee', [App\Http\Controllers\BattleController::class, 'flee'])->name('battle.flee');
     
+    // Inventory routes
+    Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/api/inventory', [App\Http\Controllers\InventoryController::class, 'getInventory'])->name('inventory.get');
+    Route::post('/api/inventory/equip', [App\Http\Controllers\InventoryController::class, 'equipItem'])->name('inventory.equip');
+    Route::post('/api/inventory/unequip', [App\Http\Controllers\InventoryController::class, 'unequipItem'])->name('inventory.unequip');
+    
+    // Item routes (hotkeys)
+    Route::post('/api/items/use-hotkey', [App\Http\Controllers\ItemController::class, 'useHotkeyItem'])->name('items.use-hotkey');
+    Route::post('/api/items/set-hotkey', [App\Http\Controllers\ItemController::class, 'setHotkeySlot'])->name('items.set-hotkey');
+    Route::get('/api/items/hotkeys', [App\Http\Controllers\ItemController::class, 'getHotkeyItems'])->name('items.hotkeys');
+    Route::post('/api/items/add', [App\Http\Controllers\ItemController::class, 'addItem'])->name('items.add');
+    
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');
-    // Route::get('/game/battle', [BattleController::class, 'index'])->name('game.battle');
-    // Route::get('/game/inventory', [InventoryController::class, 'index'])->name('game.inventory');
     // Route::get('/game/shop', [ShopController::class, 'index'])->name('game.shop');
     // Route::get('/game/guild', [GuildController::class, 'index'])->name('game.guild');
 });
