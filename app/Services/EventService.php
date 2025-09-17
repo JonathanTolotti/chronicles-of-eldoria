@@ -12,10 +12,10 @@ class EventService
     public function getEventMultipliers(): array
     {
         return [
-            'exp' => config('battle.events.exp_multiplier'),
-            'gold' => config('battle.events.gold_multiplier'),
-            'damage' => config('battle.events.damage_multiplier'),
-            'drop_rate' => config('battle.events.drop_rate_multiplier'),
+            'exp' => (float) config('battle.events.exp_multiplier'),
+            'gold' => (float) config('battle.events.gold_multiplier'),
+            'damage' => (float) config('battle.events.damage_multiplier'),
+            'drop_rate' => (float) config('battle.events.drop_rate_multiplier'),
         ];
     }
 
@@ -27,7 +27,7 @@ class EventService
         $multipliers = $this->getEventMultipliers();
         
         foreach ($multipliers as $multiplier) {
-            if ($multiplier !== 1.0) {
+            if (abs($multiplier - 1.0) > 0.001) {
                 return true;
             }
         }
@@ -43,43 +43,61 @@ class EventService
         $events = [];
         $multipliers = $this->getEventMultipliers();
 
-        if ($multipliers['exp'] !== 1.0) {
+        if (abs($multipliers['exp'] - 1.0) > 0.001) {
             $events[] = [
                 'type' => 'exp',
                 'name' => 'Evento de EXP',
                 'multiplier' => $multipliers['exp'],
-                'description' => "EXP {$multipliers['exp']}x"
+                'description' => $this->formatMultiplierDescription('EXP', $multipliers['exp'])
             ];
         }
 
-        if ($multipliers['gold'] !== 1.0) {
+        if (abs($multipliers['gold'] - 1.0) > 0.001) {
             $events[] = [
                 'type' => 'gold',
                 'name' => 'Evento de Ouro',
                 'multiplier' => $multipliers['gold'],
-                'description' => "Ouro {$multipliers['gold']}x"
+                'description' => $this->formatMultiplierDescription('Ouro', $multipliers['gold'])
             ];
         }
 
-        if ($multipliers['damage'] !== 1.0) {
+        if (abs($multipliers['damage'] - 1.0) > 0.001) {
             $events[] = [
                 'type' => 'damage',
                 'name' => 'Evento de Dano',
                 'multiplier' => $multipliers['damage'],
-                'description' => "Dano {$multipliers['damage']}x"
+                'description' => $this->formatMultiplierDescription('Dano', $multipliers['damage'])
             ];
         }
 
-        if ($multipliers['drop_rate'] !== 1.0) {
+        if (abs($multipliers['drop_rate'] - 1.0) > 0.001) {
             $events[] = [
                 'type' => 'drop_rate',
                 'name' => 'Evento de Drops',
                 'multiplier' => $multipliers['drop_rate'],
-                'description' => "Drops {$multipliers['drop_rate']}x"
+                'description' => $this->formatMultiplierDescription('Drops', $multipliers['drop_rate'])
             ];
         }
 
         return $events;
+    }
+
+    /**
+     * Format multiplier description with percentage
+     */
+    private function formatMultiplierDescription(string $type, float $multiplier): string
+    {
+        if (abs($multiplier - 1.0) <= 0.001) {
+            return '';
+        }
+        
+        $percentage = round(($multiplier - 1) * 100);
+        
+        if ($percentage > 0) {
+            return "{$type} +{$percentage}%";
+        } else {
+            return "{$type} {$percentage}%";
+        }
     }
 
     /**

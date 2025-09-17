@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\InventoryService;
+use App\Services\EventService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,7 +14,8 @@ use Inertia\Response;
 class DashboardController extends Controller
 {
     public function __construct(
-        private InventoryService $inventoryService
+        private InventoryService $inventoryService,
+        private EventService $eventService
     ) {}
 
     /**
@@ -35,12 +37,18 @@ class DashboardController extends Controller
         $equipped = $this->inventoryService->getEquippedItems($character);
         $stats = $this->inventoryService->getInventoryStats($character);
         
+        // Carregar eventos ativos
+        $activeEvents = $this->eventService->getActiveEvents();
+        $hasActiveEvents = $this->eventService->hasActiveEvents();
+        
         return Inertia::render('Dashboard', [
             'user' => $user,
             'character' => $character,
             'inventory' => $inventory,
             'equipped' => $equipped,
             'stats' => $stats,
+            'activeEvents' => $activeEvents,
+            'hasActiveEvents' => $hasActiveEvents,
         ]);
     }
 }

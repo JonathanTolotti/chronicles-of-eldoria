@@ -124,6 +124,45 @@
       </div>
     </header>
 
+    <!-- Active Events Banner -->
+    <div v-if="hasActiveEvents" class="relative overflow-hidden">
+      <!-- Background with animation -->
+      <div class="absolute inset-0 bg-gradient-to-r from-medieval-gold via-yellow-400 to-medieval-gold animate-pulse"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+      
+      <!-- Content -->
+      <div class="relative bg-gradient-to-r from-medieval-gold to-yellow-400 text-medieval-dark py-3 px-4 shadow-lg">
+        <div class="container mx-auto">
+          <div class="flex items-center justify-center space-x-6">
+            <!-- Left decoration -->
+            <div class="text-2xl animate-bounce">🎉</div>
+            
+            <!-- Main content -->
+            <div class="text-center">
+              <div class="font-medieval-decorative font-bold text-lg mb-1 tracking-wide">
+                ⚔️ EVENTOS ATIVOS ⚔️
+              </div>
+              <div class="font-medieval text-sm space-x-4">
+                <span 
+                  v-for="(event, index) in activeEvents" 
+                  :key="event.type" 
+                  class="inline-flex items-center px-3 py-1 bg-medieval-dark/20 rounded-full border border-medieval-dark/30 shadow-sm"
+                >
+                  <span class="font-semibold">{{ event.description }}</span>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Right decoration -->
+            <div class="text-2xl animate-bounce" style="animation-delay: 0.5s">🎉</div>
+          </div>
+        </div>
+        
+        <!-- Decorative border -->
+        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-medieval-dark/50 to-transparent"></div>
+      </div>
+    </div>
+
     <!-- Main Content -->
     <main class="flex-1 p-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 h-full">
@@ -605,6 +644,8 @@ const props = defineProps({
   inventory: Object,
   equipped: Object,
   stats: Object,
+  activeEvents: Array,
+  hasActiveEvents: Boolean,
 });
 
 const currentTime = ref(new Date());
