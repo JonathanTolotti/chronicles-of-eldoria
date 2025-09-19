@@ -429,14 +429,12 @@
               <div class="flex flex-col items-center space-y-2">
                 <!-- Elmo -->
                 <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     :class="equipment?.equipped?.helmet ? getTierEffect(equipment.equipped.helmet.current_tier) : ''"
                      @click="equipment?.equipped?.helmet ? unequipItem('helmet') : equipNextItem('helmet')">
                   <div v-if="equipment?.equipped?.helmet" class="text-2xl text-medieval mb-1 relative">
                     <img :src="equipment.equipped.helmet.equipment.image" 
                          :alt="equipment.equipped.helmet.equipment.name"
                          class="w-8 h-8 mx-auto object-contain">
-                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                      T{{ equipment.equipped.helmet.current_tier }}
-                    </div>
                   </div>
                   <div v-else class="text-gray-400 text-medieval text-lg text-medieval">⛑️</div>
                   <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -456,14 +454,12 @@
                 <div class="flex items-center space-x-2">
                   <!-- Espada Esquerda -->
                   <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       :class="equipment?.equipped?.weapon ? getTierEffect(equipment.equipped.weapon.current_tier) : ''"
                        @click="equipment?.equipped?.weapon ? unequipItem('weapon') : equipNextItem('weapon')">
                     <div v-if="equipment?.equipped?.weapon" class="text-2xl text-medieval mb-1 relative">
                       <img :src="equipment.equipped.weapon.equipment.image" 
                            :alt="equipment.equipped.weapon.equipment.name"
                            class="w-8 h-8 mx-auto object-contain">
-                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                        T{{ equipment.equipped.weapon.current_tier }}
-                      </div>
                     </div>
                     <div v-else class="text-gray-400 text-medieval text-lg text-medieval">⚔️</div>
                     <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -481,14 +477,12 @@
                   
                   <!-- Armadura (centro) -->
                   <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       :class="equipment?.equipped?.armor ? getTierEffect(equipment.equipped.armor.current_tier) : ''"
                        @click="equipment?.equipped?.armor ? unequipItem('armor') : equipNextItem('armor')">
                     <div v-if="equipment?.equipped?.armor" class="text-2xl text-medieval mb-1 relative">
                       <img :src="equipment.equipped.armor.equipment.image" 
                            :alt="equipment.equipped.armor.equipment.name"
                            class="w-8 h-8 mx-auto object-contain">
-                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                        T{{ equipment.equipped.armor.current_tier }}
-                      </div>
                     </div>
                     <div v-else class="text-gray-400 text-medieval text-lg text-medieval">🛡️</div>
                     <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -506,14 +500,12 @@
                   
                   <!-- Escudo Direita -->
                   <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       :class="equipment?.equipped?.shield ? getTierEffect(equipment.equipped.shield.current_tier) : ''"
                        @click="equipment?.equipped?.shield ? unequipItem('shield') : equipNextItem('shield')">
                     <div v-if="equipment?.equipped?.shield" class="text-2xl text-medieval mb-1 relative">
                       <img :src="equipment.equipped.shield.equipment.image" 
                            :alt="equipment.equipped.shield.equipment.name"
                            class="w-8 h-8 mx-auto object-contain">
-                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                        T{{ equipment.equipped.shield.current_tier }}
-                      </div>
                     </div>
                     <div v-else class="text-gray-400 text-medieval text-lg text-medieval">🛡️</div>
                     <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -532,14 +524,12 @@
                 
                 <!-- Calça -->
                 <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     :class="equipment?.equipped?.pants ? getTierEffect(equipment.equipped.pants.current_tier) : ''"
                      @click="equipment?.equipped?.pants ? unequipItem('pants') : equipNextItem('pants')">
                   <div v-if="equipment?.equipped?.pants" class="text-2xl text-medieval mb-1 relative">
                     <img :src="equipment.equipped.pants.equipment.image" 
                          :alt="equipment.equipped.pants.equipment.name"
                          class="w-8 h-8 mx-auto object-contain">
-                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                      T{{ equipment.equipped.pants.current_tier }}
-                    </div>
                   </div>
                   <div v-else class="text-gray-400 text-medieval text-lg text-medieval">👖</div>
                   <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -557,14 +547,12 @@
                 
                 <!-- Bota -->
                 <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     :class="equipment?.equipped?.boots ? getTierEffect(equipment.equipped.boots.current_tier) : ''"
                      @click="equipment?.equipped?.boots ? unequipItem('boots') : equipNextItem('boots')">
                   <div v-if="equipment?.equipped?.boots" class="text-2xl text-medieval mb-1 relative">
                     <img :src="equipment.equipped.boots.equipment.image" 
                          :alt="equipment.equipped.boots.equipment.name"
                          class="w-8 h-8 mx-auto object-contain">
-                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
-                      T{{ equipment.equipped.boots.current_tier }}
-                    </div>
                   </div>
                   <div v-else class="text-gray-400 text-medieval text-lg text-medieval">👢</div>
                   <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
@@ -641,13 +629,15 @@
                 <div v-else-if="activeInventoryTab === 'equipment'" class="grid grid-cols-4 gap-1">
                   <div v-for="(slotItems, slot) in getAvailableEquipmentInventory()" :key="`equipment-${slot}`" 
                        class="bg-white rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-amber-100 transition-colors cursor-pointer relative group"
+                       :class="hasSpecialTier(slotItems[0]?.current_tier || 0) ? getTierEffect(slotItems[0].current_tier) : ''"
                        @click="equipNextItem(slot)">
-                    <img v-if="slotItems[0]?.equipment?.image" 
-                         :src="slotItems[0].equipment.image" 
-                         :alt="slotItems[0].equipment.name"
-                         class="w-6 h-6 mb-1 object-contain">
-                    <span v-else class="text-gray-400 text-medieval text-lg text-medieval mb-1">⚔️</span>
-                    <span class="text-xs text-medieval text-medieval-gold text-medieval">T{{ slotItems[0]?.current_tier || 0 }}</span>
+                    <div class="relative w-full h-full flex items-center justify-center">
+                      <img v-if="slotItems[0]?.equipment?.image" 
+                           :src="slotItems[0].equipment.image" 
+                           :alt="slotItems[0].equipment.name"
+                           class="w-8 h-8 object-contain">
+                      <span v-else class="text-gray-400 text-medieval text-lg text-medieval">⚔️</span>
+                    </div>
                     
                     <!-- Tooltip -->
                     <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
@@ -801,6 +791,7 @@ const props = defineProps({
 const currentTime = ref(new Date());
 const mobileMenuOpen = ref(false);
 let timeInterval = null;
+
 
 // Modal de seleção de hotkey
 const showHotkeyModal = ref(false);
@@ -1036,6 +1027,40 @@ const getInventoryEquipmentTooltipLines = (item) => {
   return lines;
 };
 
+const getTierColor = (tier) => {
+  switch (tier) {
+    case 1:
+      return 'bg-green-500 text-white'; // Verde para tier 1
+    case 5:
+      return 'bg-blue-500 text-white'; // Azul para tier 5
+    case 10:
+      return 'bg-purple-500 text-white'; // Roxo para tier 10
+    case 12:
+      return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white'; // Gradiente dourado para tier 12
+    default:
+      return 'bg-medieval-gold text-medieval-dark'; // Cor padrão
+  }
+};
+
+const getTierEffect = (tier) => {
+  switch (tier) {
+    case 1:
+      return 'border-2 border-green-400 shadow-lg shadow-green-200 tier-glow-green'; // Verde com brilho suave
+    case 5:
+      return 'border-2 border-blue-400 shadow-lg shadow-blue-200 tier-glow-blue'; // Azul com brilho suave
+    case 10:
+      return 'border-2 border-purple-400 shadow-lg shadow-purple-200 tier-glow-purple'; // Roxo com brilho suave
+    case 12:
+      return 'border-2 border-yellow-400 shadow-lg shadow-yellow-200 tier-glow-gold'; // Dourado com brilho suave
+    default:
+      return ''; // Sem efeito especial
+  }
+};
+
+const hasSpecialTier = (tier) => {
+  return [1, 5, 10, 12].includes(tier);
+};
+
 const getAvailableEquipmentInventory = () => {
   const inventory = props.equipment?.inventory || {};
   const available = {};
@@ -1056,3 +1081,58 @@ onUnmounted(() => {
   }
 });
 </script>
+
+<style scoped>
+/* Efeitos de brilho suave para tiers especiais */
+.tier-glow-green {
+  animation: tier-glow-green 3s ease-in-out infinite;
+}
+
+.tier-glow-blue {
+  animation: tier-glow-blue 3s ease-in-out infinite;
+}
+
+.tier-glow-purple {
+  animation: tier-glow-purple 3s ease-in-out infinite;
+}
+
+.tier-glow-gold {
+  animation: tier-glow-gold 3s ease-in-out infinite;
+}
+
+@keyframes tier-glow-green {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.3), 0 0 10px rgba(34, 197, 94, 0.2), 0 0 15px rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.6), 0 0 20px rgba(34, 197, 94, 0.4), 0 0 30px rgba(34, 197, 94, 0.2);
+  }
+}
+
+@keyframes tier-glow-blue {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3), 0 0 10px rgba(59, 130, 246, 0.2), 0 0 15px rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.4), 0 0 30px rgba(59, 130, 246, 0.2);
+  }
+}
+
+@keyframes tier-glow-purple {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3), 0 0 10px rgba(147, 51, 234, 0.2), 0 0 15px rgba(147, 51, 234, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.6), 0 0 20px rgba(147, 51, 234, 0.4), 0 0 30px rgba(147, 51, 234, 0.2);
+  }
+}
+
+@keyframes tier-glow-gold {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.3), 0 0 10px rgba(251, 191, 36, 0.2), 0 0 15px rgba(251, 191, 36, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 20px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
+  }
+}
+</style>
