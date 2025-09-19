@@ -6,20 +6,20 @@
         <!-- Desktop Header -->
         <div class="hidden md:flex justify-between items-center">
           <div class="flex-1">
-            <h1 class="text-2xl font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
+            <h1 class="text-2xl text-medieval font-bold text-medieval">Chronicles of Eldoria</h1>
           </div>
           <div class="flex-1 text-center">
-            <h2 class="text-lg font-medieval">Dashboard</h2>
+            <h2 class="text-lg text-medieval font-medieval">Dashboard</h2>
           </div>
           <div class="flex-1 flex justify-end items-center space-x-4">
             <!-- Recursos do Jogador -->
             <div class="flex items-center space-x-4 mr-4">
               <!-- Gold -->
               <div class="flex items-center space-x-1 relative group">
-                <span class="text-lg">🪙</span>
-                <span class="text-sm font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
+                <span class="text-lg text-medieval">🪙</span>
+                <span class="text-sm text-medieval font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
                 <!-- Tooltip Gold -->
-                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
                   <div class="text-center">
                     <div class="font-semibold mb-1">Gold</div>
                     <div>• Moeda do jogo</div>
@@ -34,10 +34,10 @@
               
               <!-- Coin -->
               <div class="flex items-center space-x-1 relative group">
-                <span class="text-lg">💎</span>
-                <span class="text-sm font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
+                <span class="text-lg text-medieval">💎</span>
+                <span class="text-sm text-medieval font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
                 <!-- Tooltip Coin -->
-                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
                   <div class="text-center">
                     <div class="font-semibold mb-1">Coin</div>
                     <div>• Moeda premium</div>
@@ -54,7 +54,7 @@
             <!-- Botões -->
             <Link 
               :href="route('characters.select')" 
-              class="btn-medieval text-sm px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
+              class="btn-medieval text-sm text-medieval px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
             >
               Trocar Personagem
             </Link>
@@ -62,7 +62,7 @@
               :href="route('logout')" 
               method="post" 
               as="button"
-              class="btn-medieval text-sm px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
+              class="btn-medieval text-sm text-medieval px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
             >
               Sair
             </Link>
@@ -72,7 +72,7 @@
         <!-- Mobile Header -->
         <div class="md:hidden">
           <div class="flex justify-between items-center mb-3">
-            <h1 class="text-lg font-bold font-medieval-decorative">Chronicles of Eldoria</h1>
+            <h1 class="text-lg text-medieval font-bold text-medieval">Chronicles of Eldoria</h1>
             <button 
               @click="mobileMenuOpen = !mobileMenuOpen"
               class="p-2 text-medieval-gold hover:bg-medieval-bronze rounded-lg transition-colors duration-200"
@@ -87,14 +87,14 @@
           <div class="flex justify-center items-center space-x-6 mb-3">
             <!-- Gold -->
             <div class="flex items-center space-x-1">
-              <span class="text-lg">🪙</span>
-              <span class="text-sm font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
+              <span class="text-lg text-medieval">🪙</span>
+              <span class="text-sm text-medieval font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
             </div>
             
             <!-- Coin -->
             <div class="flex items-center space-x-1">
-              <span class="text-lg">💎</span>
-              <span class="text-sm font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
+              <span class="text-lg text-medieval">💎</span>
+              <span class="text-sm text-medieval font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
             </div>
           </div>
 
@@ -135,14 +135,14 @@
         <div class="container mx-auto">
           <div class="flex items-center justify-center space-x-6">
             <!-- Left decoration -->
-            <div class="text-2xl animate-bounce">🎉</div>
+            <div class="text-2xl text-medieval animate-bounce">🎉</div>
             
             <!-- Main content -->
             <div class="text-center">
-              <div class="font-medieval-decorative font-bold text-lg mb-1 tracking-wide">
+              <div class="text-medieval font-bold text-lg text-medieval mb-1 tracking-wide">
                 ⚔️ EVENTOS ATIVOS ⚔️
               </div>
-              <div class="font-medieval text-sm space-x-4">
+              <div class="font-medieval text-sm text-medieval space-x-4">
                 <span 
                   v-for="(event, index) in activeEvents" 
                   :key="event.type" 
@@ -154,7 +154,7 @@
             </div>
             
             <!-- Right decoration -->
-            <div class="text-2xl animate-bounce" style="animation-delay: 0.5s">🎉</div>
+            <div class="text-2xl text-medieval animate-bounce" style="animation-delay: 0.5s">🎉</div>
           </div>
         </div>
         
@@ -170,14 +170,14 @@
         <!-- Coluna Esquerda - Herói -->
         <div class="md:col-span-1 lg:col-span-3">
           <div class="card-medieval h-full">
-            <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Herói</h3>
+            <h3 class="text-xl text-medieval subtitle-medieval mb-4 text-medieval-gold">Herói</h3>
             
             <!-- Avatar -->
             <div class="text-center mb-4">
               <div class="w-20 h-20 bg-medieval-bronze rounded-lg mx-auto mb-2 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <span class="text-4xl animate-pulse">⚔️</span>
+                <span class="text-4xl text-medieval animate-pulse">⚔️</span>
               </div>
-              <h4 class="text-lg font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>
+              <h4 class="text-lg text-medieval font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>
               <p class="text-medieval-brown">{{ getClassName(character?.class) || 'Guerreiro' }}</p>
               <p class="text-medieval">Nível {{ character?.level || 1 }}</p>
               <p class="text-green-600 font-semibold">CP: {{ character?.power || 0 }}</p>
@@ -187,7 +187,7 @@
             <div class="space-y-3 mb-6">
               <!-- HP -->
               <div>
-                <div class="flex justify-between text-sm mb-1">
+                <div class="flex justify-between text-sm text-medieval mb-1">
                   <span class="text-medieval">HP:</span>
                   <span class="text-red-600 font-semibold">{{ character?.current_hp || 0 }}/{{ character?.max_hp || 0 }}</span>
                 </div>
@@ -199,7 +199,7 @@
 
               <!-- Stamina -->
               <div>
-                <div class="flex justify-between text-sm mb-1">
+                <div class="flex justify-between text-sm text-medieval mb-1">
                   <span class="text-medieval">Stamina:</span>
                   <span class="text-blue-600 font-semibold">{{ character?.current_stamina || 0 }}/{{ character?.max_stamina || 0 }}</span>
                 </div>
@@ -211,7 +211,7 @@
 
               <!-- EXP -->
               <div>
-                <div class="flex justify-between text-sm mb-1">
+                <div class="flex justify-between text-sm text-medieval mb-1">
                   <span class="text-medieval">EXP:</span>
                   <span class="text-green-600 font-semibold">{{ character?.experience || 0 }}/{{ character?.experience_to_next_level || 100 }}</span>
                 </div>
@@ -225,7 +225,7 @@
             <!-- Stats -->
             <div class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Stats</h4>
-              <div class="space-y-2 text-sm">
+              <div class="space-y-2 text-sm text-medieval">
                 <div class="flex justify-between">
                   <span class="text-medieval">Força:</span>
                   <span class="font-semibold text-medieval-gold">{{ character?.strength || 0 }}</span>
@@ -253,18 +253,18 @@
             <div class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Treinamento</h4>
               <div class="bg-amber-50 p-3 rounded-lg hover:bg-amber-100 transition-colors duration-200">
-                <p v-if="!character?.training_stat" class="text-sm text-medieval">Nenhum treinamento ativo</p>
-                <div v-else class="text-sm text-medieval">
+                <p v-if="!character?.training_stat" class="text-sm text-medieval text-medieval">Nenhum treinamento ativo</p>
+                <div v-else class="text-sm text-medieval text-medieval">
                   <p class="font-semibold flex items-center">
                     <span class="animate-spin mr-2">⚔️</span>
                     Treinando: {{ getStatName(character.training_stat) }}
                   </p>
-                  <p class="text-xs">Tempo restante: {{ getTimeRemaining() }}</p>
-                  <p class="text-xs text-green-600 font-semibold">+{{ character.training_points || 0 }} pontos</p>
+                  <p class="text-xs text-medieval">Tempo restante: {{ getTimeRemaining() }}</p>
+                  <p class="text-xs text-medieval text-green-600 font-semibold">+{{ character.training_points || 0 }} pontos</p>
                 </div>
                 <Link 
                   :href="route('training.index')" 
-                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200"
+                  class="btn-medieval text-xs text-medieval px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200"
                 >
                   {{ character?.training_stat ? 'Ver Treinamento' : 'Iniciar Treino' }}
                 </Link>
@@ -275,13 +275,13 @@
             <div v-if="character?.stat_points > 0" class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Pontos Livres</h4>
               <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-3 rounded-lg border-2 border-yellow-300 hover:border-yellow-400 transition-all duration-200">
-                <p class="text-sm text-medieval flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+                <p class="text-sm text-medieval text-medieval flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
                   <span class="animate-bounce mr-2">✨</span>
                   <span>Você tem <span class="font-bold text-yellow-600">{{ character?.stat_points || 0 }}</span> pontos para distribuir</span>
                 </p>
                 <Link 
                   :href="route('character.stats.index')" 
-                  class="btn-medieval text-xs px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200 w-full sm:w-auto text-center"
+                  class="btn-medieval text-xs text-medieval px-3 py-1 mt-2 inline-block hover:scale-105 transition-transform duration-200 w-full sm:w-auto text-center"
                 >
                   Distribuir Pontos
                 </Link>
@@ -292,8 +292,8 @@
             <div>
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">VIP</h4>
               <div class="bg-amber-50 p-3 rounded-lg">
-                <p class="text-sm text-medieval">Status VIP: Inativo</p>
-                <button class="btn-medieval text-xs px-3 py-1 mt-2">Gerenciar</button>
+                <p class="text-sm text-medieval text-medieval">Status VIP: Inativo</p>
+                <button class="btn-medieval text-xs text-medieval px-3 py-1 mt-2">Gerenciar</button>
               </div>
             </div>
           </div>
@@ -302,14 +302,14 @@
         <!-- Coluna Centro - Mundo de Eldoria -->
         <div class="md:col-span-1 lg:col-span-6">
           <div class="card-medieval h-full">
-            <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Mundo de Eldoria</h3>
+            <h3 class="text-xl text-medieval subtitle-medieval mb-4 text-medieval-gold">Mundo de Eldoria</h3>
             
             <!-- Área Principal do Jogo -->
             <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg h-96 flex items-center justify-center mb-4 shadow-2xl hover:shadow-3xl transition-all duration-300">
               <div class="text-center text-gray-300">
                 <div class="text-6xl mb-4 animate-pulse">🏰</div>
-                <p class="text-lg font-semibold">Área de Jogo Principal</p>
-                <p class="text-sm opacity-75">(Mapa, Batalha, Chat)</p>
+                <p class="text-lg text-medieval font-semibold">Área de Jogo Principal</p>
+                <p class="text-sm text-medieval opacity-75">(Mapa, Batalha, Chat)</p>
                 <div class="mt-4 flex justify-center space-x-2">
                   <div class="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
                   <div class="w-2 h-2 bg-yellow-400 rounded-full animate-ping" style="animation-delay: 0.2s"></div>
@@ -323,31 +323,31 @@
               <!-- Explorar - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🗺️</div>
-                <h4 class="subtitle-medieval text-gray-500">Explorar</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🗺️</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Explorar</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Chat - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">💬</div>
-                <h4 class="subtitle-medieval text-gray-500">Chat</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">💬</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Chat</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Missões - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">📜</div>
-                <h4 class="subtitle-medieval text-gray-500">Missões</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">📜</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Missões</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Batalha - Ativo -->
@@ -355,49 +355,49 @@
                 :href="route('battle.index')" 
                 class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
               >
-                <div class="text-4xl mb-2 text-red-600 hover:scale-110 transition-transform duration-200">⚔️</div>
+                <div class="text-4xl text-medieval mb-2 text-red-600 hover:scale-110 transition-transform duration-200">⚔️</div>
                 <h4 class="subtitle-medieval text-medieval-gold">Batalha</h4>
-                <p class="text-sm text-medieval">Lute contra monstros</p>
+                <p class="text-sm text-medieval text-medieval">Lute contra monstros</p>
               </Link>
 
               <!-- Inventário - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🎒</div>
-                <h4 class="subtitle-medieval text-gray-500">Inventário</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🎒</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Inventário</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Loja - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🏪</div>
-                <h4 class="subtitle-medieval text-gray-500">Loja</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🏪</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Loja</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Guilda - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">🏰</div>
-                <h4 class="subtitle-medieval text-gray-500">Guilda</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🏰</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Guilda</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
               <!-- Configurações - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-lg animate-pulse">🔒</span>
+                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
                 </div>
-                <div class="text-4xl mb-2 text-gray-500 hover:scale-110 transition-transform duration-200">⚙️</div>
-                <h4 class="subtitle-medieval text-gray-500">Configurações</h4>
-                <p class="text-sm text-gray-500">Em breve</p>
+                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">⚙️</div>
+                <h4 class="subtitle-medieval text-gray-500 text-medieval">Configurações</h4>
+                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
             </div>
           </div>
@@ -406,49 +406,163 @@
         <!-- Coluna Direita - Itens -->
         <div class="md:col-span-2 lg:col-span-3">
           <div class="card-medieval h-full">
-            <h3 class="text-xl subtitle-medieval mb-4 text-medieval-gold">Itens</h3>
+            <h3 class="text-xl text-medieval subtitle-medieval mb-4 text-medieval-gold">Itens</h3>
             
             <!-- Equipamento -->
             <div class="mb-6">
               <h4 class="subtitle-medieval mb-3 text-medieval-gold">Equipamento</h4>
               <div class="flex flex-col items-center space-y-2">
                 <!-- Elmo -->
-                <div class="bg-gray-200 rounded-lg p-2 text-center w-16">
-                  <div class="text-2xl mb-1">⛑️</div>
-                  <div class="text-xs text-gray-600">T5</div>
+                <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     @click="equipment?.equipped?.helmet ? unequipItem('helmet') : equipNextItem('helmet')">
+                  <div v-if="equipment?.equipped?.helmet" class="text-2xl text-medieval mb-1 relative">
+                    <img :src="equipment.equipped.helmet.equipment.image" 
+                         :alt="equipment.equipped.helmet.equipment.name"
+                         class="w-8 h-8 mx-auto object-contain">
+                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                      T{{ equipment.equipped.helmet.current_tier }}
+                    </div>
+                  </div>
+                  <div v-else class="text-gray-400 text-medieval text-lg text-medieval">⛑️</div>
+                  <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                    {{ equipment?.equipped?.helmet ? '' : 'Vazio' }}
+                  </div>
+                  
+                  <!-- Tooltip -->
+                  <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                    <div class="text-center">
+                      <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('helmet') }}</div>
+                      <div v-for="line in getEquipmentTooltipLines('helmet')" :key="line">• {{ line }}</div>
+                    </div>
+                  </div>
                 </div>
                 
                 <!-- Armadura com armas ao lado -->
                 <div class="flex items-center space-x-2">
                   <!-- Espada Esquerda -->
-                  <div class="bg-gray-200 rounded-lg p-2 text-center w-16">
-                    <div class="text-2xl mb-1">⚔️</div>
-                    <div class="text-xs text-gray-600">T8</div>
+                  <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       @click="equipment?.equipped?.weapon ? unequipItem('weapon') : equipNextItem('weapon')">
+                    <div v-if="equipment?.equipped?.weapon" class="text-2xl text-medieval mb-1 relative">
+                      <img :src="equipment.equipped.weapon.equipment.image" 
+                           :alt="equipment.equipped.weapon.equipment.name"
+                           class="w-8 h-8 mx-auto object-contain">
+                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                        T{{ equipment.equipped.weapon.current_tier }}
+                      </div>
+                    </div>
+                    <div v-else class="text-gray-400 text-medieval text-lg text-medieval">⚔️</div>
+                    <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                      {{ equipment?.equipped?.weapon ? '' : 'Vazio' }}
+                    </div>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('weapon') }}</div>
+                        <div v-for="line in getEquipmentTooltipLines('weapon')" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                   </div>
                   
                   <!-- Armadura (centro) -->
-                  <div class="bg-gray-200 rounded-lg p-2 text-center w-16">
-                    <div class="text-2xl mb-1">🛡️</div>
-                    <div class="text-xs text-gray-600">T7</div>
+                  <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       @click="equipment?.equipped?.armor ? unequipItem('armor') : equipNextItem('armor')">
+                    <div v-if="equipment?.equipped?.armor" class="text-2xl text-medieval mb-1 relative">
+                      <img :src="equipment.equipped.armor.equipment.image" 
+                           :alt="equipment.equipped.armor.equipment.name"
+                           class="w-8 h-8 mx-auto object-contain">
+                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                        T{{ equipment.equipped.armor.current_tier }}
+                      </div>
+                    </div>
+                    <div v-else class="text-gray-400 text-medieval text-lg text-medieval">🛡️</div>
+                    <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                      {{ equipment?.equipped?.armor ? '' : 'Vazio' }}
+                    </div>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('armor') }}</div>
+                        <div v-for="line in getEquipmentTooltipLines('armor')" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                   </div>
                   
                   <!-- Escudo Direita -->
-                  <div class="bg-gray-100 rounded-lg p-2 text-center w-16 border-2 border-dashed border-gray-300">
-                    <div class="text-gray-400 text-lg">+</div>
-                    <div class="text-xs text-gray-400">Vazio</div>
+                  <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                       @click="equipment?.equipped?.shield ? unequipItem('shield') : equipNextItem('shield')">
+                    <div v-if="equipment?.equipped?.shield" class="text-2xl text-medieval mb-1 relative">
+                      <img :src="equipment.equipped.shield.equipment.image" 
+                           :alt="equipment.equipped.shield.equipment.name"
+                           class="w-8 h-8 mx-auto object-contain">
+                      <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                        T{{ equipment.equipped.shield.current_tier }}
+                      </div>
+                    </div>
+                    <div v-else class="text-gray-400 text-medieval text-lg text-medieval">🛡️</div>
+                    <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                      {{ equipment?.equipped?.shield ? '' : 'Vazio' }}
+                    </div>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('shield') }}</div>
+                        <div v-for="line in getEquipmentTooltipLines('shield')" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
                 <!-- Calça -->
-                <div class="bg-gray-200 rounded-lg p-2 text-center w-16">
-                  <div class="text-2xl mb-1">👖</div>
-                  <div class="text-xs text-gray-600">T7</div>
+                <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     @click="equipment?.equipped?.pants ? unequipItem('pants') : equipNextItem('pants')">
+                  <div v-if="equipment?.equipped?.pants" class="text-2xl text-medieval mb-1 relative">
+                    <img :src="equipment.equipped.pants.equipment.image" 
+                         :alt="equipment.equipped.pants.equipment.name"
+                         class="w-8 h-8 mx-auto object-contain">
+                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                      T{{ equipment.equipped.pants.current_tier }}
+                    </div>
+                  </div>
+                  <div v-else class="text-gray-400 text-medieval text-lg text-medieval">👖</div>
+                  <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                    {{ equipment?.equipped?.pants ? '' : 'Vazio' }}
+                  </div>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('pants') }}</div>
+                        <div v-for="line in getEquipmentTooltipLines('pants')" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                 </div>
                 
                 <!-- Bota -->
-                <div class="bg-gray-200 rounded-lg p-2 text-center w-16">
-                  <div class="text-2xl mb-1">👢</div>
-                  <div class="text-xs text-gray-600">T6</div>
+                <div class="bg-gray-200 rounded-lg p-2 text-center w-16 cursor-pointer hover:bg-gray-300 transition-colors relative group" 
+                     @click="equipment?.equipped?.boots ? unequipItem('boots') : equipNextItem('boots')">
+                  <div v-if="equipment?.equipped?.boots" class="text-2xl text-medieval mb-1 relative">
+                    <img :src="equipment.equipped.boots.equipment.image" 
+                         :alt="equipment.equipped.boots.equipment.name"
+                         class="w-8 h-8 mx-auto object-contain">
+                    <div class="absolute -top-2 -right-2 bg-medieval-gold text-medieval-dark text-xs text-medieval px-1 rounded text-[9px] font-bold">
+                      T{{ equipment.equipped.boots.current_tier }}
+                    </div>
+                  </div>
+                  <div v-else class="text-gray-400 text-medieval text-lg text-medieval">👢</div>
+                  <div class="text-xs text-medieval text-gray-600 text-medieval text-medieval">
+                    {{ equipment?.equipped?.boots ? '' : 'Vazio' }}
+                  </div>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getEquipmentTooltipTitle('boots') }}</div>
+                        <div v-for="line in getEquipmentTooltipLines('boots')" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -461,20 +575,25 @@
               <div class="flex">
                 <button 
                   @click="activeInventoryTab = 'potions'"
-                  class="px-3 py-1 text-xs rounded-tl-lg transition-colors border-2 border-medieval-bronze border-b-0 border-r-0"
+                  class="px-3 py-1 text-xs text-medieval rounded-tl-lg transition-colors border-2 border-medieval-bronze border-b-0 border-r-0 text-medieval"
                   :class="activeInventoryTab === 'potions' ? 'bg-medieval-gold text-medieval-dark font-semibold border-medieval-gold' : 'bg-medieval-dark text-medieval-gold hover:bg-medieval-bronze'"
                 >
                   Poções
                 </button>
                 <button 
-                  disabled
-                  class="px-3 py-1 text-xs transition-colors border-2 border-medieval-bronze border-b-0 border-r-0 opacity-50 cursor-not-allowed bg-medieval-dark text-medieval-stone"
+                  @click="activeInventoryTab = 'equipment'"
+                  :class="[
+                    'px-3 py-1 text-xs text-medieval transition-colors border-2 border-medieval-bronze border-b-0 border-r-0 text-medieval',
+                    activeInventoryTab === 'equipment' 
+                      ? 'bg-medieval-gold text-medieval-dark' 
+                      : 'bg-medieval-dark text-medieval-gold hover:bg-medieval-bronze'
+                  ]"
                 >
-                  Equipamentos 🔒
+                  Equipamentos
                 </button>
                 <button 
                   disabled
-                  class="px-3 py-1 text-xs rounded-tr-lg transition-colors border-2 border-medieval-bronze border-b-0 opacity-50 cursor-not-allowed bg-medieval-dark text-medieval-stone"
+                  class="px-3 py-1 text-xs text-medieval rounded-tr-lg transition-colors border-2 border-medieval-bronze border-b-0 opacity-50 cursor-not-allowed bg-medieval-dark text-medieval-stone text-medieval"
                 >
                   Materiais 🔒
                 </button>
@@ -488,10 +607,10 @@
                        class="bg-white rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-amber-100 transition-colors cursor-pointer"
                        @click="setHotkeyFromInventory(item)">
                     <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
-                    <span class="text-xs text-medieval-dark">{{ item.quantity }}x</span>
+                    <span class="text-xs text-medieval text-medieval-dark">{{ item.quantity }}x</span>
                     
                     <!-- Label do Hotkey -->
-                    <div v-if="item.slot_position" class="text-xs text-medieval-gold font-bold">
+                    <div v-if="item.slot_position" class="text-xs text-medieval text-medieval-gold font-bold">
                       [F{{ item.slot_position }}]
                     </div>
                   </div>
@@ -499,22 +618,35 @@
                   <!-- Slots vazios -->
                   <div v-for="i in Math.max(0, 8 - (inventory?.potions?.length || 0))" :key="`empty-${i}`" 
                        class="bg-white rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
-                    <span class="text-gray-400 text-xs">+</span>
+                    <span class="text-gray-400 text-medieval text-xs text-medieval">+</span>
                   </div>
                 </div>
                 
                 <!-- Aba Equipamentos -->
                 <div v-else-if="activeInventoryTab === 'equipment'" class="grid grid-cols-4 gap-1">
-                  <div v-for="(item, index) in inventory?.equipment?.slice(0, 8)" :key="item.id" 
-                       class="bg-medieval-dark rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-medieval-bronze transition-colors cursor-pointer">
-                    <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
-                    <span class="text-xs text-medieval-gold">{{ item.quantity }}x</span>
+                  <div v-for="(slotItems, slot) in getAvailableEquipmentInventory()" :key="`equipment-${slot}`" 
+                       class="bg-white rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-amber-100 transition-colors cursor-pointer relative group"
+                       @click="equipNextItem(slot)">
+                    <img v-if="slotItems[0]?.equipment?.image" 
+                         :src="slotItems[0].equipment.image" 
+                         :alt="slotItems[0].equipment.name"
+                         class="w-6 h-6 mb-1 object-contain">
+                    <span v-else class="text-gray-400 text-medieval text-lg text-medieval mb-1">⚔️</span>
+                    <span class="text-xs text-medieval text-medieval-gold text-medieval">T{{ slotItems[0]?.current_tier || 0 }}</span>
+                    
+                    <!-- Tooltip -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
+                      <div class="text-center">
+                        <div class="font-semibold mb-1">{{ getInventoryEquipmentTooltipTitle(slotItems[0]) }}</div>
+                        <div v-for="line in getInventoryEquipmentTooltipLines(slotItems[0])" :key="line">• {{ line }}</div>
+                      </div>
+                    </div>
                   </div>
                   
                   <!-- Slots vazios -->
-                  <div v-for="i in Math.max(0, 8 - (inventory?.equipment?.length || 0))" :key="`empty-${i}`" 
-                       class="bg-medieval-dark rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
-                    <span class="text-medieval-stone text-xs">+</span>
+                  <div v-for="i in Math.max(0, 8 - (Object.keys(getAvailableEquipmentInventory()).length))" :key="`empty-equipment-${i}`" 
+                       class="bg-white rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
+                    <span class="text-gray-400 text-medieval text-xs text-medieval">+</span>
                   </div>
                 </div>
                 
@@ -523,19 +655,19 @@
                   <div v-for="(item, index) in inventory?.materials?.slice(0, 8)" :key="item.id" 
                        class="bg-medieval-dark rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-medieval-bronze transition-colors cursor-pointer">
                     <img :src="item.item.image_path" :alt="item.item.name" class="w-6 h-6 mb-1" />
-                    <span class="text-xs text-medieval-gold">{{ item.quantity }}x</span>
+                    <span class="text-xs text-medieval text-medieval-gold">{{ item.quantity }}x</span>
                   </div>
                   
                   <!-- Slots vazios -->
                   <div v-for="i in Math.max(0, 8 - (inventory?.materials?.length || 0))" :key="`empty-${i}`" 
                        class="bg-medieval-dark rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
-                    <span class="text-medieval-stone text-xs">+</span>
+                    <span class="text-medieval-stone text-xs text-medieval">+</span>
                   </div>
                 </div>
               </div>
               
               <!-- Estatísticas do inventário -->
-              <div v-if="stats" class="mt-3 text-xs text-medieval-stone">
+              <div v-if="stats" class="mt-3 text-xs text-medieval text-medieval-stone">
                 <div class="flex justify-between">
                   <span v-if="activeInventoryTab === 'potions'" class="text-medieval-gold">Poções: {{ stats.potions_count || 0 }}</span>
                   <span v-else-if="activeInventoryTab === 'equipment'" class="text-medieval-gold">Equipamentos: {{ stats.equipment_count || 0 }}</span>
@@ -548,6 +680,7 @@
       </div>
     </main>
 
+
     <!-- Footer -->
     <footer class="bg-medieval-dark text-medieval-stone text-center py-4">
       <p>&copy; 2025 Chronicles of Eldoria. Todos os direitos reservados.</p>
@@ -559,19 +692,19 @@
         <!-- Header do Modal -->
         <div class="bg-medieval-dark text-medieval-gold p-4 rounded-t-lg border-b-2 border-medieval-bronze">
           <div class="flex items-center justify-center space-x-2">
-            <span class="text-xl">⚔️</span>
-            <h3 class="text-lg font-bold title-medieval">Escolher Hotkey</h3>
-            <span class="text-xl">⚔️</span>
+            <span class="text-xl text-medieval">⚔️</span>
+            <h3 class="text-lg text-medieval font-bold title-medieval">Escolher Hotkey</h3>
+            <span class="text-xl text-medieval">⚔️</span>
           </div>
         </div>
         
         <!-- Conteúdo do Modal -->
         <div class="p-4 bg-amber-50">
           <div class="text-center mb-4">
-            <p class="text-sm text-medieval mb-1">Selecione em qual slot deseja colocar:</p>
+            <p class="text-sm text-medieval text-medieval mb-1">Selecione em qual slot deseja colocar:</p>
             <div class="flex items-center justify-center space-x-2">
               <img :src="selectedItem?.item?.image_path" :alt="selectedItem?.item?.name" class="w-5 h-5" />
-              <span class="text-sm text-medieval-dark font-semibold">{{ selectedItem?.item?.name }}</span>
+              <span class="text-sm text-medieval text-medieval-dark font-semibold">{{ selectedItem?.item?.name }}</span>
             </div>
           </div>
           
@@ -588,23 +721,23 @@
               }"
             >
               <div class="text-center">
-                <div class="text-sm font-bold text-medieval-dark mb-1">F{{ slot }}</div>
+                <div class="text-sm text-medieval font-bold text-medieval-dark mb-1">F{{ slot }}</div>
                 
                 <!-- Mostrar poção atual no slot -->
                 <div v-if="currentHotkeys[slot - 1]" class="space-y-1">
                   <img :src="currentHotkeys[slot - 1].item.image_path" :alt="currentHotkeys[slot - 1].item.name" class="w-4 h-4 mx-auto" />
-                  <div class="text-xs text-medieval-stone">
+                  <div class="text-xs text-medieval text-medieval-stone">
                     {{ currentHotkeys[slot - 1].quantity }}x
                   </div>
                 </div>
-                <div v-else class="text-xs text-gray-400 mt-2">
+                <div v-else class="text-xs text-medieval text-gray-400 text-medieval mt-2">
                   Vazio
                 </div>
               </div>
               
               <!-- Indicador de seleção -->
               <div v-if="selectedHotkey === slot" class="absolute -top-1 -right-1 w-3 h-3 bg-medieval-gold rounded-full flex items-center justify-center">
-                <span class="text-xs text-medieval-dark">✓</span>
+                <span class="text-xs text-medieval text-medieval-dark">✓</span>
               </div>
             </button>
           </div>
@@ -644,6 +777,7 @@ const props = defineProps({
   inventory: Object,
   equipped: Object,
   stats: Object,
+  equipment: Object,
   activeEvents: Array,
   hasActiveEvents: Boolean,
 });
@@ -656,6 +790,8 @@ let timeInterval = null;
 const showHotkeyModal = ref(false);
 const selectedHotkey = ref(null);
 const selectedItem = ref(null);
+
+// Modal de equipamentos
 
 // Abas do inventário
 const activeInventoryTab = ref('potions');
@@ -792,6 +928,111 @@ onMounted(() => {
     }
   }, 1000);
 });
+
+// Funções de equipamentos
+const equipNextItem = async (slot) => {
+  try {
+    // Encontrar próximo equipamento disponível no inventário (não equipado)
+    const availableItems = props.equipment?.inventory?.[slot] || [];
+    const nextItem = availableItems.find(item => !item.is_equipped);
+    
+    if (nextItem) {
+      const response = await axios.post('/equipment/equip', {
+        equipment_id: nextItem.equipment_id,
+        slot: slot
+      });
+      
+      if (response.data.success) {
+        router.reload();
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao equipar item:', error);
+  }
+};
+
+const unequipItem = async (slot) => {
+  try {
+    const response = await axios.post('/equipment/unequip', {
+      slot: slot
+    });
+    
+    if (response.data.success) {
+      router.reload();
+    }
+  } catch (error) {
+    console.error('Erro ao desequipar item:', error);
+  }
+};
+
+const getEquipmentTooltipTitle = (slot) => {
+  const equipped = props.equipment?.equipped?.[slot];
+  if (!equipped) {
+    return 'Slot Vazio';
+  }
+  return `${equipped.equipment.name} (T${equipped.current_tier})`;
+};
+
+const getEquipmentTooltipLines = (slot) => {
+  const equipped = props.equipment?.equipped?.[slot];
+  if (!equipped) {
+    return ['Clique para equipar'];
+  }
+  
+  const lines = [];
+  if (equipped.equipment.strength_bonus > 0) lines.push(`STR +${equipped.equipment.strength_bonus}`);
+  if (equipped.equipment.dexterity_bonus > 0) lines.push(`DEX +${equipped.equipment.dexterity_bonus}`);
+  if (equipped.equipment.constitution_bonus > 0) lines.push(`CON +${equipped.equipment.constitution_bonus}`);
+  if (equipped.equipment.intelligence_bonus > 0) lines.push(`INT +${equipped.equipment.intelligence_bonus}`);
+  if (equipped.equipment.luck_bonus > 0) lines.push(`LCK +${equipped.equipment.luck_bonus}`);
+  if (equipped.equipment.hp_bonus > 0) lines.push(`HP +${equipped.equipment.hp_bonus}`);
+  if (equipped.equipment.mp_bonus > 0) lines.push(`MP +${equipped.equipment.mp_bonus}`);
+  
+  if (lines.length === 0) {
+    lines.push('Sem bônus');
+  }
+  
+  lines.push('Clique para desequipar');
+  return lines;
+};
+
+const getInventoryEquipmentTooltipTitle = (item) => {
+  if (!item) return 'Slot Vazio';
+  return `${item.equipment.name} (T${item.current_tier})`;
+};
+
+const getInventoryEquipmentTooltipLines = (item) => {
+  if (!item) return ['Clique para equipar'];
+  
+  const lines = [];
+  if (item.equipment.strength_bonus > 0) lines.push(`STR +${item.equipment.strength_bonus}`);
+  if (item.equipment.dexterity_bonus > 0) lines.push(`DEX +${item.equipment.dexterity_bonus}`);
+  if (item.equipment.constitution_bonus > 0) lines.push(`CON +${item.equipment.constitution_bonus}`);
+  if (item.equipment.intelligence_bonus > 0) lines.push(`INT +${item.equipment.intelligence_bonus}`);
+  if (item.equipment.luck_bonus > 0) lines.push(`LCK +${item.equipment.luck_bonus}`);
+  if (item.equipment.hp_bonus > 0) lines.push(`HP +${item.equipment.hp_bonus}`);
+  if (item.equipment.mp_bonus > 0) lines.push(`MP +${item.equipment.mp_bonus}`);
+  
+  if (lines.length === 0) {
+    lines.push('Sem bônus');
+  }
+  
+  return lines;
+};
+
+const getAvailableEquipmentInventory = () => {
+  const inventory = props.equipment?.inventory || {};
+  const available = {};
+  
+  Object.keys(inventory).forEach(slot => {
+    const availableItems = inventory[slot].filter(item => !item.is_equipped);
+    if (availableItems.length > 0) {
+      available[slot] = availableItems;
+    }
+  });
+  
+  return available;
+};
 
 onUnmounted(() => {
   if (timeInterval) {

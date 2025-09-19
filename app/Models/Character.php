@@ -66,6 +66,11 @@ class Character extends Model
         return $this->hasMany(CharacterItem::class);
     }
 
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(CharacterEquipment::class);
+    }
+
     /**
      * Check if character is currently training.
      */

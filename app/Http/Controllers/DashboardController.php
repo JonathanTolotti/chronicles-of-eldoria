@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\InventoryService;
 use App\Services\EventService;
+use App\Services\EquipmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,7 +16,8 @@ class DashboardController extends Controller
 {
     public function __construct(
         private InventoryService $inventoryService,
-        private EventService $eventService
+        private EventService $eventService,
+        private EquipmentService $equipmentService
     ) {}
 
     /**
@@ -37,6 +39,8 @@ class DashboardController extends Controller
         $equipped = $this->inventoryService->getEquippedItems($character);
         $stats = $this->inventoryService->getInventoryStats($character);
         
+        // Carregar dados dos equipamentos
+        $equipment = $this->equipmentService->getCharacterEquipment($character);
         // Carregar eventos ativos
         $activeEvents = $this->eventService->getActiveEvents();
         $hasActiveEvents = $this->eventService->hasActiveEvents();
@@ -47,6 +51,7 @@ class DashboardController extends Controller
             'inventory' => $inventory,
             'equipped' => $equipped,
             'stats' => $stats,
+            'equipment' => $equipment,
             'activeEvents' => $activeEvents,
             'hasActiveEvents' => $hasActiveEvents,
         ]);

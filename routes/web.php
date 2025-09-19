@@ -118,6 +118,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/items/hotkeys', [App\Http\Controllers\ItemController::class, 'getHotkeyItems'])->name('items.hotkeys');
     Route::post('/api/items/add', [App\Http\Controllers\ItemController::class, 'addItem'])->name('items.add');
     
+    // Sistema de Equipamentos
+    Route::prefix('equipment')->group(function () {
+        Route::get('/', [App\Http\Controllers\EquipmentController::class, 'index'])->name('equipment.index');
+        Route::post('/equip', [App\Http\Controllers\EquipmentController::class, 'equip'])->name('equipment.equip');
+        Route::post('/unequip', [App\Http\Controllers\EquipmentController::class, 'unequip'])->name('equipment.unequip');
+        Route::get('/available', [App\Http\Controllers\EquipmentController::class, 'available'])->name('equipment.available');
+        Route::post('/recalculate', [App\Http\Controllers\EquipmentController::class, 'recalculate'])->name('equipment.recalculate');
+    });
+    
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');
     // Route::get('/game/shop', [ShopController::class, 'index'])->name('game.shop');
