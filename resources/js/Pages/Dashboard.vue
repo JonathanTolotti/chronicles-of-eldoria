@@ -570,9 +570,15 @@
               </div>
             </div>
 
-            <!-- Inventário -->
+            <!-- Inventário Rápido -->
             <div>
-              <h4 class="subtitle-medieval mb-3 text-medieval-gold">Inventário</h4>
+              <div class="flex justify-between items-center mb-3">
+                <h4 class="subtitle-medieval text-medieval-gold">Inventário Rápido</h4>
+                <Link :href="route('inventory.index')" 
+                      class="text-xs bg-medieval-gold hover:bg-yellow-500 text-medieval-dark px-3 py-1 rounded text-medieval transition-colors">
+                  Ver Todos
+                </Link>
+              </div>
               
               <!-- Abas do inventário -->
               <div class="flex">
@@ -619,22 +625,31 @@
                   </div>
                   
                   <!-- Slots vazios -->
-                  <div v-for="i in Math.max(0, 8 - (inventory?.potions?.length || 0))" :key="`empty-${i}`" 
+                  <div v-for="i in Math.max(0, 8 - Math.min(8, inventory?.potions?.length || 0))" :key="`empty-${i}`" 
                        class="bg-white rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
                     <span class="text-gray-400 text-medieval text-xs text-medieval">+</span>
+                  </div>
+                  
+                  <!-- Indicador de mais itens -->
+                  <div v-if="(inventory?.potions?.length || 0) > 8" 
+                       class="bg-gradient-to-r from-medieval-gold to-yellow-400 rounded border-2 border-medieval-bronze aspect-square flex items-center justify-center cursor-pointer hover:from-yellow-400 hover:to-medieval-gold transition-all"
+                       @click="$inertia.visit(route('inventory.index'))">
+                    <span class="text-medieval-dark text-medieval text-xs font-bold text-center">
+                      +{{ (inventory?.potions?.length || 0) - 8 }}<br/>mais
+                    </span>
                   </div>
                 </div>
                 
                 <!-- Aba Equipamentos -->
                 <div v-else-if="activeInventoryTab === 'equipment'" class="grid grid-cols-4 gap-1">
-                  <div v-for="(slotItems, slot) in getAvailableEquipmentInventory()" :key="`equipment-${slot}`" 
+                  <div v-for="(slotItems, slot) in Object.entries(getAvailableEquipmentInventory()).slice(0, 8)" :key="`equipment-${slot[0]}`" 
                        class="bg-white rounded border-2 border-medieval-bronze aspect-square flex flex-col items-center justify-center p-1 hover:bg-amber-100 transition-colors cursor-pointer relative group"
-                       :class="hasSpecialTier(slotItems[0]?.current_tier || 0) ? getTierEffect(slotItems[0].current_tier) : ''"
-                       @click="equipNextItem(slot)">
+                       :class="hasSpecialTier(slotItems[1][0]?.current_tier || 0) ? getTierEffect(slotItems[1][0].current_tier) : ''"
+                       @click="equipNextItem(slot[0])">
                     <div class="relative w-full h-full flex items-center justify-center">
-                      <img v-if="slotItems[0]?.equipment?.image" 
-                           :src="slotItems[0].equipment.image" 
-                           :alt="slotItems[0].equipment.name"
+                      <img v-if="slotItems[1][0]?.equipment?.image" 
+                           :src="slotItems[1][0].equipment.image" 
+                           :alt="slotItems[1][0].equipment.name"
                            class="w-8 h-8 object-contain">
                       <span v-else class="text-gray-400 text-medieval text-lg text-medieval">⚔️</span>
                     </div>
@@ -642,16 +657,25 @@
                     <!-- Tooltip -->
                     <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap text-medieval">
                       <div class="text-center">
-                        <div class="font-semibold mb-1">{{ getInventoryEquipmentTooltipTitle(slotItems[0]) }}</div>
-                        <div v-for="line in getInventoryEquipmentTooltipLines(slotItems[0])" :key="line">• {{ line }}</div>
+                        <div class="font-semibold mb-1">{{ getInventoryEquipmentTooltipTitle(slotItems[1][0]) }}</div>
+                        <div v-for="line in getInventoryEquipmentTooltipLines(slotItems[1][0])" :key="line">• {{ line }}</div>
                       </div>
                     </div>
                   </div>
                   
                   <!-- Slots vazios -->
-                  <div v-for="i in Math.max(0, 8 - (Object.keys(getAvailableEquipmentInventory()).length))" :key="`empty-equipment-${i}`" 
+                  <div v-for="i in Math.max(0, 8 - Math.min(8, Object.keys(getAvailableEquipmentInventory()).length))" :key="`empty-equipment-${i}`" 
                        class="bg-white rounded border-2 border-dashed border-medieval-bronze aspect-square flex items-center justify-center">
                     <span class="text-gray-400 text-medieval text-xs text-medieval">+</span>
+                  </div>
+                  
+                  <!-- Indicador de mais equipamentos -->
+                  <div v-if="Object.keys(getAvailableEquipmentInventory()).length > 8" 
+                       class="bg-gradient-to-r from-medieval-gold to-yellow-400 rounded border-2 border-medieval-bronze aspect-square flex items-center justify-center cursor-pointer hover:from-yellow-400 hover:to-medieval-gold transition-all"
+                       @click="$inertia.visit(route('inventory.index'))">
+                    <span class="text-medieval-dark text-medieval text-xs font-bold text-center">
+                      +{{ Object.keys(getAvailableEquipmentInventory()).length - 8 }}<br/>mais
+                    </span>
                   </div>
                 </div>
                 

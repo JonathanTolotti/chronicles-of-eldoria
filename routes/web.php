@@ -127,6 +127,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/recalculate', [App\Http\Controllers\EquipmentController::class, 'recalculate'])->name('equipment.recalculate');
     });
     
+    // Sistema de Inventário
+    Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
+    
+    // Toggle inventário rápido
+    Route::post('/items/toggle-quick-inventory', [App\Http\Controllers\ItemController::class, 'toggleQuickInventory'])->name('items.toggle-quick-inventory');
+    Route::post('/equipment/toggle-quick-inventory', [App\Http\Controllers\EquipmentController::class, 'toggleQuickInventory'])->name('equipment.toggle-quick-inventory');
+    
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');
     // Route::get('/game/shop', [ShopController::class, 'index'])->name('game.shop');

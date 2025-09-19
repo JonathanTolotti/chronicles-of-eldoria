@@ -131,4 +131,47 @@ class EquipmentController extends Controller
             'character' => $character->fresh()
         ]);
     }
+
+    /**
+     * Toggle equipment visibility in quick inventory
+     */
+    public function toggleQuickInventory(Request $request): JsonResponse
+    {
+        $request->validate([
+            'item_id' => 'required|integer',
+            'show_in_quick_inventory' => 'required|boolean'
+        ]);
+
+        $user = auth()->user();
+        $character = $user->activeCharacter;
+
+        if (!$character) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Personagem não encontrado'
+            ], 404);
+        }
+
+        $characterEquipment = $character->equipment()
+            ->where('id', $request->item_id)
+            ->first();
+
+        if (!$characterEquipment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Equipamento não encontrado no inventário'
+            ], 404);
+        }
+
+        $characterEquipment->update([
+            'show_in_quick_inventory' => $request->show_in_quick_inventory
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $request->show_in_quick_inventory 
+                ? 'Equipamento adicionado ao inventário rápido' 
+                : 'Equipamento removido do inventário rápido'
+        ]);
+    }
 }

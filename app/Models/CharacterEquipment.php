@@ -13,11 +13,13 @@ class CharacterEquipment extends Model
         'equipment_id',
         'current_tier',
         'is_equipped',
+        'show_in_quick_inventory',
     ];
 
     protected $casts = [
         'current_tier' => 'integer',
         'is_equipped' => 'boolean',
+        'show_in_quick_inventory' => 'boolean',
     ];
 
     /**

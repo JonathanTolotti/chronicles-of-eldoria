@@ -34,8 +34,8 @@ class DashboardController extends Controller
                 ->with('error', 'Você precisa selecionar um personagem para acessar o dashboard.');
         }
         
-        // Carregar dados do inventário
-        $inventory = $this->inventoryService->getInventoryByTabs($character);
+        // Carregar dados do inventário rápido
+        $inventory = $this->inventoryService->getQuickInventoryByTabs($character);
         $equipped = $this->inventoryService->getEquippedItems($character);
         $stats = $this->inventoryService->getInventoryStats($character);
         

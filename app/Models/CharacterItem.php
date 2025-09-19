@@ -16,12 +16,14 @@ class CharacterItem extends Model
         'is_equipped',
         'equipment_slot',
         'slot_position',
+        'show_in_quick_inventory',
     ];
 
     protected function casts(): array
     {
         return [
             'is_equipped' => 'boolean',
+            'show_in_quick_inventory' => 'boolean',
         ];
     }
 

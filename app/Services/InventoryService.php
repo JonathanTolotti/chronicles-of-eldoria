@@ -28,6 +28,25 @@ class InventoryService
     }
 
     /**
+     * Get character's quick inventory (only items marked for quick inventory)
+     */
+    public function getQuickInventoryByTabs(Character $character): array
+    {
+        $items = CharacterItem::where('character_id', $character->id)
+            ->where('is_equipped', false)
+            ->where('show_in_quick_inventory', true)
+            ->with(['item.effects'])
+            ->get();
+
+        return [
+            'potions' => $items->filter(fn($item) => $item->item->type === 'potion')->values()->toArray(),
+            'equipment' => $items->filter(fn($item) => in_array($item->item->type, ['weapon', 'armor', 'accessory']))->values()->toArray(),
+            'materials' => $items->filter(fn($item) => $item->item->type === 'material')->values()->toArray(),
+            'other' => $items->filter(fn($item) => !in_array($item->item->type, ['potion', 'weapon', 'armor', 'accessory', 'material']))->values()->toArray(),
+        ];
+    }
+
+    /**
      * Get character's equipped items
      */
     public function getEquippedItems(Character $character): array

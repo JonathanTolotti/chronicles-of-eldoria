@@ -125,4 +125,47 @@ class ItemController extends Controller
             'character_item' => $characterItem->load('item.effects')
         ]);
     }
+
+    /**
+     * Toggle item visibility in quick inventory
+     */
+    public function toggleQuickInventory(Request $request): JsonResponse
+    {
+        $request->validate([
+            'item_id' => 'required|integer',
+            'show_in_quick_inventory' => 'required|boolean'
+        ]);
+
+        $user = auth()->user();
+        $character = $user->activeCharacter;
+
+        if (!$character) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Personagem não encontrado'
+            ], 404);
+        }
+
+        $characterItem = $character->items()
+            ->where('id', $request->item_id)
+            ->first();
+
+        if (!$characterItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item não encontrado no inventário'
+            ], 404);
+        }
+
+        $characterItem->update([
+            'show_in_quick_inventory' => $request->show_in_quick_inventory
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $request->show_in_quick_inventory 
+                ? 'Item adicionado ao inventário rápido' 
+                : 'Item removido do inventário rápido'
+        ]);
+    }
 }
