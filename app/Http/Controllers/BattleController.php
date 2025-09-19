@@ -217,6 +217,9 @@ class BattleController extends Controller
 
         // Criar personagem temporário para cálculos (usando dados atuais do personagem)
         $tempCharacter = clone $character;
+        
+        // Recalcular stats do personagem com equipamentos para a batalha
+        $this->characterService->recalculateStats($tempCharacter, false);
 
         // Execute character attack
         $attackResult = $this->battleService->executeAttack($tempCharacter, $tempMonster);

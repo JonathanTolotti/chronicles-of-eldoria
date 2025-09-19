@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 class CharacterService
 {
     public function __construct(
-        private CharacterRepository $characterRepository
+        private CharacterRepository $characterRepository,
+        private EquipmentService $equipmentService
     ) {}
 
     public function createCharacter(User $user, array $data): Character
@@ -113,10 +114,25 @@ class CharacterService
                     ($character->intelligence * 2.2) + 
                     ($character->level * 10);
         
-        // TODO: Add equipment power when equipment system is implemented
-        $equipmentPower = 0;
+        // Add equipment power
+        $equipmentBonuses = $this->equipmentService->getEquipmentBonuses($character);
+        $equipmentPower = array_sum($equipmentBonuses);
         
         return (int) ($basePower + $equipmentPower);
+    }
+
+    public function calculateDefense(Character $character): int
+    {
+        // Defesa base baseada em constituição
+        $baseDefense = $character->constitution * 0.5;
+        
+        // Adicionar defesa dos equipamentos (armor, shield, helmet)
+        $equipmentBonuses = $this->equipmentService->getEquipmentBonuses($character);
+        
+        // Defesa dos equipamentos é baseada principalmente em armor e shield
+        $equipmentDefense = $equipmentBonuses['constitution'] * 0.3; // Armor/shield dão defesa
+        
+        return (int) ($baseDefense + $equipmentDefense);
     }
 
     public function calculateMaxHp(Character $character): int

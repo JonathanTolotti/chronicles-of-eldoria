@@ -6,14 +6,17 @@ namespace App\Services;
 
 use App\Models\Character;
 use App\Models\Monster;
+use App\Services\CharacterService;
 
 class BattleService
 {
     protected EventService $eventService;
+    protected CharacterService $characterService;
 
-    public function __construct(EventService $eventService)
+    public function __construct(EventService $eventService, CharacterService $characterService)
     {
         $this->eventService = $eventService;
+        $this->characterService = $characterService;
     }
 
     /**
@@ -151,7 +154,8 @@ class BattleService
         $result['hit'] = true;
 
         // Calculate damage
-        $damage = $this->calculateDamage($monster->attack_power, 0); // Characters don't have defense yet
+        $characterDefense = $this->calculateCharacterDefense($character);
+        $damage = $this->calculateDamage($monster->attack_power, $characterDefense);
         
         // Check for critical hit (monsters have low crit chance)
         $monsterCritChance = config('battle.critical_hit.monster_chance');
@@ -210,5 +214,13 @@ class BattleService
             'winner' => null,
             'message' => 'Batalha em andamento...'
         ];
+    }
+
+    /**
+     * Calculate character defense including equipment bonuses
+     */
+    private function calculateCharacterDefense(Character $character): int
+    {
+        return $this->characterService->calculateDefense($character);
     }
 }
