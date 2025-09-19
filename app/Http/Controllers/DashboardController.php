@@ -41,6 +41,8 @@ class DashboardController extends Controller
         
         // Carregar dados dos equipamentos
         $equipment = $this->equipmentService->getCharacterEquipment($character);
+        $equipmentBonuses = $this->equipmentService->getEquipmentBonuses($character);
+        
         // Carregar eventos ativos
         $activeEvents = $this->eventService->getActiveEvents();
         $hasActiveEvents = $this->eventService->hasActiveEvents();
@@ -52,6 +54,7 @@ class DashboardController extends Controller
             'equipped' => $equipped,
             'stats' => $stats,
             'equipment' => $equipment,
+            'equipmentBonuses' => $equipmentBonuses,
             'activeEvents' => $activeEvents,
             'hasActiveEvents' => $hasActiveEvents,
         ]);

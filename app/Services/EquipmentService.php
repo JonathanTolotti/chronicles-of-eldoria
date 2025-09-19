@@ -149,12 +149,13 @@ class EquipmentService
         $currentEquipmentBonuses = $this->getTotalEquipmentBonuses($character);
 
         // Calcular stats base removendo os bônus de equipamentos
+        // Garantir que não fique negativo
         return [
-            'strength' => $character->strength - $currentEquipmentBonuses['strength'],
-            'dexterity' => $character->dexterity - $currentEquipmentBonuses['dexterity'],
-            'constitution' => $character->constitution - $currentEquipmentBonuses['constitution'],
-            'intelligence' => $character->intelligence - $currentEquipmentBonuses['intelligence'],
-            'luck' => $character->luck - $currentEquipmentBonuses['luck'],
+            'strength' => max(0, $character->strength - $currentEquipmentBonuses['strength']),
+            'dexterity' => max(0, $character->dexterity - $currentEquipmentBonuses['dexterity']),
+            'constitution' => max(0, $character->constitution - $currentEquipmentBonuses['constitution']),
+            'intelligence' => max(0, $character->intelligence - $currentEquipmentBonuses['intelligence']),
+            'luck' => max(0, $character->luck - $currentEquipmentBonuses['luck']),
         ];
     }
 
@@ -259,5 +260,13 @@ class EquipmentService
             'equipped' => $equipped,
             'inventory' => $allEquipment
         ];
+    }
+
+    /**
+     * Obter bônus dos equipamentos para exibição no dashboard
+     */
+    public function getEquipmentBonuses(Character $character): array
+    {
+        return $this->getTotalEquipmentBonuses($character);
     }
 }

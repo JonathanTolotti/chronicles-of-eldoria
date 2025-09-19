@@ -228,23 +228,38 @@
               <div class="space-y-2 text-sm text-medieval">
                 <div class="flex justify-between">
                   <span class="text-medieval">Força:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.strength || 0 }}</span>
+                  <span class="font-semibold text-medieval-gold">
+                    {{ character?.strength || 0 }}
+                    <span v-if="equipmentBonuses?.strength > 0" class="text-green-500 text-medieval">(+{{ equipmentBonuses.strength }})</span>
+                  </span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Destreza:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.dexterity || 0 }}</span>
+                  <span class="font-semibold text-medieval-gold">
+                    {{ character?.dexterity || 0 }}
+                    <span v-if="equipmentBonuses?.dexterity > 0" class="text-green-500 text-medieval">(+{{ equipmentBonuses.dexterity }})</span>
+                  </span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Constituição:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.constitution || 0 }}</span>
+                  <span class="font-semibold text-medieval-gold">
+                    {{ character?.constitution || 0 }}
+                    <span v-if="equipmentBonuses?.constitution > 0" class="text-green-500 text-medieval">(+{{ equipmentBonuses.constitution }})</span>
+                  </span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Inteligência:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.intelligence || 0 }}</span>
+                  <span class="font-semibold text-medieval-gold">
+                    {{ character?.intelligence || 0 }}
+                    <span v-if="equipmentBonuses?.intelligence > 0" class="text-green-500 text-medieval">(+{{ equipmentBonuses.intelligence }})</span>
+                  </span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-medieval">Sorte:</span>
-                  <span class="font-semibold text-medieval-gold">{{ character?.luck || 0 }}</span>
+                  <span class="font-semibold text-medieval-gold">
+                    {{ character?.luck || 0 }}
+                    <span v-if="equipmentBonuses?.luck > 0" class="text-green-500 text-medieval">(+{{ equipmentBonuses.luck }})</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -778,6 +793,7 @@ const props = defineProps({
   equipped: Object,
   stats: Object,
   equipment: Object,
+  equipmentBonuses: Object,
   activeEvents: Array,
   hasActiveEvents: Boolean,
 });
