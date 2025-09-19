@@ -180,8 +180,9 @@ class CharacterService
             return;
         }
 
-        // Get the current value and add training points
-        $currentValue = $character->{$character->training_stat};
+        // Get the base stat value (without equipment bonuses)
+        $baseStats = $this->getBaseCharacterStats($character);
+        $currentValue = $baseStats[$character->training_stat];
         $newValue = $currentValue + $character->training_points;
         $trainingStat = $character->training_stat;
         
@@ -262,5 +263,25 @@ class CharacterService
     {
         // 2 points per hour of training (1 point per 30 minutes)
         return max(1, (int) ($duration / 30));
+    }
+
+    /**
+     * Obter stats base do personagem (sem equipamentos)
+     * Usa os stats atuais do personagem, removendo apenas os bônus de equipamentos
+     */
+    private function getBaseCharacterStats(Character $character): array
+    {
+        // Obter bônus atuais de equipamentos
+        $currentEquipmentBonuses = $this->equipmentService->getEquipmentBonuses($character);
+
+        // Calcular stats base removendo os bônus de equipamentos
+        // Garantir que não fique negativo
+        return [
+            'strength' => max(0, $character->strength - $currentEquipmentBonuses['strength']),
+            'dexterity' => max(0, $character->dexterity - $currentEquipmentBonuses['dexterity']),
+            'constitution' => max(0, $character->constitution - $currentEquipmentBonuses['constitution']),
+            'intelligence' => max(0, $character->intelligence - $currentEquipmentBonuses['intelligence']),
+            'luck' => max(0, $character->luck - $currentEquipmentBonuses['luck']),
+        ];
     }
 }

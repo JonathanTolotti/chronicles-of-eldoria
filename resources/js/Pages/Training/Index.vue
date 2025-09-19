@@ -124,11 +124,11 @@
                 required
               >
                 <option value="">Selecione um atributo</option>
-                <option value="strength">Força (+2 pontos por hora)</option>
-                <option value="dexterity">Destreza (+2 pontos por hora)</option>
-                <option value="constitution">Constituição (+2 pontos por hora)</option>
-                <option value="intelligence">Inteligência (+2 pontos por hora)</option>
-                <option value="luck">Sorte (+2 pontos por hora)</option>
+                <option value="strength">Força</option>
+                <option value="dexterity">Destreza</option>
+                <option value="constitution">Constituição</option>
+                <option value="intelligence">Inteligência</option>
+                <option value="luck">Sorte</option>
               </select>
             </div>
 
@@ -141,9 +141,9 @@
               >
                 <option value="">Selecione a duração</option>
                 <option value="5">5 minutos (+1 ponto)</option>
-                <option value="15">15 minutos (+3 pontos)</option>
-                <option value="30">30 minutos (+6 pontos)</option>
-                <option value="60">1 hora (+12 pontos)</option>
+                <option value="15">15 minutos (+1 ponto)</option>
+                <option value="30">30 minutos (+1 ponto)</option>
+                <option value="60">1 hora (+2 pontos)</option>
               </select>
             </div>
 
