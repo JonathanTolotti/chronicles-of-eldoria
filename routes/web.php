@@ -130,6 +130,10 @@ Route::middleware('auth')->group(function () {
     // Sistema de Inventário
     Route::get('/inventory', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventory.index');
     
+    // Sistema de Ranking
+    Route::get('/ranking', [App\Http\Controllers\RankingController::class, 'index'])->name('ranking.index');
+    Route::get('/api/ranking', [App\Http\Controllers\RankingController::class, 'getRankings'])->name('ranking.api');
+    
     // Toggle inventário rápido
     Route::post('/items/toggle-quick-inventory', [App\Http\Controllers\ItemController::class, 'toggleQuickInventory'])->name('items.toggle-quick-inventory');
     Route::post('/equipment/toggle-quick-inventory', [App\Http\Controllers\EquipmentController::class, 'toggleQuickInventory'])->name('equipment.toggle-quick-inventory');

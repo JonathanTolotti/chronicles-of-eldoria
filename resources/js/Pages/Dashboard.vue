@@ -375,6 +375,16 @@
                 <p class="text-sm text-medieval text-medieval">Lute contra monstros</p>
               </Link>
 
+              <!-- Ranking - Ativo -->
+              <button 
+                @click="showRankingModal = true"
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105 w-full"
+              >
+                <div class="text-4xl text-medieval mb-2 text-yellow-500 hover:scale-110 transition-transform duration-200">🏆</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Ranking</h4>
+                <p class="text-sm text-medieval text-medieval">Veja os melhores heróis</p>
+              </button>
+
               <!-- Inventário - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
@@ -792,6 +802,12 @@
       </div>
     </div>
 
+    <!-- Modal de Ranking -->
+    <RankingModal 
+      :show="showRankingModal" 
+      @close="showRankingModal = false" 
+    />
+
   </div>
 </template>
 
@@ -799,6 +815,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
+import RankingModal from '@/Components/RankingModal.vue';
 
 const props = defineProps({
   user: Object,
@@ -814,6 +831,7 @@ const props = defineProps({
 
 const currentTime = ref(new Date());
 const mobileMenuOpen = ref(false);
+const showRankingModal = ref(false);
 let timeInterval = null;
 
 
