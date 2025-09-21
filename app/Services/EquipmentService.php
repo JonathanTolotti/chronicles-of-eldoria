@@ -104,14 +104,14 @@ class EquipmentService
 
         // Calcular stats finais (stats base + bônus de equipamentos)
         $finalStats = [
-            'strength' => $character->strength,
-            'dexterity' => $character->dexterity,
-            'constitution' => $character->constitution,
-            'intelligence' => $character->intelligence,
-            'luck' => $character->luck,
+            'strength' => $character->strength + $equipmentBonuses['strength'],
+            'dexterity' => $character->dexterity + $equipmentBonuses['dexterity'],
+            'constitution' => $character->constitution + $equipmentBonuses['constitution'],
+            'intelligence' => $character->intelligence + $equipmentBonuses['intelligence'],
+            'luck' => $character->luck + $equipmentBonuses['luck'],
         ];
 
-        // Calcular HP e MP baseado nos stats
+        // Calcular HP e MP baseado nos stats finais
         $finalStats['max_hp'] = $this->calculateMaxHP($finalStats['constitution'], $character->level);
         $finalStats['max_stamina'] = $this->calculateMaxStamina($finalStats['intelligence'], $character->level);
 
@@ -122,8 +122,12 @@ class EquipmentService
         // Calcular CP (Poder de Combate)
         $finalStats['power'] = $this->calculatePower($finalStats, $character->level, $equipmentBonuses);
 
-        // Atualizar o personagem
-        $character->update($finalStats);
+        // Atualizar apenas os stats calculados (não os stats base)
+        $character->update([
+            'max_hp' => $finalStats['max_hp'],
+            'max_stamina' => $finalStats['max_stamina'],
+            'power' => $finalStats['power'],
+        ]);
 
         // Garantir que HP atual não exceda HP máximo
         if ($character->current_hp > $character->max_hp) {
