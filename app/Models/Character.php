@@ -16,6 +16,9 @@ class Character extends Model
         'user_id',
         'name',
         'class',
+        'avatar',
+        'biography',
+        'profile_public',
         'level',
         'experience',
         'experience_to_next_level',
@@ -40,6 +43,7 @@ class Character extends Model
     protected function casts(): array
     {
         return [
+            'profile_public' => 'boolean',
             'training_started_at' => 'datetime',
             'training_ends_at' => 'datetime',
         ];
@@ -79,5 +83,31 @@ class Character extends Model
         return $this->training_stat !== null && 
                $this->training_ends_at !== null && 
                $this->training_ends_at->isFuture();
+    }
+
+    /**
+     * Get the avatar URL for the character.
+     */
+    public function getAvatarUrl(): string
+    {
+        $avatarPath = "images/avatars/{$this->avatar}.png";
+        $fullPath = public_path($avatarPath);
+
+        if (file_exists($fullPath)) {
+            return asset($avatarPath);
+        }
+
+        return asset('images/avatars/default.png');
+    }
+
+    /**
+     * Get sanitized biography HTML.
+     */
+    public function getSanitizedBiography(): string
+    {
+        if (empty($this->biography)) {
+            return '';
+        }
+        return strip_tags($this->biography, '<p><br><strong><em><u><ol><ul><li><h1><h2><h3><h4><h5><h6>');
     }
 }

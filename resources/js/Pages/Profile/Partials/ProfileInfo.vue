@@ -3,6 +3,10 @@ const props = defineProps({
     user: {
         type: Object,
         required: true
+    },
+    character: {
+        type: Object,
+        required: true
     }
 });
 
@@ -14,18 +18,37 @@ const formatDate = (date) => {
         day: 'numeric'
     });
 };
+
+const getClassName = (classType) => {
+    const classNames = {
+        'warrior': 'Guerreiro',
+        'mage': 'Mago',
+        'archer': 'Arqueiro',
+        'rogue': 'Ladino',
+        'paladin': 'Paladino',
+        'priest': 'Sacerdote'
+    };
+    return classNames[classType] || classType;
+};
+
+const formatNumber = (number) => {
+    if (!number) return '0';
+    return new Intl.NumberFormat('pt-BR').format(number);
+};
 </script>
 
 <template>
     <div class="space-y-6">
         <div class="flex items-center space-x-4">
             <img
-                :src="user.avatar_url"
-                :alt="`Avatar de ${user.name}`"
+                :src="character.avatar_url"
+                :alt="`Avatar de ${character.name}`"
                 class="h-20 w-20 rounded-full object-cover"
             />
             <div>
-                <h2 class="text-2xl font-bold text-medieval">{{ user.name }}</h2>
+                <h2 class="text-2xl font-bold text-medieval">{{ character.name }}</h2>
+                <p class="text-lg text-medieval-brown">{{ getClassName(character.class) }}</p>
+                <p class="text-sm text-medieval">Nível {{ character.level }}</p>
                 <div class="flex items-center space-x-2 mt-1">
                     <!-- Badge VIP -->
                     <span
@@ -52,13 +75,40 @@ const formatDate = (date) => {
             </div>
         </div>
 
-        <!-- Biografia -->
-        <div v-if="user.biography" class="mt-6">
-            <h3 class="text-lg font-medium text-medieval mb-2">Biografia</h3>
-            <div 
-                class="prose prose-sm max-w-none"
-                v-html="user.biography"
-            ></div>
+            <!-- Biografia -->
+            <div v-if="character.biography" class="mt-6">
+                <h3 class="text-lg font-medium text-medieval mb-2">Biografia</h3>
+                <div 
+                    class="prose prose-sm max-w-none"
+                    v-html="character.biography"
+                ></div>
+            </div>
+
+        <!-- Atributos do Personagem -->
+        <div class="mt-6">
+            <h3 class="text-lg font-medium text-medieval mb-4">Atributos</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-sm text-medieval">Força</div>
+                    <div class="text-lg font-bold text-medieval-gold">{{ character.strength || 0 }}</div>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-sm text-medieval">Destreza</div>
+                    <div class="text-lg font-bold text-medieval-gold">{{ character.dexterity || 0 }}</div>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-sm text-medieval">Constituição</div>
+                    <div class="text-lg font-bold text-medieval-gold">{{ character.constitution || 0 }}</div>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-sm text-medieval">Inteligência</div>
+                    <div class="text-lg font-bold text-medieval-gold">{{ character.intelligence || 0 }}</div>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-sm text-medieval">Sorte</div>
+                    <div class="text-lg font-bold text-medieval-gold">{{ character.luck || 0 }}</div>
+                </div>
+            </div>
         </div>
 
         <!-- Informações da conta -->
@@ -81,27 +131,47 @@ const formatDate = (date) => {
                 </dl>
             </div>
 
-            <div class="bg-amber-50 rounded-lg p-4">
-                <h4 class="text-sm font-medium text-medieval">Estatísticas</h4>
-                <dl class="mt-2 space-y-1">
-                    <div class="flex justify-between">
-                        <dt class="text-sm text-medieval">Personagens:</dt>
-                        <dd class="text-sm text-medieval">{{ user.characters_count || 0 }}</dd>
-                    </div>
-                    <div class="flex justify-between">
-                        <dt class="text-sm text-medieval">Nível mais alto:</dt>
-                        <dd class="text-sm text-medieval">{{ user.highest_level_character || 0 }}</dd>
-                    </div>
-                    <div class="flex justify-between">
-                        <dt class="text-sm text-medieval">Perfil:</dt>
-                        <dd class="text-sm text-medieval">
-                            <span :class="user.profile_public ? 'text-green-600' : 'text-red-600'">
-                                {{ user.profile_public ? 'Público' : 'Privado' }}
-                            </span>
-                        </dd>
-                    </div>
-                </dl>
-            </div>
+                <div class="bg-amber-50 rounded-lg p-4">
+                    <h4 class="text-sm font-medium text-medieval">Estatísticas do Personagem</h4>
+                    <dl class="mt-2 space-y-1">
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Nível:</dt>
+                            <dd class="text-sm text-medieval">{{ character.level }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Experiência:</dt>
+                            <dd class="text-sm text-medieval">{{ formatNumber(character.experience || 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Poder:</dt>
+                            <dd class="text-sm text-medieval">{{ formatNumber(character.power || 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Gold:</dt>
+                            <dd class="text-sm text-medieval">{{ formatNumber(character.gold || 0) }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Pontos Livres:</dt>
+                            <dd class="text-sm text-medieval">{{ character.stat_points || 0 }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">HP:</dt>
+                            <dd class="text-sm text-medieval">{{ character.current_hp || 0 }}/{{ character.max_hp || 0 }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Stamina:</dt>
+                            <dd class="text-sm text-medieval">{{ character.current_stamina || 0 }}/{{ character.max_stamina || 0 }}</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-sm text-medieval">Perfil:</dt>
+                            <dd class="text-sm text-medieval">
+                                <span :class="character.profile_public ? 'text-green-600' : 'text-red-600'">
+                                    {{ character.profile_public ? 'Público' : 'Privado' }}
+                                </span>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
         </div>
     </div>
 </template>

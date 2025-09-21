@@ -98,7 +98,12 @@
 
             <!-- Nome -->
             <div class="col-span-5 flex items-center">
-              <span class="text-medieval font-semibold text-white truncate">{{ player.name }}</span>
+              <Link 
+                :href="route('profile.show', player.name)"
+                class="text-medieval font-semibold text-white truncate hover:text-yellow-400 transition-colors duration-200 cursor-pointer"
+              >
+                {{ player.name }}
+              </Link>
             </div>
 
             <!-- Classe -->
@@ -136,6 +141,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import Modal from './Modal.vue'
 
 const props = defineProps({

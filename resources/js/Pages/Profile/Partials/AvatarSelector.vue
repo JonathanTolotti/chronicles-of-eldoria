@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     currentAvatar: {
@@ -8,32 +8,30 @@ const props = defineProps({
     },
     availableAvatars: {
         type: Object,
-        required: true,
-        default: () => ({
-            'default': 'Avatar Padrão',
-            'warrior': 'Guerreiro',
-            'mage': 'Mago',
-            'archer': 'Arqueiro',
-            'rogue': 'Ladino',
-            'knight': 'Cavaleiro',
-            'priest': 'Sacerdote',
-            'druid': 'Druida',
-            'paladin': 'Paladino',
-            'necromancer': 'Necromante',
-        })
+        required: true
     }
 });
 
-const form = useForm({
-    avatar: props.currentAvatar
-});
+// Lista completa de avatares disponíveis (sem o padrão)
+const allAvatars = [
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
+    '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'
+];
 
 const selectAvatar = (avatarKey) => {
-    form.avatar = avatarKey;
-    form.post(route('profile.update-profile'), {
+    router.post(route('profile.update-profile'), {
+        avatar: avatarKey
+    }, {
         preserveScroll: true,
+        preserveState: true,
         onSuccess: () => {
             // Avatar atualizado com sucesso
+        },
+        onError: (errors) => {
+            console.error('Erro ao atualizar avatar:', errors);
         }
     });
 };
@@ -42,35 +40,32 @@ const selectAvatar = (avatarKey) => {
 <template>
     <div class="space-y-4">
         <div class="bg-amber-50 p-4 rounded-lg">
-            <p class="text-sm text-medieval mb-4"></p>
+            <p class="text-sm text-medieval mb-4">
                 Escolha seu avatar para personalizar seu perfil no jogo.
             </p>
             
+            <!-- Grid de Avatares -->
             <div class="grid grid-cols-5 gap-4">
                 <div
-                    v-for="(name, key) in (availableAvatars || {})"
-                    :key="key"
-                    @click="selectAvatar(key)"
+                    v-for="avatarKey in allAvatars"
+                    :key="avatarKey"
+                    @click="selectAvatar(avatarKey)"
                     :class="[
-                        'relative cursor-pointer rounded-lg border-2 p-2 transition-all hover:scale-105',
-                        currentAvatar === key 
+                        'relative cursor-pointer rounded-lg border-2 p-3 transition-all hover:scale-105 flex items-center justify-center',
+                        currentAvatar === avatarKey 
                             ? 'border-medieval-gold bg-medieval-gold/20 shadow-lg' 
                             : 'border-medieval-bronze hover:border-medieval-gold hover:shadow-md'
                     ]"
                 >
                     <img
-                        :src="`/images/avatars/${key}.png`"
-                        :alt="name || 'Avatar'"
+                        :src="`/images/avatars/${avatarKey}.png`"
+                        :alt="`Avatar ${avatarKey}`"
                         class="h-16 w-16 rounded-lg object-cover"
-                        @error="$event.target.src = '/images/avatars/default.png'"
                     />
-                    <div class="mt-1 text-center text-xs text-medieval">
-                        {{ name || 'Avatar' }}
-                    </div>
                     
                     <!-- Indicador de seleção -->
                     <div
-                        v-if="currentAvatar === key"
+                        v-if="currentAvatar === avatarKey"
                         class="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-medieval-gold flex items-center justify-center shadow-md"
                     >
                         <svg class="h-3 w-3 text-medieval-dark" fill="currentColor" viewBox="0 0 20 20">
@@ -86,11 +81,10 @@ const selectAvatar = (avatarKey) => {
                 <div class="mt-2 flex items-center space-x-3">
                     <img
                         :src="`/images/avatars/${currentAvatar || 'default'}.png`"
-                        :alt="(availableAvatars && availableAvatars[currentAvatar]) || 'Avatar Padrão'"
+                        :alt="`Avatar ${currentAvatar}`"
                         class="h-12 w-12 rounded-lg object-cover border-2 border-medieval-gold"
-                        @error="$event.target.src = '/images/avatars/default.png'"
                     />
-                    <span class="text-sm text-medieval">{{ (availableAvatars && availableAvatars[currentAvatar]) || 'Avatar Padrão' }}</span>
+                    <span class="text-sm text-medieval">{{ `Avatar ${currentAvatar}` }}</span>
                 </div>
             </div>
         </div>

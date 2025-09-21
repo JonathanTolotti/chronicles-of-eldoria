@@ -12,14 +12,14 @@
             <h2 class="text-lg text-medieval font-medieval">Dashboard</h2>
           </div>
           <div class="flex-1 flex justify-end items-center space-x-4">
-            <!-- Avatar do Usuário -->
+            <!-- Avatar do Personagem -->
             <div class="flex items-center space-x-2 mr-4">
               <img
-                :src="user?.avatar_url || '/images/avatars/default.png'"
-                :alt="`Avatar de ${user?.name}`"
+                :src="character?.avatar_url || '/images/avatars/default.png'"
+                :alt="`Avatar de ${character?.name}`"
                 class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
               />
-              <span class="text-sm text-medieval-gold font-semibold">{{ user?.name }}</span>
+              <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
             </div>
             
             <!-- Recursos do Jogador -->
@@ -185,10 +185,10 @@
             <!-- Avatar -->
             <div class="text-center mb-4">
               <div class="relative w-20 h-20 mx-auto mb-2">
-                <!-- Avatar do usuário -->
+                <!-- Avatar do personagem -->
                 <img
-                  :src="user?.avatar_url || '/images/avatars/default.png'"
-                  :alt="`Avatar de ${user?.name}`"
+                  :src="character?.avatar_url || '/images/avatars/default.png'"
+                  :alt="`Avatar de ${character?.name}`"
                   class="w-20 h-20 rounded-lg object-cover border-2 border-medieval-gold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 />
                 <!-- Ícone do personagem sobreposto -->

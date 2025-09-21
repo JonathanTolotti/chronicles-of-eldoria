@@ -27,9 +27,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'vip_expires_at',
         'active_character_id',
         'coin',
-        'avatar',
-        'biography',
-        'profile_public',
         'is_staff',
         'last_seen_at',
     ];
@@ -57,7 +54,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'is_vip' => 'boolean',
             'vip_expires_at' => 'datetime',
             'active_character_id' => 'integer',
-            'profile_public' => 'boolean',
             'is_staff' => 'boolean',
             'last_seen_at' => 'datetime',
         ];
@@ -96,33 +92,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->is_staff;
     }
 
-    /**
-     * Get avatar URL.
-     */
-    public function getAvatarUrl(): string
-    {
-        $avatarPath = "images/avatars/{$this->avatar}.png";
-        $fullPath = public_path($avatarPath);
-        
-        if (file_exists($fullPath)) {
-            return asset($avatarPath);
-        }
-        
-        return asset('images/avatars/default.png');
-    }
-
-    /**
-     * Get sanitized biography.
-     */
-    public function getSanitizedBiography(): string
-    {
-        if (empty($this->biography)) {
-            return '';
-        }
-        
-        // Usar HTMLPurifier ou similar para sanitizar HTML
-        return strip_tags($this->biography, '<p><br><strong><em><u><ol><ul><li><h1><h2><h3><h4><h5><h6>');
-    }
 
     /**
      * Send the password reset notification.

@@ -121,7 +121,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update-profile', [App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('profile.update-profile');
     Route::post('/profile/update-password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.update-password');
     Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/{character}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     
     
     // Sistema de Equipamentos

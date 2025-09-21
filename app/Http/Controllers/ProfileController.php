@@ -21,6 +21,12 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = $request->user();
+        $character = $user->activeCharacter;
+        
+        if (!$character) {
+            return redirect()->route('characters.select')
+                ->with('error', 'Você precisa selecionar um personagem para acessar o perfil.');
+        }
         
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
@@ -28,16 +34,36 @@ class ProfileController extends Controller
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
-                'avatar' => $user->avatar,
-                'biography' => $user->biography,
-                'profile_public' => $user->profile_public,
                 'is_staff' => $user->is_staff,
                 'is_vip' => $user->isVip(),
-                'avatar_url' => $user->getAvatarUrl(),
                 'created_at' => $user->created_at,
                 'last_seen_at' => $user->last_seen_at,
                 'characters_count' => $user->characters()->count(),
                 'highest_level_character' => $user->characters()->max('level'),
+            ],
+            'character' => [
+                'id' => $character->id,
+                'name' => $character->name,
+                'class' => $character->class,
+                'level' => $character->level,
+                'experience' => $character->experience,
+                'experience_to_next_level' => $character->experience_to_next_level,
+                'strength' => $character->strength,
+                'dexterity' => $character->dexterity,
+                'constitution' => $character->constitution,
+                'intelligence' => $character->intelligence,
+                'luck' => $character->luck,
+                'max_hp' => $character->max_hp,
+                'current_hp' => $character->current_hp,
+                'max_stamina' => $character->max_stamina,
+                'current_stamina' => $character->current_stamina,
+                'power' => $character->power,
+                'gold' => $character->gold,
+                'stat_points' => $character->stat_points,
+                'avatar' => $character->avatar,
+                'biography' => $character->biography,
+                'profile_public' => $character->profile_public,
+                'avatar_url' => $character->getAvatarUrl(),
             ],
             'available_avatars' => $this->getAvailableAvatars(),
         ]);
@@ -56,7 +82,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return back()->with('status', 'profile-updated');
     }
 
     /**
@@ -81,28 +107,42 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update user profile information (avatar, biography, etc.)
+     * Update character profile information (avatar, biography, etc.)
      */
     public function updateProfile(Request $request): RedirectResponse
     {
         $request->validate([
-            'avatar' => ['required', 'string', 'in:' . implode(',', array_keys($this->getAvailableAvatars()))],
+            'avatar' => ['nullable', 'string'],
             'biography' => ['nullable', 'string', 'max:2000'],
-            'profile_public' => ['boolean'],
+            'profile_public' => ['nullable', 'boolean'],
         ]);
 
         $user = $request->user();
+        $character = $user->activeCharacter;
         
-        // Sanitizar biografia HTML
-        $biography = $request->biography ? $this->sanitizeHtml($request->biography) : null;
+        if (!$character) {
+            return redirect()->route('characters.select')
+                ->with('error', 'Você precisa selecionar um personagem para atualizar o perfil.');
+        }
         
-        $user->update([
-            'avatar' => $request->avatar,
-            'biography' => $biography,
-            'profile_public' => $request->boolean('profile_public'),
-        ]);
+        // Preparar dados para atualização
+        $updateData = [];
+        
+        if ($request->has('avatar')) {
+            $updateData['avatar'] = $request->avatar;
+        }
+        
+        if ($request->has('biography')) {
+            $updateData['biography'] = $request->biography ? $this->sanitizeHtml($request->biography) : null;
+        }
+        
+        if ($request->has('profile_public')) {
+            $updateData['profile_public'] = $request->boolean('profile_public');
+        }
+        
+        $character->update($updateData);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return back()->with('status', 'profile-updated');
     }
 
     /**
@@ -119,34 +159,62 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return Redirect::route('profile.edit')->with('status', 'password-updated');
+        return back()->with('status', 'password-updated');
     }
 
     /**
      * Show public profile
      */
-    public function show(Request $request, $userId): Response
+    public function show(Request $request, $characterName): Response
     {
-        $user = \App\Models\User::findOrFail($userId);
+        $character = \App\Models\Character::where('name', $characterName)->firstOrFail();
+        $user = $character->user;
         
         // Verificar se o perfil é público
-        if (!$user->profile_public && $user->id !== $request->user()?->id) {
+        if (!$character->profile_public && $user->id !== $request->user()?->id) {
             abort(403, 'Este perfil é privado.');
         }
 
+        // Buscar equipamentos equipados (mesmo sistema do dashboard)
+        $equippedItems = \App\Models\CharacterEquipment::where('character_id', $character->id)
+            ->where('is_equipped', true)
+            ->with('equipment')
+            ->get()
+            ->keyBy('slot');
+        
+        
         return Inertia::render('Profile/Show', [
             'profile' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'avatar' => $user->avatar,
-                'avatar_url' => $user->getAvatarUrl(),
-                'biography' => $user->getSanitizedBiography(),
+                'id' => $character->id,
+                'name' => $character->name,
+                'class' => $character->class,
+                'level' => $character->level,
+                'experience' => $character->experience,
+                'experience_to_next_level' => $character->experience_to_next_level,
+                'strength' => $character->strength,
+                'dexterity' => $character->dexterity,
+                'constitution' => $character->constitution,
+                'intelligence' => $character->intelligence,
+                'luck' => $character->luck,
+                'max_hp' => $character->max_hp,
+                'current_hp' => $character->current_hp,
+                'max_stamina' => $character->max_stamina,
+                'current_stamina' => $character->current_stamina,
+                'power' => $character->power,
+                'gold' => $character->gold,
+                'stat_points' => $character->stat_points,
+                'avatar' => $character->avatar,
+                'avatar_url' => $character->getAvatarUrl(),
+                'biography' => $character->getSanitizedBiography(),
                 'is_staff' => $user->is_staff,
                 'is_vip' => $user->isVip(),
                 'created_at' => $user->created_at,
                 'last_seen_at' => $user->last_seen_at,
                 'characters_count' => $user->characters()->count(),
                 'highest_level_character' => $user->characters()->max('level'),
+                'equipment' => [
+                    'equipped' => $equippedItems->toArray()
+                ],
             ],
         ]);
     }
@@ -158,15 +226,56 @@ class ProfileController extends Controller
     {
         return [
             'default' => 'Avatar Padrão',
-            'warrior' => 'Guerreiro',
-            'mage' => 'Mago',
-            'archer' => 'Arqueiro',
-            'rogue' => 'Ladino',
-            'knight' => 'Cavaleiro',
-            'priest' => 'Sacerdote',
-            'druid' => 'Druida',
-            'paladin' => 'Paladino',
-            'necromancer' => 'Necromante',
+            '1' => 'Avatar 1',
+            '2' => 'Avatar 2',
+            '3' => 'Avatar 3',
+            '4' => 'Avatar 4',
+            '5' => 'Avatar 5',
+            '6' => 'Avatar 6',
+            '7' => 'Avatar 7',
+            '8' => 'Avatar 8',
+            '9' => 'Avatar 9',
+            '10' => 'Avatar 10',
+            '11' => 'Avatar 11',
+            '12' => 'Avatar 12',
+            '13' => 'Avatar 13',
+            '14' => 'Avatar 14',
+            '15' => 'Avatar 15',
+            '16' => 'Avatar 16',
+            '17' => 'Avatar 17',
+            '18' => 'Avatar 18',
+            '19' => 'Avatar 19',
+            '20' => 'Avatar 20',
+            '21' => 'Avatar 21',
+            '22' => 'Avatar 22',
+            '23' => 'Avatar 23',
+            '24' => 'Avatar 24',
+            '25' => 'Avatar 25',
+            '26' => 'Avatar 26',
+            '27' => 'Avatar 27',
+            '28' => 'Avatar 28',
+            '29' => 'Avatar 29',
+            '30' => 'Avatar 30',
+            '31' => 'Avatar 31',
+            '32' => 'Avatar 32',
+            '33' => 'Avatar 33',
+            '34' => 'Avatar 34',
+            '35' => 'Avatar 35',
+            '36' => 'Avatar 36',
+            '37' => 'Avatar 37',
+            '38' => 'Avatar 38',
+            '39' => 'Avatar 39',
+            '40' => 'Avatar 40',
+            '41' => 'Avatar 41',
+            '42' => 'Avatar 42',
+            '43' => 'Avatar 43',
+            '44' => 'Avatar 44',
+            '45' => 'Avatar 45',
+            '46' => 'Avatar 46',
+            '47' => 'Avatar 47',
+            '48' => 'Avatar 48',
+            '49' => 'Avatar 49',
+            '50' => 'Avatar 50',
         ];
     }
 

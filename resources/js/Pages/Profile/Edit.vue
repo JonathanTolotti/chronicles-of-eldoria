@@ -15,14 +15,14 @@
                         <h2 class="text-lg font-bold text-medieval">Configurações do Perfil</h2>
                     </div>
                     <div class="flex-1 flex justify-end items-center space-x-4">
-                        <!-- Avatar do Usuário -->
+                        <!-- Avatar do Personagem -->
                         <div class="flex items-center space-x-2 mr-4">
                             <img
-                                :src="user?.avatar_url || '/images/avatars/default.png'"
-                                :alt="`Avatar de ${user?.name}`"
+                                :src="character?.avatar_url || '/images/avatars/default.png'"
+                                :alt="`Avatar de ${character?.name}`"
                                 class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
                             />
-                            <span class="text-sm text-medieval-gold font-semibold">{{ user?.name }}</span>
+                            <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
                         </div>
                         
                         <!-- Botões -->
@@ -54,11 +54,11 @@
                     <!-- Avatar Mobile -->
                     <div class="flex justify-center items-center space-x-2 mb-3">
                         <img
-                            :src="user?.avatar_url || '/images/avatars/default.png'"
-                            :alt="`Avatar de ${user?.name}`"
+                            :src="character?.avatar_url || '/images/avatars/default.png'"
+                            :alt="`Avatar de ${character?.name}`"
                             class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
                         />
-                        <span class="text-sm text-medieval-gold font-semibold">{{ user?.name }}</span>
+                        <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
                     </div>
 
                     <!-- Menu Mobile -->
@@ -81,64 +81,30 @@
         <main class="flex-1 p-4">
             <div class="max-w-4xl mx-auto space-y-6">
                 
-                <!-- Informações do Perfil -->
-                <div class="card-medieval">
-                    <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Informações do Perfil</h3>
-                    <ProfileInfo :user="user" />
-                </div>
-
-                <!-- Seleção de Avatar -->
-                <div class="card-medieval">
-                    <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Avatar</h3>
-                    <AvatarSelector 
-                        :current-avatar="user.avatar"
-                        :available-avatars="availableAvatars"
-                    />
-                </div>
-
-                <!-- Editor de Biografia -->
-                <div class="card-medieval">
-                    <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Biografia</h3>
-                    <BiographyEditor 
-                        :current-biography="user.biography"
-                        :is-public="user.profile_public"
-                    />
-                </div>
-
-                <!-- Informações Básicas -->
-                <div class="card-medieval">
-                    <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Informações Básicas</h3>
-                    <div class="bg-amber-50 p-4 rounded-lg">
-                        <p class="text-sm text-medieval mb-4">
-                            Atualize seu nome. O email não pode ser alterado por questões de segurança.
-                        </p>
-                        <form @submit.prevent="updateProfile" class="space-y-4">
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-medieval mb-2">Nome</label>
-                                <input
-                                    id="name"
-                                    v-model="form.name"
-                                    type="text"
-                                    class="w-full px-3 py-2 border border-medieval-bronze rounded-lg focus:ring-2 focus:ring-medieval-gold focus:border-medieval-gold text-medieval-dark"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-medieval mb-2">Email</label>
-                                <div class="w-full px-3 py-2 border border-medieval-bronze rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed">
-                                    {{ user.email }}
-                                </div>
-                                <p class="text-xs text-gray-500 mt-1">Email não pode ser alterado</p>
-                            </div>
-                            <button
-                                type="submit"
-                                class="btn-medieval px-4 py-2 bg-medieval-gold text-medieval-dark hover:bg-yellow-500 transition-colors"
-                            >
-                                Atualizar Nome
-                            </button>
-                        </form>
+                    <!-- Informações do Perfil -->
+                    <div class="card-medieval">
+                        <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Informações do Perfil</h3>
+                        <ProfileInfo :user="user" :character="character" />
                     </div>
-                </div>
+
+                    <!-- Seleção de Avatar -->
+                    <div class="card-medieval">
+                        <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Avatar</h3>
+                        <AvatarSelector 
+                            :current-avatar="character.avatar"
+                            :available-avatars="availableAvatars"
+                        />
+                    </div>
+
+                    <!-- Editor de Biografia -->
+                    <div class="card-medieval">
+                        <h3 class="text-xl font-bold text-medieval mb-4 text-medieval-gold">Biografia</h3>
+                        <BiographyEditor 
+                            :current-biography="character.biography"
+                            :is-public="character.profile_public"
+                        />
+                    </div>
+
 
                 <!-- Troca de Senha -->
                 <div class="card-medieval">
@@ -217,6 +183,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    character: {
+        type: Object,
+        required: true,
+    },
     availableAvatars: {
         type: Object,
         required: true,
@@ -225,29 +195,12 @@ const props = defineProps({
 
 const mobileMenuOpen = ref(false);
 
-// Formulário de informações básicas
-const form = reactive({
-    name: props.user.name,
-});
-
 // Formulário de senha
 const passwordForm = reactive({
     current_password: '',
     password: '',
     password_confirmation: '',
 });
-
-// Função para atualizar perfil
-const updateProfile = () => {
-    router.post(route('profile.update-profile'), form, {
-        onSuccess: () => {
-            // Sucesso
-        },
-        onError: (errors) => {
-            console.error('Erro ao atualizar perfil:', errors);
-        }
-    });
-};
 
 // Função para atualizar senha
 const updatePassword = () => {

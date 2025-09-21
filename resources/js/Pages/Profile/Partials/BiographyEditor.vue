@@ -1,8 +1,6 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { useForm } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
+import { ref, reactive } from 'vue';
 
 const props = defineProps({
     currentBiography: {
@@ -15,14 +13,32 @@ const props = defineProps({
     }
 });
 
-const form = useForm({
+const form = reactive({
     biography: props.currentBiography,
     profile_public: props.isPublic
 });
 
+const isProcessing = ref(false);
+const showSuccess = ref(false);
+
 const updateBiography = () => {
-    form.post(route('profile.update-profile'), {
-        preserveScroll: true
+    isProcessing.value = true;
+    showSuccess.value = false;
+    
+    router.post(route('profile.update-profile'), form, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            isProcessing.value = false;
+            showSuccess.value = true;
+            setTimeout(() => {
+                showSuccess.value = false;
+            }, 3000);
+        },
+        onError: (errors) => {
+            isProcessing.value = false;
+            console.error('Erro ao salvar biografia:', errors);
+        }
     });
 };
 
@@ -46,15 +62,14 @@ const allowedTags = [
 
         <form @submit.prevent="updateBiography" class="space-y-4">
             <div>
-                <InputLabel for="biography" value="Biografia" />
+                <label for="biography" class="block text-sm font-medium text-medieval mb-2">Biografia</label>
                 <textarea
                     id="biography"
                     v-model="form.biography"
                     rows="6"
-                    class="mt-1 block w-full rounded-lg border border-medieval-bronze shadow-sm focus:border-medieval-gold focus:ring-medieval-gold text-medieval-dark"
+                    class="w-full px-3 py-2 border border-medieval-bronze rounded-lg focus:ring-2 focus:ring-medieval-gold focus:border-medieval-gold text-medieval-dark"
                     placeholder="Conte um pouco sobre você..."
                 ></textarea>
-                <InputError class="mt-2" :message="form.errors.biography" />
             </div>
 
             <div class="flex items-center">
@@ -70,9 +85,13 @@ const allowedTags = [
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">
-                    {{ form.processing ? 'Salvando...' : 'Salvar Biografia' }}
-                </PrimaryButton>
+                <button
+                    type="submit"
+                    :disabled="isProcessing"
+                    class="btn-medieval px-4 py-2 bg-medieval-gold text-medieval-dark hover:bg-yellow-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {{ isProcessing ? 'Salvando...' : 'Salvar Biografia' }}
+                </button>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -81,7 +100,7 @@ const allowedTags = [
                     leave-to-class="opacity-0"
                 >
                     <p
-                        v-if="form.recentlySuccessful"
+                        v-if="showSuccess"
                         class="text-sm text-green-600"
                     >
                         Biografia atualizada!
