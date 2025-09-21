@@ -102,16 +102,13 @@ class EquipmentService
         // Obter bônus de todos os equipamentos primeiro
         $equipmentBonuses = $this->getTotalEquipmentBonuses($character);
 
-        // Obter stats base do personagem (sem equipamentos)
-        $baseStats = $this->getBaseCharacterStats($character);
-
-        // Calcular stats finais
+        // Calcular stats finais (stats base + bônus de equipamentos)
         $finalStats = [
-            'strength' => $baseStats['strength'] + $equipmentBonuses['strength'],
-            'dexterity' => $baseStats['dexterity'] + $equipmentBonuses['dexterity'],
-            'constitution' => $baseStats['constitution'] + $equipmentBonuses['constitution'],
-            'intelligence' => $baseStats['intelligence'] + $equipmentBonuses['intelligence'],
-            'luck' => $baseStats['luck'] + $equipmentBonuses['luck'],
+            'strength' => $character->strength,
+            'dexterity' => $character->dexterity,
+            'constitution' => $character->constitution,
+            'intelligence' => $character->intelligence,
+            'luck' => $character->luck,
         ];
 
         // Calcular HP e MP baseado nos stats
@@ -140,22 +137,49 @@ class EquipmentService
     }
 
     /**
+     * Aplicar bônus de equipamentos a um personagem temporário (sem salvar no banco)
+     */
+    public function applyEquipmentBonusesToCharacter(Character $character): void
+    {
+        // Obter bônus de todos os equipamentos
+        $equipmentBonuses = $this->getTotalEquipmentBonuses($character);
+
+        // Aplicar bônus diretamente ao objeto (sem salvar no banco)
+        $character->strength += $equipmentBonuses['strength'];
+        $character->dexterity += $equipmentBonuses['dexterity'];
+        $character->constitution += $equipmentBonuses['constitution'];
+        $character->intelligence += $equipmentBonuses['intelligence'];
+        $character->luck += $equipmentBonuses['luck'];
+        
+        // Recalcular HP e MP
+        $character->max_hp = $this->calculateMaxHP($character->constitution, $character->level) + $equipmentBonuses['hp'];
+        $character->max_stamina = $this->calculateMaxStamina($character->intelligence, $character->level) + $equipmentBonuses['mp'];
+        
+        // Recalcular poder
+        $character->power = $this->calculatePower([
+            'strength' => $character->strength,
+            'dexterity' => $character->dexterity,
+            'constitution' => $character->constitution,
+            'intelligence' => $character->intelligence,
+            'luck' => $character->luck,
+        ], $character->level, $equipmentBonuses);
+    }
+
+    /**
      * Obter stats base do personagem (sem equipamentos)
      * Usa os stats atuais do personagem, removendo apenas os bônus de equipamentos
      */
     private function getBaseCharacterStats(Character $character): array
     {
-        // Obter bônus atuais de equipamentos
-        $currentEquipmentBonuses = $this->getTotalEquipmentBonuses($character);
-
-        // Calcular stats base removendo os bônus de equipamentos
-        // Garantir que não fique negativo
+        // Buscar stats base diretamente do banco de dados
+        $characterFromDb = Character::find($character->id);
+        
         return [
-            'strength' => max(0, $character->strength - $currentEquipmentBonuses['strength']),
-            'dexterity' => max(0, $character->dexterity - $currentEquipmentBonuses['dexterity']),
-            'constitution' => max(0, $character->constitution - $currentEquipmentBonuses['constitution']),
-            'intelligence' => max(0, $character->intelligence - $currentEquipmentBonuses['intelligence']),
-            'luck' => max(0, $character->luck - $currentEquipmentBonuses['luck']),
+            'strength' => $characterFromDb->strength,
+            'dexterity' => $characterFromDb->dexterity,
+            'constitution' => $characterFromDb->constitution,
+            'intelligence' => $characterFromDb->intelligence,
+            'luck' => $characterFromDb->luck,
         ];
     }
 

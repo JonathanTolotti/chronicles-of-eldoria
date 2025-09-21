@@ -8,6 +8,7 @@ use App\Models\BattleInstance;
 use App\Models\Monster;
 use App\Services\BattleService;
 use App\Services\CharacterService;
+use App\Services\EquipmentService;
 use App\Services\EventService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +20,14 @@ class BattleController extends Controller
 {
     protected BattleService $battleService;
     protected CharacterService $characterService;
+    protected EquipmentService $equipmentService;
     protected EventService $eventService;
 
     public function __construct()
     {
         $this->battleService = app(BattleService::class);
         $this->characterService = app(CharacterService::class);
+        $this->equipmentService = app(EquipmentService::class);
         $this->eventService = app(EventService::class);
     }
     /**
@@ -218,8 +221,8 @@ class BattleController extends Controller
         // Criar personagem temporário para cálculos (usando dados atuais do personagem)
         $tempCharacter = clone $character;
         
-        // Recalcular stats do personagem com equipamentos para a batalha
-        $this->characterService->recalculateStats($tempCharacter, false);
+        // Aplicar bônus de equipamentos ao personagem temporário (sem salvar no banco)
+        $this->equipmentService->applyEquipmentBonusesToCharacter($tempCharacter);
 
         // Execute character attack
         $attackResult = $this->battleService->executeAttack($tempCharacter, $tempMonster);

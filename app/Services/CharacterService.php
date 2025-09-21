@@ -147,9 +147,8 @@ class CharacterService
 
     public function recalculateStats(Character $character, bool $restoreHealthAndStamina = false): void
     {
-        $character->max_hp = $this->calculateMaxHp($character);
-        $character->max_stamina = $this->calculateMaxStamina($character);
-        $character->power = $this->calculatePower($character);
+        // Recalcular stats com equipamentos usando EquipmentService
+        $this->equipmentService->recalculateCharacterStats($character);
         
         if ($restoreHealthAndStamina) {
             // Restaurar vida e stamina quando sobe de nível
