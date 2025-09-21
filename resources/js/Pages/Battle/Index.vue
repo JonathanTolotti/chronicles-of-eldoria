@@ -133,9 +133,11 @@
                 <div class="flex items-center space-x-1 sm:space-x-2">
                   <!-- Imagem do Personagem -->
                   <div class="flex-shrink-0">
-                    <div class="w-10 h-10 sm:w-14 sm:h-14 bg-medieval-bronze rounded-lg flex items-center justify-center text-lg sm:text-xl">
-                      ⚔️
-                    </div>
+                    <img
+                      :src="getAvatarUrl(characterData) || getAvatarUrl(character)"
+                      :alt="`Avatar de ${characterData?.name}`"
+                      class="w-10 h-10 sm:w-14 sm:h-14 rounded-lg object-cover border-2 border-medieval-gold"
+                    />
                   </div>
                   
                   <!-- Stats Compactos -->
@@ -547,6 +549,22 @@ const props = defineProps({
 });
 
 const page = usePage();
+
+// Função para obter URL do avatar
+const getAvatarUrl = (character) => {
+  if (!character) return '/images/avatars/default.png';
+  
+  if (character.avatar_url) {
+    return character.avatar_url;
+  }
+  
+  if (character.avatar) {
+    const avatarPath = `images/avatars/${character.avatar}.png`;
+    return `/${avatarPath}`;
+  }
+  
+  return '/images/avatars/default.png';
+};
 
 const showBattleModal = ref(false);
 const selectedMonster = ref(null);

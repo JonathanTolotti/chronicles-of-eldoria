@@ -39,50 +39,71 @@ const formatNumber = (number) => {
 
 <template>
     <div class="space-y-6">
-        <div class="flex items-center space-x-4">
-            <img
-                :src="character.avatar_url"
-                :alt="`Avatar de ${character.name}`"
-                class="h-20 w-20 rounded-full object-cover"
-            />
-            <div>
-                <h2 class="text-2xl font-bold text-medieval">{{ character.name }}</h2>
-                <p class="text-lg text-medieval-brown">{{ getClassName(character.class) }}</p>
-                <p class="text-sm text-medieval">Nível {{ character.level }}</p>
-                <div class="flex items-center space-x-2 mt-1">
-                    <!-- Badge VIP -->
-                    <span
-                        v-if="user.is_vip"
-                        class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800"
-                    >
-                        <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        VIP
-                    </span>
-                    
-                    <!-- Badge Staff -->
-                    <span
-                        v-if="user.is_staff"
-                        class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800"
-                    >
-                        <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        STAFF
-                    </span>
+        <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+                <img
+                    :src="character.avatar_url"
+                    :alt="`Avatar de ${character.name}`"
+                    class="h-32 w-32 rounded-full object-cover border-4 border-medieval-gold shadow-lg"
+                />
+            </div>
+            
+            <!-- Informações Básicas -->
+            <div class="flex-1 text-center md:text-left">
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-4">
+                    <h1 class="text-4xl font-bold text-medieval">{{ character.name }}</h1>
+                </div>
+                
+                <div class="mt-4 space-y-2">
+                    <p class="text-xl text-medieval-brown">{{ getClassName(character.class) }}</p>
+                    <p class="text-lg text-medieval">Nível {{ character.level }}</p>
+                    <div class="flex items-center justify-center md:justify-start space-x-4 text-sm text-medieval">
+                        <span>CP: <span class="font-bold text-medieval-gold">{{ formatNumber(character.power) }}</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Badges - Lado Direito e Bem Maiores -->
+            <div class="flex items-center space-x-4">
+                <!-- Badge VIP -->
+                <div v-if="user?.is_vip" class="relative group">
+                    <img
+                        src="/images/badges/vip.png"
+                        alt="VIP"
+                        class="h-32 w-32"
+                    />
+                    <!-- Tooltip VIP -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                        <div class="text-center">
+                            <div class="font-semibold mb-1">VIP</div>
+                            <div>Membro VIP</div>
+                        </div>
+                        <!-- Seta do tooltip -->
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-medieval-dark"></div>
+                    </div>
+                </div>
+                
+                <!-- Badge Staff -->
+                <div v-if="user?.is_staff" class="relative group">
+                    <img
+                        src="/images/badges/staff.png"
+                        alt="Staff"
+                        class="h-32 w-32"
+                    />
+                    <!-- Tooltip Staff -->
+                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                        <div class="text-center">
+                            <div class="font-semibold mb-1">Staff</div>
+                            <div>Membro da equipe</div>
+                        </div>
+                        <!-- Seta do tooltip -->
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-medieval-dark"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-            <!-- Biografia -->
-            <div v-if="character.biography" class="mt-6">
-                <h3 class="text-lg font-medium text-medieval mb-2">Biografia</h3>
-                <div 
-                    class="prose prose-sm max-w-none"
-                    v-html="character.biography"
-                ></div>
-            </div>
 
         <!-- Atributos do Personagem -->
         <div class="mt-6">

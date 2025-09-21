@@ -26,7 +26,6 @@
             <div class="flex items-center space-x-4 mr-4">
               <!-- Gold -->
               <div class="flex items-center space-x-1 relative group">
-                <span class="text-lg text-medieval">🪙</span>
                 <span class="text-sm text-medieval font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
                 <!-- Tooltip Gold -->
                 <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
@@ -44,7 +43,6 @@
               
               <!-- Coin -->
               <div class="flex items-center space-x-1 relative group">
-                <span class="text-lg text-medieval">💎</span>
                 <span class="text-sm text-medieval font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
                 <!-- Tooltip Coin -->
                 <div class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
@@ -64,7 +62,7 @@
             <!-- Botões -->
             <Link 
               :href="route('characters.select')" 
-              class="btn-medieval text-sm text-medieval px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark"
+              class="btn-medieval text-sm text-medieval px-4 py-2 bg-transparent border-medieval-gold text-medieval-gold hover:bg-medieval-gold hover:text-medieval-dark whitespace-nowrap"
             >
               Trocar Personagem
             </Link>
@@ -97,13 +95,11 @@
           <div class="flex justify-center items-center space-x-6 mb-3">
             <!-- Gold -->
             <div class="flex items-center space-x-1">
-              <span class="text-lg text-medieval">🪙</span>
               <span class="text-sm text-medieval font-semibold text-yellow-400">{{ formatNumber(character?.gold || 0) }}</span>
             </div>
             
             <!-- Coin -->
             <div class="flex items-center space-x-1">
-              <span class="text-lg text-medieval">💎</span>
               <span class="text-sm text-medieval font-semibold text-blue-400">{{ formatNumber(user?.coin || 0) }}</span>
             </div>
           </div>
@@ -150,7 +146,7 @@
             <!-- Main content -->
             <div class="text-center">
               <div class="text-medieval font-bold text-lg text-medieval mb-1 tracking-wide">
-                ⚔️ EVENTOS ATIVOS ⚔️
+                 EVENTOS ATIVOS 
               </div>
               <div class="font-medieval text-sm text-medieval space-x-4">
                 <span 
@@ -191,37 +187,12 @@
                   :alt="`Avatar de ${character?.name}`"
                   class="w-20 h-20 rounded-lg object-cover border-2 border-medieval-gold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 />
-                <!-- Ícone do personagem sobreposto -->
-                <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-medieval-bronze rounded-full flex items-center justify-center border-2 border-medieval-gold shadow-md">
-                  <span class="text-lg text-medieval animate-pulse">⚔️</span>
-                </div>
               </div>
               <h4 class="text-lg text-medieval font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>
               <p class="text-medieval-brown">{{ getClassName(character?.class) || 'Guerreiro' }}</p>
               <p class="text-medieval">Nível {{ character?.level || 1 }}</p>
               <p class="text-green-600 font-semibold">CP: {{ character?.power || 0 }}</p>
               
-              <!-- Badges do usuário -->
-              <div class="flex justify-center space-x-2 mt-2">
-                <span
-                  v-if="user?.is_vip"
-                  class="inline-flex items-center rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800"
-                >
-                  <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  VIP
-                </span>
-                <span
-                  v-if="user?.is_staff"
-                  class="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800"
-                >
-                  <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                  </svg>
-                  STAFF
-                </span>
-              </div>
             </div>
 
             <!-- Barras de Progresso -->
@@ -376,6 +347,36 @@
 
             <!-- Menu de Funcionalidades -->
             <div class="grid grid-cols-2 gap-4">
+              <!-- Batalha - Ativo -->
+              <Link 
+                :href="route('battle.index')" 
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                <div class="text-4xl text-medieval mb-2 text-red-600 hover:scale-110 transition-transform duration-200">⚔️</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Batalha</h4>
+                <p class="text-sm text-medieval text-medieval">Lute contra monstros</p>
+              </Link>
+
+              <!-- Ranking - Ativo -->
+              <button 
+                @click="showRankingModal = true"
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105 w-full"
+              >
+                <div class="text-4xl text-medieval mb-2 text-yellow-500 hover:scale-110 transition-transform duration-200">🏆</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Ranking</h4>
+                <p class="text-sm text-medieval text-medieval">Veja os melhores heróis</p>
+              </button>
+
+              <!-- Configurações - Ativo -->
+              <Link 
+                :href="route('profile.edit')" 
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                <div class="text-4xl text-medieval mb-2 text-blue-600 hover:scale-110 transition-transform duration-200">⚙️</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Configurações</h4>
+                <p class="text-sm text-medieval text-medieval">Perfil e configurações</p>
+              </Link>
+
               <!-- Explorar - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
@@ -406,26 +407,6 @@
                 <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 
-              <!-- Batalha - Ativo -->
-              <Link 
-                :href="route('battle.index')" 
-                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
-              >
-                <div class="text-4xl text-medieval mb-2 text-red-600 hover:scale-110 transition-transform duration-200">⚔️</div>
-                <h4 class="subtitle-medieval text-medieval-gold">Batalha</h4>
-                <p class="text-sm text-medieval text-medieval">Lute contra monstros</p>
-              </Link>
-
-              <!-- Ranking - Ativo -->
-              <button 
-                @click="showRankingModal = true"
-                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105 w-full"
-              >
-                <div class="text-4xl text-medieval mb-2 text-yellow-500 hover:scale-110 transition-transform duration-200">🏆</div>
-                <h4 class="subtitle-medieval text-medieval-gold">Ranking</h4>
-                <p class="text-sm text-medieval text-medieval">Veja os melhores heróis</p>
-              </button>
-
               <!-- Inventário - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
@@ -455,16 +436,6 @@
                 <h4 class="subtitle-medieval text-gray-500 text-medieval">Guilda</h4>
                 <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
-
-              <!-- Configurações - Ativo -->
-              <Link 
-                :href="route('profile.edit')" 
-                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
-              >
-                <div class="text-4xl text-medieval mb-2 text-blue-600 hover:scale-110 transition-transform duration-200">⚙️</div>
-                <h4 class="subtitle-medieval text-medieval-gold">Configurações</h4>
-                <p class="text-sm text-medieval text-medieval">Perfil e configurações</p>
-              </Link>
             </div>
           </div>
         </div>
