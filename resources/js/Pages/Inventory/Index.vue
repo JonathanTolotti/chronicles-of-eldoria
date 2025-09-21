@@ -2,11 +2,10 @@
   <div class="min-h-screen bg-gradient-to-br from-medieval-dark via-medieval-stone to-medieval-dark">
     <!-- Header -->
     <div class="bg-medieval-dark shadow-lg border-b border-medieval-gold">
-      <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-4xl font-bold text-medieval-gold text-medieval mb-2">Inventário</h1>
-            <p class="text-medieval-gold text-medieval">Gerencie todos os seus itens e equipamentos</p>
+            <h1 class="text-3xl font-bold text-medieval-gold text-medieval">Inventário</h1>
           </div>
           <div class="flex items-center space-x-4">
             <Link :href="route('dashboard')" 
@@ -91,8 +90,8 @@
               </select>
             </div>
 
-            <!-- Raridade (apenas para materiais) -->
-            <div v-if="activeTab === 'materials'">
+            <!-- Raridade (apenas para materiais e cosméticos) -->
+            <div v-if="activeTab === 'materials' || activeTab === 'cosmetics'">
               <label class="block text-sm font-medium text-gray-700 text-medieval mb-2">Raridade</label>
               <select v-model="filters.rarity" 
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-medieval-gold focus:border-transparent text-medieval">
@@ -110,9 +109,9 @@
               <select v-model="filters.sort" 
                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-medieval-gold focus:border-transparent text-medieval">
                 <option value="name">Nome</option>
-                <option v-if="activeTab === 'potions' || activeTab === 'materials'" value="quantity">Quantidade</option>
+                <option v-if="activeTab === 'potions' || activeTab === 'materials' || activeTab === 'cosmetics'" value="quantity">Quantidade</option>
                 <option v-if="activeTab === 'equipment'" value="tier">Tier</option>
-                <option v-if="activeTab === 'equipment' || activeTab === 'materials'" value="rarity">Raridade</option>
+                <option v-if="activeTab === 'equipment' || activeTab === 'materials' || activeTab === 'cosmetics'" value="rarity">Raridade</option>
                 <option v-if="activeTab === 'equipment'" value="type">Tipo</option>
               </select>
             </div>
@@ -138,8 +137,8 @@
           </div>
         </div>
         
-        <!-- Inventário Rápido - Drag and Drop -->
-        <div class="p-1 border-t border-gray-200">
+        <!-- Inventário Rápido - Drag and Drop (apenas para outras abas) -->
+        <div v-if="activeTab !== 'cosmetics'" class="p-1 border-t border-gray-200">
           <div class="flex justify-between items-center mb-0.5">
             <h3 class="text-xs font-semibold text-medieval-dark text-medieval">Inventário Rápido</h3>
             <span class="text-xs text-gray-600 text-medieval">{{ quickInventoryCount }}/8</span>
@@ -414,20 +413,127 @@
             </nav>
           </div>
         </div>
+
+        <!-- Cosméticos -->
+        <div v-if="activeTab === 'cosmetics'" class="p-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-medieval-dark text-medieval">Cosméticos</h2>
+            <div class="text-sm text-gray-600 text-medieval">
+              {{ filteredCosmetics.length }} de {{ cosmetics.length }} itens
+            </div>
+          </div>
+
+          <!-- Grid de Cosméticos -->
+          <div v-if="viewMode === 'grid'" class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+            <div v-for="item in paginatedCosmetics" :key="`cosmetic-${item.id}`"
+                 :class="[
+                   'bg-gray-50 rounded-lg border border-medieval-bronze p-2 transition-colors relative group cursor-pointer',
+                   item.rarity === 'legendary' ? 'border-purple-400 shadow-lg shadow-purple-200 legendary-glow' : '',
+                   isFrameActive(item) ? 'border-green-500 bg-green-50' : 'hover:bg-amber-100'
+                 ]"
+                 @click="toggleFrame(item)">
+              <div class="text-center">
+                <img :src="item.image" :alt="item.name" class="w-8 h-8 mx-auto mb-1 object-contain">
+                <h3 class="font-semibold text-medieval-dark text-medieval text-xs mb-0.5">{{ item.name }}</h3>
+                <p class="text-xs text-gray-600 text-medieval">{{ item.quantity }}x</p>
+                <div v-if="isFrameActive(item)" class="text-xs bg-green-500 text-white px-1 py-0.5 rounded text-medieval font-bold mt-1">
+                  ✓ ATIVA
+                </div>
+              </div>
+              
+              <!-- Efeito piscante para lendários -->
+              <div v-if="item.rarity === 'legendary'" class="absolute inset-0 rounded-lg border-2 border-purple-400 shadow-lg shadow-purple-200 animate-pulse pointer-events-none"></div>
+              <div v-if="item.rarity === 'legendary'" class="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400/10 via-purple-300/20 to-purple-400/10 animate-pulse pointer-events-none"></div>
+              
+              <!-- Tooltip -->
+              <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-medieval-dark text-medieval-gold text-xs text-medieval rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                <div class="text-center">
+                  <div class="font-semibold mb-1">{{ item.name }}</div>
+                  <div class="text-gray-300">{{ item.description }}</div>
+                  <div v-if="isFrameActive(item)" class="mt-1 text-green-300 font-bold">✓ MOLDURA ATIVA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de Cosméticos -->
+          <div v-else class="space-y-2">
+            <div v-for="item in paginatedCosmetics" :key="`cosmetic-list-${item.id}`"
+                 :class="[
+                   'flex items-center justify-between p-4 rounded-lg border transition-colors',
+                   isFrameActive(item) 
+                     ? 'bg-green-50 border-green-500' 
+                     : 'bg-gray-50 border-gray-200 hover:bg-amber-100'
+                 ]">
+              <div class="flex items-center space-x-4">
+                <img :src="item.image" :alt="item.name" class="w-8 h-8 object-contain">
+                <div>
+                  <h3 class="font-semibold text-medieval-dark text-medieval">{{ item.name }}</h3>
+                  <p class="text-sm text-gray-600 text-medieval">{{ item.description }}</p>
+                  <div v-if="isFrameActive(item)" class="text-xs bg-green-500 text-white px-2 py-1 rounded text-medieval font-bold mt-1 inline-block">
+                    ✓ MOLDURA ATIVA
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600 text-medieval">{{ item.quantity }}x</span>
+                
+                <!-- Botão para aplicar/remover moldura -->
+                <button @click="toggleFrame(item)" 
+                        :class="[
+                          'px-3 py-1 rounded text-sm text-medieval transition-colors',
+                          isFrameActive(item)
+                            ? 'bg-red-600 hover:bg-red-700 text-white'
+                            : 'bg-purple-600 hover:bg-purple-700 text-white'
+                        ]">
+                  {{ isFrameActive(item) ? 'Remover Moldura' : 'Aplicar Moldura' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paginação -->
+          <div v-if="totalCosmeticsPages > 1" class="mt-6 flex justify-center">
+            <nav class="flex space-x-2">
+              <button v-for="page in totalCosmeticsPages" :key="`cosmetic-page-${page}`"
+                      @click="currentCosmeticsPage = page"
+                      :class="[
+                        'px-3 py-2 text-sm font-medium rounded-md text-medieval transition-colors',
+                        currentCosmeticsPage === page 
+                          ? 'bg-medieval-gold text-medieval-dark' 
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      ]">
+                {{ page }}
+              </button>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Sistema de Alert -->
+  <MedievalAlert
+    :show="showAlert"
+    :type="alertType"
+    :title="alertTitle"
+    :message="alertMessage"
+    :button-text="alertButtonText"
+    @close="handleAlertClose"
+  />
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import axios from 'axios';
+import MedievalAlert from '@/Components/MedievalAlert.vue';
 
 const props = defineProps({
   potions: Array,
   equipment: Array,
   materials: Array,
+  cosmetics: Array,
   character: Object,
 });
 
@@ -437,6 +543,7 @@ const viewMode = ref('grid');
 const currentPotionsPage = ref(1);
 const currentEquipmentPage = ref(1);
 const currentMaterialsPage = ref(1);
+const currentCosmeticsPage = ref(1);
 const itemsPerPage = 24;
 
 
@@ -453,12 +560,36 @@ const tabs = computed(() => [
   { key: 'potions', label: 'Poções', count: potions.value?.length || 0 },
   { key: 'equipment', label: 'Equipamentos', count: equipment.value?.length || 0 },
   { key: 'materials', label: 'Materiais', count: materials.value?.length || 0 },
+  { key: 'cosmetics', label: 'Cosméticos', count: cosmetics.value?.length || 0 },
 ]);
 
 // Dados reativos
 const potions = ref(props.potions || []);
 const equipment = ref(props.equipment || []);
 const materials = ref(props.materials || []);
+const cosmetics = ref(props.cosmetics || []);
+const character = ref(props.character || {});
+
+// Sistema de Alert
+const showAlert = ref(false);
+const alertType = ref('success');
+const alertTitle = ref('');
+const alertMessage = ref('');
+const alertButtonText = ref('OK');
+
+// Função para mostrar alert
+const showMedievalAlert = (type, title, message, buttonText = 'OK') => {
+  alertType.value = type;
+  alertTitle.value = title;
+  alertMessage.value = message;
+  alertButtonText.value = buttonText;
+  showAlert.value = true;
+};
+
+// Função para fechar alert
+const handleAlertClose = () => {
+  showAlert.value = false;
+};
 
 // Drag and Drop
 const quickInventorySlots = ref(Array(8).fill(null).map(() => ({ item: null })));
@@ -560,6 +691,36 @@ const filteredMaterials = computed(() => {
   return filtered;
 });
 
+const filteredCosmetics = computed(() => {
+  let filtered = cosmetics.value;
+  
+  if (filters.value.search) {
+    filtered = filtered.filter(item => 
+      (item.name || '').toLowerCase().includes(filters.value.search.toLowerCase())
+    );
+  }
+  
+  if (filters.value.rarity) {
+    filtered = filtered.filter(item => (item.rarity || '') === filters.value.rarity);
+  }
+  
+  // Ordenação
+  filtered.sort((a, b) => {
+    switch (filters.value.sort) {
+      case 'quantity':
+        return (b.quantity || 0) - (a.quantity || 0);
+      case 'rarity':
+        return (b.rarity || '').localeCompare(a.rarity || '');
+      case 'type':
+        return (a.type || '').localeCompare(b.type || '');
+      default:
+        return (a.name || '').localeCompare(b.name || '');
+    }
+  });
+  
+  return filtered;
+});
+
 // Paginação
 const paginatedPotions = computed(() => {
   const start = (currentPotionsPage.value - 1) * itemsPerPage;
@@ -579,10 +740,17 @@ const paginatedMaterials = computed(() => {
   return filteredMaterials.value.slice(start, end);
 });
 
+const paginatedCosmetics = computed(() => {
+  const start = (currentCosmeticsPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredCosmetics.value.slice(start, end);
+});
+
 // Total de páginas
 const totalPotionsPages = computed(() => Math.ceil(filteredPotions.value.length / itemsPerPage));
 const totalEquipmentPages = computed(() => Math.ceil(filteredEquipment.value.length / itemsPerPage));
 const totalMaterialsPages = computed(() => Math.ceil(filteredMaterials.value.length / itemsPerPage));
+const totalCosmeticsPages = computed(() => Math.ceil(filteredCosmetics.value.length / itemsPerPage));
 
 // Contar itens no inventário rápido
 const quickInventoryCount = computed(() => {
@@ -632,6 +800,63 @@ const equipItem = async (item) => {
   } catch (error) {
     console.error('Erro ao equipar/desequipar:', error);
     alert('Erro ao equipar/desequipar item. Tente novamente.');
+  }
+};
+
+// Verificar se uma moldura está ativa
+const isFrameActive = (item) => {
+  return character.value?.active_frame_id === item.id;
+};
+
+// Alternar entre aplicar/remover moldura
+const toggleFrame = async (item) => {
+  try {
+    if (isFrameActive(item)) {
+      // Remover moldura
+      const response = await axios.post('/frames/remove');
+      if (response.data.success) {
+        // Atualizar o estado local
+        character.value.active_frame_id = response.data.active_frame_id;
+        showMedievalAlert('success', 'Sucesso!', 'Moldura removida com sucesso!');
+      } else {
+        showMedievalAlert('error', 'Erro', response.data.error);
+        return;
+      }
+    } else {
+      // Aplicar moldura
+      const frameId = parseInt(item.id);
+      
+      const response = await axios.post('/frames/apply', { 
+        frame_id: frameId
+      });
+      if (response.data.success) {
+        // Atualizar o estado local
+        character.value.active_frame_id = response.data.active_frame_id;
+        showMedievalAlert('success', 'Sucesso!', 'Moldura aplicada com sucesso!');
+      } else {
+        showMedievalAlert('error', 'Erro', response.data.error);
+        return;
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao alterar moldura:', error);
+    console.error('Response data:', error.response?.data);
+    const errorMessage = error.response?.data?.error || 'Erro ao alterar moldura. Tente novamente.';
+    showMedievalAlert('error', 'Erro', errorMessage);
+  }
+};
+
+const applyFrame = async (item) => {
+  try {
+    await axios.post('/frames/apply', { 
+      frame_id: item.id
+    });
+    
+    // Recarregar a página para atualizar os dados
+    router.reload();
+  } catch (error) {
+    console.error('Erro ao aplicar moldura:', error);
+    alert('Erro ao aplicar moldura. Tente novamente.');
   }
 };
 
@@ -785,7 +1010,7 @@ const initializeQuickInventory = () => {
   // Limpar slots
   quickInventorySlots.value = Array(8).fill(null).map(() => ({ item: null }));
   
-  // Adicionar itens que já estão no inventário rápido da aba ativa
+  // Adicionar itens que já estão no inventário rápido da aba ativa (exceto cosméticos)
   let currentItems = [];
   switch (activeTab.value) {
     case 'potions':
@@ -796,6 +1021,10 @@ const initializeQuickInventory = () => {
       break;
     case 'materials':
       currentItems = materials.value;
+      break;
+    case 'cosmetics':
+      // Cosméticos não usam inventário rápido
+      currentItems = [];
       break;
   }
   
@@ -809,7 +1038,7 @@ const initializeQuickInventory = () => {
 };
 
 // Inicializar quando os dados mudarem
-watch([potions, equipment, materials], () => {
+watch([potions, equipment, materials, cosmetics, character], () => {
   initializeQuickInventory();
 }, { immediate: true });
 
@@ -823,6 +1052,7 @@ watch(filters, () => {
   currentPotionsPage.value = 1;
   currentEquipmentPage.value = 1;
   currentMaterialsPage.value = 1;
+  currentCosmeticsPage.value = 1;
 }, { deep: true });
 
 
@@ -880,5 +1110,19 @@ watch(filters, () => {
   50% {
     box-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 20px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
   }
+}
+
+/* Efeito de brilho para itens lendários */
+@keyframes legendary-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(147, 51, 234, 0.3), 0 0 10px rgba(147, 51, 234, 0.2), 0 0 15px rgba(147, 51, 234, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.6), 0 0 20px rgba(147, 51, 234, 0.4), 0 0 30px rgba(147, 51, 234, 0.2);
+  }
+}
+
+.legendary-glow {
+  animation: legendary-glow 2s ease-in-out infinite;
 }
 </style>

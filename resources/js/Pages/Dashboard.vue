@@ -377,6 +377,26 @@
                 <p class="text-sm text-medieval text-medieval">Perfil e configurações</p>
               </Link>
 
+              <!-- Inventário - Ativo -->
+              <Link 
+                :href="route('inventory.index')" 
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                <div class="text-4xl text-medieval mb-2 text-blue-600 hover:scale-110 transition-transform duration-200">🎒</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Inventário</h4>
+                <p class="text-sm text-medieval text-medieval">Gerencie seus itens</p>
+              </Link>
+
+              <!-- Loja - Ativo -->
+              <Link 
+                :href="route('shop.index')" 
+                class="card-medieval text-center p-4 relative hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                <div class="text-4xl text-medieval mb-2 text-green-600 hover:scale-110 transition-transform duration-200">🏪</div>
+                <h4 class="subtitle-medieval text-medieval-gold">Loja</h4>
+                <p class="text-sm text-medieval text-medieval">Compre itens e equipamentos</p>
+              </Link>
+
               <!-- Explorar - Bloqueado -->
               <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
                 <div class="absolute top-2 right-2">
@@ -404,26 +424,6 @@
                 </div>
                 <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">📜</div>
                 <h4 class="subtitle-medieval text-gray-500 text-medieval">Missões</h4>
-                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
-              </div>
-
-              <!-- Inventário - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
-                <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
-                </div>
-                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🎒</div>
-                <h4 class="subtitle-medieval text-gray-500 text-medieval">Inventário</h4>
-                <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
-              </div>
-
-              <!-- Loja - Bloqueado -->
-              <div class="card-medieval text-center opacity-50 cursor-not-allowed p-4 relative hover:opacity-60 transition-opacity duration-200">
-                <div class="absolute top-2 right-2">
-                  <span class="text-gray-500 text-medieval text-lg text-medieval animate-pulse">🔒</span>
-                </div>
-                <div class="text-4xl text-medieval mb-2 text-gray-500 text-medieval hover:scale-110 transition-transform duration-200">🏪</div>
-                <h4 class="subtitle-medieval text-gray-500 text-medieval">Loja</h4>
                 <p class="text-sm text-medieval text-gray-500 text-medieval">Em breve</p>
               </div>
 

@@ -41,7 +41,8 @@ class InventoryController extends Controller
             }
             
             return [
-                'id' => $item['id'] ?? 0,
+                'id' => $item['item']['id'] ?? 0, // ID do Item, não do CharacterItem
+                'character_item_id' => $item['id'] ?? 0, // ID do CharacterItem
                 'name' => $item['item']['name'] ?? 'Item Desconhecido',
                 'description' => $item['item']['description'] ?? '',
                 'image' => $item['item']['image_path'] ?? '/images/items/default.png',
@@ -59,7 +60,26 @@ class InventoryController extends Controller
             }
             
             return [
-                'id' => $item['id'] ?? 0,
+                'id' => $item['item']['id'] ?? 0, // ID do Item, não do CharacterItem
+                'character_item_id' => $item['id'] ?? 0, // ID do CharacterItem
+                'name' => $item['item']['name'] ?? 'Item Desconhecido',
+                'description' => $item['item']['description'] ?? '',
+                'image' => $item['item']['image_path'] ?? '/images/items/default.png',
+                'quantity' => $item['quantity'] ?? 0,
+                'type' => $item['item']['type'] ?? 'unknown',
+                'rarity' => $item['item']['rarity'] ?? 'common',
+                'show_in_quick_inventory' => $item['show_in_quick_inventory'] ?? false,
+            ];
+        })->filter(); // Remove valores null
+        
+        $cosmetics = collect($inventory['cosmetics'])->map(function ($item) {
+            if (!is_array($item) || !isset($item['item'])) {
+                return null;
+            }
+            
+            return [
+                'id' => $item['item']['id'] ?? 0, // ID do Item, não do CharacterItem
+                'character_item_id' => $item['id'] ?? 0, // ID do CharacterItem
                 'name' => $item['item']['name'] ?? 'Item Desconhecido',
                 'description' => $item['item']['description'] ?? '',
                 'image' => $item['item']['image_path'] ?? '/images/items/default.png',
@@ -99,10 +119,11 @@ class InventoryController extends Controller
         // Não adicionar hotkeys - apenas o inventário rápido lida com isso
 
         return Inertia::render('Inventory/Index', [
-            'character' => $character,
+            'character' => $character->load('activeFrame'),
             'potions' => $potions,
             'equipment' => $equipmentItems,
             'materials' => $materials,
+            'cosmetics' => $cosmetics,
         ]);
     }
 

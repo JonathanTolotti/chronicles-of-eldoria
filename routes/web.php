@@ -144,9 +144,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/items/toggle-quick-inventory', [App\Http\Controllers\ItemController::class, 'toggleQuickInventory'])->name('items.toggle-quick-inventory');
     Route::post('/equipment/toggle-quick-inventory', [App\Http\Controllers\EquipmentController::class, 'toggleQuickInventory'])->name('equipment.toggle-quick-inventory');
     
+    // Sistema de Loja
+    Route::prefix('shop')->group(function () {
+        Route::get('/', [App\Http\Controllers\ShopController::class, 'index'])->name('shop.index');
+        Route::post('/purchase', [App\Http\Controllers\ShopController::class, 'purchase'])->name('shop.purchase');
+        Route::get('/history', [App\Http\Controllers\ShopController::class, 'purchaseHistory'])->name('shop.history');
+        Route::get('/{id}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.show');
+    });
+
+    // Sistema de Molduras
+    Route::prefix('frames')->group(function () {
+        Route::post('/apply', [App\Http\Controllers\FrameController::class, 'apply'])->name('frames.apply');
+        Route::post('/remove', [App\Http\Controllers\FrameController::class, 'remove'])->name('frames.remove');
+        Route::get('/available', [App\Http\Controllers\FrameController::class, 'available'])->name('frames.available');
+    });
+    
     // TODO: Adicionar outras rotas do jogo aqui conforme implementadas
     // Route::get('/game/dashboard', [GameController::class, 'dashboard'])->name('game.dashboard');
-    // Route::get('/game/shop', [ShopController::class, 'index'])->name('game.shop');
     // Route::get('/game/guild', [GuildController::class, 'index'])->name('game.guild');
 });
 

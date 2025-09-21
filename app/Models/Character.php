@@ -17,6 +17,7 @@ class Character extends Model
         'name',
         'class',
         'avatar',
+        'active_frame_id',
         'biography',
         'profile_public',
         'level',
@@ -73,6 +74,14 @@ class Character extends Model
     public function equipment(): HasMany
     {
         return $this->hasMany(CharacterEquipment::class);
+    }
+
+    /**
+     * Relacionamento com moldura ativa
+     */
+    public function activeFrame(): BelongsTo
+    {
+        return $this->belongsTo(Item::class, 'active_frame_id');
     }
 
     /**
