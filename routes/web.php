@@ -54,6 +54,7 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
+
 // Página inicial do jogo - apenas para usuários verificados
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
     ->middleware('auth')
@@ -79,10 +80,6 @@ Route::get('/email/verified', function () {
 
 // Rotas que NÃO precisam de verificação de email
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
     // Email verification resend
     Route::post('/email/verification-notification', [App\Http\Controllers\Auth\EmailVerificationController::class, 'resend'])
         ->middleware(['throttle:6,1'])
@@ -117,6 +114,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/items/set-hotkey', [App\Http\Controllers\ItemController::class, 'setHotkeySlot'])->name('items.set-hotkey');
     Route::get('/api/items/hotkeys', [App\Http\Controllers\ItemController::class, 'getHotkeyItems'])->name('items.hotkeys');
     Route::post('/api/items/add', [App\Http\Controllers\ItemController::class, 'addItem'])->name('items.add');
+    
+    // Profile routes
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/update-profile', [App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('profile.update-profile');
+    Route::post('/profile/update-password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    
     
     // Sistema de Equipamentos
     Route::prefix('equipment')->group(function () {

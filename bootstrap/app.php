@@ -35,6 +35,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\MaintenanceMode::class,
         ]);
+
+        // Aplicar middleware de atualização de última atividade
+        $middleware->web(append: [
+            \App\Http\Middleware\UpdateUserLastSeen::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

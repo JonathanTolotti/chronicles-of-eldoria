@@ -48,7 +48,16 @@ class DashboardController extends Controller
         $hasActiveEvents = $this->eventService->hasActiveEvents();
         
         return Inertia::render('Dashboard', [
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'avatar_url' => $user->getAvatarUrl(),
+                'is_vip' => $user->isVip(),
+                'is_staff' => $user->is_staff,
+                'coin' => $user->coin,
+            ],
             'character' => $character,
             'inventory' => $inventory,
             'equipped' => $equipped,
