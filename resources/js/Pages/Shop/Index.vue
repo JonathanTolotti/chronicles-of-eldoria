@@ -175,7 +175,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { router, Link } from '@inertiajs/vue3'
+import { router, Link, usePage } from '@inertiajs/vue3'
 import ShopItemCard from '@/Components/Shop/ShopItemCard.vue'
 import PurchaseModal from '@/Components/Shop/PurchaseModal.vue'
 import MedievalAlert from '@/Components/MedievalAlert.vue'
@@ -189,6 +189,8 @@ const props = defineProps({
   categories: Object,
   rarities: Object,
 })
+
+const page = usePage()
 
 // Estados reativos
 const loading = ref(false)
@@ -313,16 +315,86 @@ const handleAlertClose = () => {
   }
 }
 
+// Função para obter token CSRF atualizado
+const getCsrfToken = () => {
+  return page.props.csrf_token || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+}
+
+// Função para renovar token CSRF se necessário
+const refreshCsrfToken = async () => {
+  try {
+    // Simplesmente atualizar o token da meta tag
+    const newToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (newToken) {
+      page.props.csrf_token = newToken;
+    }
+  } catch (error) {
+    console.warn('Erro ao renovar CSRF token:', error);
+  }
+}
+
 const confirmPurchase = async (purchaseData) => {
   try {
+    const csrfToken = getCsrfToken();
+    
     const response = await fetch(route('shop.purchase'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'X-CSRF-TOKEN': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
       },
       body: JSON.stringify(purchaseData),
     })
+
+    // Se receber erro 419, tentar renovar token e tentar novamente
+    if (response.status === 419) {
+      await refreshCsrfToken();
+      
+      const newCsrfToken = getCsrfToken();
+      const retryResponse = await fetch(route('shop.purchase'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': newCsrfToken,
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(purchaseData),
+      });
+      
+      const retryResult = await retryResponse.json();
+      
+      if (retryResult.success) {
+        // Atualizar dados locais
+        props.character.gold = retryResult.character.gold
+        props.user.coin = retryResult.user.coin
+        
+        // Guardar nome do item antes de limpar
+        const itemName = selectedItem.value?.name || 'item'
+        
+        // Fechar modal
+        showPurchaseModal.value = false
+        selectedItem.value = null
+        
+        // Mostrar sucesso com alerta medieval
+        showMedievalAlert(
+          'success',
+          'Compra Realizada!',
+          `Você comprou ${purchaseData.quantity}x ${itemName} com sucesso!`,
+          'OK'
+        )
+      } else {
+        showMedievalAlert(
+          'error',
+          'Erro na Compra',
+          retryResult.error || 'Não foi possível realizar a compra. Tente novamente.',
+          'Entendi'
+        )
+      }
+      return;
+    }
 
     const result = await response.json()
 
