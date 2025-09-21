@@ -9,6 +9,10 @@ const props = defineProps({
     availableAvatars: {
         type: Object,
         required: true
+    },
+    character: {
+        type: Object,
+        required: true
     }
 });
 
@@ -79,11 +83,24 @@ const selectAvatar = (avatarKey) => {
             <div class="mt-6">
                 <h4 class="text-sm font-medium text-medieval text-medieval-gold">Avatar Atual:</h4>
                 <div class="mt-2 flex items-center space-x-3">
-                    <img
-                        :src="`/images/avatars/${currentAvatar || 'default'}.png`"
-                        :alt="`Avatar ${currentAvatar}`"
-                        class="h-12 w-12 rounded-lg object-cover border-2 border-medieval-gold"
-                    />
+                    <div class="relative w-16 h-16">
+                        <!-- Moldura do Avatar -->
+                        <img
+                            v-if="character?.active_frame?.image_path"
+                            :src="character.active_frame.image_path"
+                            :alt="`Moldura ${character.active_frame.name}`"
+                            class="w-16 h-16 rounded-full object-cover pointer-events-none z-20"
+                        />
+                        <!-- Avatar do personagem -->
+                        <img
+                            :src="`/images/avatars/${currentAvatar || 'default'}.png`"
+                            :alt="`Avatar ${currentAvatar}`"
+                            :class="[
+                                'absolute top-2 left-2 h-12 w-12 rounded-lg object-cover z-10',
+                                !character?.active_frame?.image_path ? 'border-2 border-medieval-gold' : ''
+                            ]"
+                        />
+                    </div>
                     <span class="text-sm text-medieval">{{ `Avatar ${currentAvatar}` }}</span>
                 </div>
             </div>

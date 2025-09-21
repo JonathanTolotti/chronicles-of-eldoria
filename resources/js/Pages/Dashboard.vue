@@ -12,16 +12,6 @@
             <h2 class="text-lg text-medieval font-medieval">Dashboard</h2>
           </div>
           <div class="flex-1 flex justify-end items-center space-x-4">
-            <!-- Avatar do Personagem -->
-            <div class="flex items-center space-x-2 mr-4">
-              <img
-                :src="character?.avatar_url || '/images/avatars/default.png'"
-                :alt="`Avatar de ${character?.name}`"
-                class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
-              />
-              <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
-            </div>
-            
             <!-- Recursos do Jogador -->
             <div class="flex items-center space-x-4 mr-4">
               <!-- Gold -->
@@ -180,12 +170,22 @@
             
             <!-- Avatar -->
             <div class="text-center mb-4">
-              <div class="relative w-20 h-20 mx-auto mb-2">
+              <div class="relative w-36 h-36 mx-auto mb-2">
                 <!-- Avatar do personagem -->
                 <img
                   :src="character?.avatar_url || '/images/avatars/default.png'"
                   :alt="`Avatar de ${character?.name}`"
-                  class="w-20 h-20 rounded-lg object-cover border-2 border-medieval-gold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  :class="[
+                    'absolute top-8 left-8 w-20 h-20 rounded-full object-cover z-10',
+                    !character?.active_frame?.image_path ? 'border-2 border-medieval-gold' : ''
+                  ]"
+                />
+                <!-- Moldura do Avatar -->
+                <img
+                  v-if="character?.active_frame?.image_path"
+                  :src="character.active_frame.image_path"
+                  :alt="`Moldura ${character.active_frame.name}`"
+                  class="w-36 h-36 rounded-full object-cover pointer-events-none z-20"
                 />
               </div>
               <h4 class="text-lg text-medieval font-semibold text-medieval-gold">{{ character?.name || 'Nome do Personagem' }}</h4>

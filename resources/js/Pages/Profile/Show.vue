@@ -129,11 +129,24 @@ const getEquipmentTooltipLines = (slot) => {
                 <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
                     <!-- Avatar -->
                     <div class="flex-shrink-0">
-                        <img
-                            :src="profile.avatar_url"
-                            :alt="`Avatar de ${profile.name}`"
-                            class="h-32 w-32 rounded-full object-cover border-4 border-medieval-gold shadow-lg"
-                        />
+                        <div class="relative w-56 h-56">
+                            <!-- Moldura do Avatar -->
+                            <img
+                                v-if="profile.active_frame?.image_path"
+                                :src="profile.active_frame.image_path"
+                                :alt="`Moldura ${profile.active_frame.name}`"
+                                class="w-56 h-56 rounded-full object-cover pointer-events-none z-20"
+                            />
+                            <!-- Avatar do personagem -->
+                            <img
+                                :src="profile.avatar_url"
+                                :alt="`Avatar de ${profile.name}`"
+                                :class="[
+                                    'absolute top-12 left-12 w-32 h-32 rounded-full object-cover z-10',
+                                    !profile.active_frame?.image_path ? 'border-4 border-medieval-gold' : ''
+                                ]"
+                            />
+                        </div>
                     </div>
                     
                     <!-- Informações Básicas -->

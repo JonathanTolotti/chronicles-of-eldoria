@@ -51,12 +51,26 @@
           ]"
         >
           <div class="text-center">
-            <div class="text-4xl mb-4">
-              <span v-if="character.class === 'warrior'">⚔️</span>
-              <span v-else-if="character.class === 'mage'">🧙‍♂️</span>
-              <span v-else-if="character.class === 'archer'">🏹</span>
-              <span v-else-if="character.class === 'rogue'">🗡️</span>
-              <span v-else>👤</span>
+            <!-- Avatar com Moldura -->
+            <div class="flex justify-center mb-4">
+              <div class="relative w-44 h-44">
+                <!-- Moldura do Avatar -->
+                <img
+                  v-if="character?.active_frame?.image_path"
+                  :src="character.active_frame.image_path"
+                  :alt="`Moldura ${character.active_frame.name}`"
+                  class="w-44 h-44 rounded-full object-cover pointer-events-none z-20"
+                />
+                <!-- Avatar do personagem -->
+                <img
+                  :src="getAvatarUrl(character)"
+                  :alt="`Avatar de ${character.name}`"
+                  :class="[
+                    'absolute top-10 left-10 w-24 h-24 rounded-full object-cover z-10',
+                    !character?.active_frame?.image_path ? 'border-2 border-medieval-gold' : ''
+                  ]"
+                />
+              </div>
             </div>
             
             <h3 class="text-xl subtitle-medieval mb-2">{{ character.name }}</h3>
@@ -135,6 +149,22 @@ const form = useForm({
 const selectCharacter = (characterId) => {
   selectedCharacterId.value = characterId;
   form.character_id = characterId;
+};
+
+// Função para obter URL do avatar
+const getAvatarUrl = (character) => {
+  if (!character) return '/images/avatars/default.png';
+  
+  if (character.avatar_url) {
+    return character.avatar_url;
+  }
+  
+  if (character.avatar) {
+    const avatarPath = `images/avatars/${character.avatar}.png`;
+    return `/${avatarPath}`;
+  }
+  
+  return '/images/avatars/default.png';
 };
 
 const confirmSelection = () => {

@@ -15,16 +15,6 @@
                         <h2 class="text-lg font-bold text-medieval">Configurações do Perfil</h2>
                     </div>
                     <div class="flex-1 flex justify-end items-center space-x-4">
-                        <!-- Avatar do Personagem -->
-                        <div class="flex items-center space-x-2 mr-4">
-                            <img
-                                :src="character?.avatar_url || '/images/avatars/default.png'"
-                                :alt="`Avatar de ${character?.name}`"
-                                class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
-                            />
-                            <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
-                        </div>
-                        
                         <!-- Botões -->
                         <Link 
                             :href="route('dashboard')" 
@@ -51,15 +41,6 @@
                         </button>
                     </div>
                     
-                    <!-- Avatar Mobile -->
-                    <div class="flex justify-center items-center space-x-2 mb-3">
-                        <img
-                            :src="character?.avatar_url || '/images/avatars/default.png'"
-                            :alt="`Avatar de ${character?.name}`"
-                            class="w-8 h-8 rounded-full object-cover border-2 border-medieval-gold"
-                        />
-                        <span class="text-sm text-medieval-gold font-semibold">{{ character?.name }}</span>
-                    </div>
 
                     <!-- Menu Mobile -->
                     <div v-show="mobileMenuOpen" class="bg-medieval-bronze rounded-lg p-4 space-y-3">
@@ -93,6 +74,7 @@
                         <AvatarSelector 
                             :current-avatar="character.avatar"
                             :available-avatars="availableAvatars"
+                            :character="character"
                         />
                     </div>
 

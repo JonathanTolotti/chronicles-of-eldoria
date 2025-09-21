@@ -48,7 +48,7 @@ class BattleController extends Controller
             ->get();
 
         return Inertia::render('Battle/Index', [
-            'character' => $character,
+            'character' => $character->load('activeFrame'),
             'monsters' => $monsters,
             'csrf_token' => csrf_token(),
         ]);
@@ -145,7 +145,7 @@ class BattleController extends Controller
 
         return response()->json([
             'battle_instance_id' => $battleInstance->id,
-            'character' => $character->fresh(),
+            'character' => $character->fresh()->load('activeFrame'),
             'monster' => [
                 'id' => $monster->id,
                 'name' => $monster->name,
@@ -260,7 +260,7 @@ class BattleController extends Controller
                     'base_exp_reward' => $monster->exp_reward,
                     'active_events' => $this->eventService->getActiveEvents()
                 ],
-                'character' => $character->fresh(),
+                'character' => $character->fresh()->load('activeFrame'),
                 'monster' => [
                     'id' => $monster->id,
                     'name' => $monster->name,
@@ -301,7 +301,7 @@ class BattleController extends Controller
                     'winner' => 'monster',
                     'message' => "Você foi derrotado por {$monster->name}!"
                 ],
-                'character' => $character->fresh(),
+                'character' => $character->fresh()->load('activeFrame'),
                 'monster' => [
                     'id' => $monster->id,
                     'name' => $monster->name,

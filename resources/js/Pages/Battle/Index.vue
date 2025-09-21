@@ -133,11 +133,24 @@
                 <div class="flex items-center space-x-1 sm:space-x-2">
                   <!-- Imagem do Personagem -->
                   <div class="flex-shrink-0">
-                    <img
-                      :src="getAvatarUrl(characterData) || getAvatarUrl(character)"
-                      :alt="`Avatar de ${characterData?.name}`"
-                      class="w-10 h-10 sm:w-14 sm:h-14 rounded-lg object-cover border-2 border-medieval-gold"
-                    />
+                    <div class="relative w-20 h-20 sm:w-28 sm:h-28">
+                      <!-- Moldura do Avatar -->
+                      <img
+                        v-if="(characterData?.active_frame?.image_path || character?.active_frame?.image_path)"
+                        :src="characterData?.active_frame?.image_path || character?.active_frame?.image_path"
+                        :alt="`Moldura ${characterData?.active_frame?.name || character?.active_frame?.name}`"
+                        class="w-20 h-20 sm:w-28 sm:h-28 rounded-full object-cover pointer-events-none z-20"
+                      />
+                      <!-- Avatar do personagem -->
+                      <img
+                        :src="getAvatarUrl(characterData) || getAvatarUrl(character)"
+                        :alt="`Avatar de ${characterData?.name}`"
+                        :class="[
+                          'absolute top-6 left-6 w-8 h-8 sm:w-16 sm:h-16 rounded-full object-cover z-10',
+                          !(characterData?.active_frame?.image_path || character?.active_frame?.image_path) ? 'border-2 border-medieval-gold' : ''
+                        ]"
+                      />
+                    </div>
                   </div>
                   
                   <!-- Stats Compactos -->

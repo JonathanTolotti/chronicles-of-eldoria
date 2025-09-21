@@ -21,7 +21,7 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = $request->user();
-        $character = $user->activeCharacter;
+        $character = $user->activeCharacter?->load('activeFrame');
         
         if (!$character) {
             return redirect()->route('characters.select')
@@ -64,6 +64,12 @@ class ProfileController extends Controller
                 'biography' => $character->biography,
                 'profile_public' => $character->profile_public,
                 'avatar_url' => $character->getAvatarUrl(),
+                'active_frame_id' => $character->active_frame_id,
+                'active_frame' => $character->activeFrame ? [
+                    'id' => $character->activeFrame->id,
+                    'name' => $character->activeFrame->name,
+                    'image_path' => $character->activeFrame->image_path,
+                ] : null,
             ],
             'available_avatars' => $this->getAvailableAvatars(),
         ]);
@@ -167,7 +173,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request, $characterName): Response
     {
-        $character = \App\Models\Character::where('name', $characterName)->firstOrFail();
+        $character = \App\Models\Character::where('name', $characterName)->with('activeFrame')->firstOrFail();
         $user = $character->user;
         
         // Verificar se o perfil é público
@@ -206,6 +212,12 @@ class ProfileController extends Controller
                 'avatar' => $character->avatar,
                 'avatar_url' => $character->getAvatarUrl(),
                 'biography' => $character->getSanitizedBiography(),
+                'active_frame_id' => $character->active_frame_id,
+                'active_frame' => $character->activeFrame ? [
+                    'id' => $character->activeFrame->id,
+                    'name' => $character->activeFrame->name,
+                    'image_path' => $character->activeFrame->image_path,
+                ] : null,
                 'is_staff' => $user->is_staff,
                 'is_vip' => $user->isVip(),
                 'created_at' => $user->created_at,

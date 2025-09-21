@@ -25,7 +25,7 @@ class CharacterController extends Controller
     public function select(): Response
     {
         $user = auth()->user();
-        $characters = $user->characters()->get();
+        $characters = $user->characters()->with('activeFrame')->get();
         
         return Inertia::render('Character/Select', [
             'characters' => $characters,

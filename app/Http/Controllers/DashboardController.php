@@ -26,7 +26,7 @@ class DashboardController extends Controller
     public function index(): Response|RedirectResponse
     {
         $user = auth()->user();
-        $character = $user->activeCharacter;
+        $character = $user->activeCharacter?->load('activeFrame');
         
         // Se não há personagem ativo, redirecionar para seleção
         if (!$character) {
@@ -79,6 +79,12 @@ class DashboardController extends Controller
                 'avatar_url' => $character->getAvatarUrl(),
                 'biography' => $character->biography,
                 'profile_public' => $character->profile_public,
+                'active_frame_id' => $character->active_frame_id,
+                'active_frame' => $character->activeFrame ? [
+                    'id' => $character->activeFrame->id,
+                    'name' => $character->activeFrame->name,
+                    'image_path' => $character->activeFrame->image_path,
+                ] : null,
             ],
             'inventory' => $inventory,
             'equipped' => $equipped,
