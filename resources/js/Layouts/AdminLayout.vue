@@ -19,12 +19,6 @@ const showingNavigationDropdown = ref(false);
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
                         <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('admin.dashboard')" class="flex items-center space-x-2">
-                                    <span class="text-xl font-bold text-medieval-bronze">Painel Administrativo</span>
-                                </Link>
-                            </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -93,16 +87,8 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Staff Badge -->
-                            <div class="mr-4">
-                                <span class="inline-flex items-center rounded-full bg-medieval-gold px-3 py-1 text-xs font-medium text-white shadow-lg">
-                                    <i class="fas fa-crown mr-1"></i>
-                                    Staff
-                                </span>
-                            </div>
-                            
                             <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
+                            <div class="relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -214,12 +200,6 @@ const showingNavigationDropdown = ref(false);
                             </div>
                             <div class="text-sm font-medium text-gray-600">
                                 {{ $page.props.auth.user.email }}
-                            </div>
-                            <div class="mt-1">
-                                <span class="inline-flex items-center rounded-full bg-medieval-gold px-2 py-1 text-xs font-medium text-white">
-                                    <i class="fas fa-crown mr-1"></i>
-                                    Staff
-                                </span>
                             </div>
                         </div>
 
