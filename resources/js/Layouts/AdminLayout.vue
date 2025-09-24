@@ -66,6 +66,15 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                                 
                                 <NavLink
+                                    :href="route('admin.equipment.index')"
+                                    :active="route().current('admin.equipment.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
+                                >
+                                    <i class="fas fa-shield-alt mr-2"></i>
+                                    Equipamentos
+                                </NavLink>
+                                
+                                <NavLink
                                     href="#"
                                     class="text-gray-600 hover:text-medieval-bronze font-medium opacity-60"
                                 >

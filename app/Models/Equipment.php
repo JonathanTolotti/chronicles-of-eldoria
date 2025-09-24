@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Equipment extends Model
 {
     protected $fillable = [
+        'uuid',
         'name',
         'description',
         'type',
@@ -31,6 +33,17 @@ class Equipment extends Model
         'mp_bonus' => 'integer',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($equipment) {
+            if (empty($equipment->uuid)) {
+                $equipment->uuid = Str::uuid()->toString();
+            }
+        });
+    }
+
     /**
      * Relacionamento com equipamentos dos personagens
      */
@@ -39,13 +52,6 @@ class Equipment extends Model
         return $this->hasMany(CharacterEquipment::class);
     }
 
-    /**
-     * Relacionamento com tiers do equipamento
-     */
-    public function tiers(): HasMany
-    {
-        return $this->hasMany(EquipmentTier::class);
-    }
 
     /**
      * Calcular stats baseados no tier

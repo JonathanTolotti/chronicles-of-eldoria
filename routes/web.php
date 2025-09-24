@@ -218,6 +218,17 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
         Route::post('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'update'])->name('admin.items.update');
         Route::delete('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'destroy'])->name('admin.items.destroy');
     });
+
+    // Gerenciamento de Equipamentos
+    Route::prefix('equipment')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment.index');
+        Route::get('/create', [App\Http\Controllers\Admin\EquipmentController::class, 'create'])->name('admin.equipment.create');
+        Route::post('/', [App\Http\Controllers\Admin\EquipmentController::class, 'store'])->name('admin.equipment.store');
+        Route::get('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'show'])->name('admin.equipment.show');
+        Route::get('/{equipment:uuid}/edit', [App\Http\Controllers\Admin\EquipmentController::class, 'edit'])->name('admin.equipment.edit');
+        Route::post('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'update'])->name('admin.equipment.update');
+        Route::delete('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'destroy'])->name('admin.equipment.destroy');
+    });
     
     // Rotas que requerem role de admin
     Route::middleware(['role:admin'])->group(function () {

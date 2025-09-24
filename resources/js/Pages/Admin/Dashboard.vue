@@ -101,6 +101,19 @@ defineProps({
                             </div>
                         </div>
 
+                        <!-- Total de Equipamentos -->
+                        <div class="card-medieval p-6 border-l-4 border-blue-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-shield-alt text-3xl text-blue-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total de Equipamentos</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_equipment ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Membros da Equipe -->
                         <div class="card-medieval p-6 border-l-4 border-medieval-gold">
                             <div class="flex items-center">
@@ -255,6 +268,11 @@ defineProps({
                         <Link :href="route('admin.items.index')" class="btn-medieval">
                             <i class="fas fa-gem mr-2"></i>
                             Gerenciar Itens
+                        </Link>
+                        
+                        <Link :href="route('admin.equipment.index')" class="btn-medieval">
+                            <i class="fas fa-shield-alt mr-2"></i>
+                            Gerenciar Equipamentos
                         </Link>
                         
                         <button class="btn-medieval">
