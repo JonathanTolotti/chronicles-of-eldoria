@@ -106,9 +106,9 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Permissões do usuário (através dos roles)
      */
-    public function permissions(): BelongsToMany
+    public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'role_user', 'user_id', 'role_id')
+        return $this->roles()
             ->join('permission_role', 'roles.id', '=', 'permission_role.role_id')
             ->join('permissions', 'permission_role.permission_id', '=', 'permissions.id')
             ->select('permissions.*')
@@ -128,7 +128,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasPermission(string $permission): bool
     {
-        return $this->permissions()->where('name', $permission)->exists();
+        return $this->permissions()->where('permissions.name', $permission)->exists();
     }
 
     /**
@@ -144,7 +144,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasAnyPermission(array $permissions): bool
     {
-        return $this->permissions()->whereIn('name', $permissions)->exists();
+        return $this->permissions()->whereIn('permissions.name', $permissions)->exists();
     }
 
     /**

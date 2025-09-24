@@ -1,6 +1,6 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     user: Object,
@@ -31,7 +31,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Total de Usuários</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_users }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_users ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Total de Personagens</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_characters }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_characters ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Total de Batalhas</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_battles }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_battles ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Membros da Equipe</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.staff_members }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.staff_members ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Usuários VIP</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.vip_users }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.vip_users ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +96,7 @@ defineProps({
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-600">Ativos Hoje</p>
-                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.active_users_today }}</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.active_users_today ?? 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +116,7 @@ defineProps({
                         <div class="p-6">
                             <div class="space-y-4">
                                 <div
-                                    v-for="user in recent_users"
+                                    v-for="user in (recent_users || [])"
                                     :key="user.id"
                                     class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                                 >
@@ -168,7 +168,7 @@ defineProps({
                         <div class="p-6">
                             <div class="space-y-4">
                                 <div
-                                    v-for="(character, index) in top_characters"
+                                    v-for="(character, index) in (top_characters || [])"
                                     :key="character.id"
                                     class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                                 >
@@ -202,11 +202,11 @@ defineProps({
                         <i class="fas fa-bolt mr-2"></i>
                         Ações Rápidas
                     </h3>
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        <button class="btn-medieval">
-                            <i class="fas fa-users mr-2"></i>
-                            Gerenciar Usuários
-                        </button>
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <Link :href="route('admin.users.index')" class="btn-medieval">
+                                    <i class="fas fa-users mr-2"></i>
+                                    Gerenciar Usuários
+                                </Link>
                         
                         <button class="btn-medieval">
                             <i class="fas fa-user-ninja mr-2"></i>

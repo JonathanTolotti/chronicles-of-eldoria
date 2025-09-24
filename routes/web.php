@@ -171,7 +171,18 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
     
     // Rotas que requerem permissões específicas
     Route::middleware(['permission:users.view'])->group(function () {
-        // Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users');
+        Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('admin.users.create');
+        Route::post('/users', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
+        Route::get('/users/{user:uuid}', [App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
+        Route::get('/users/{user:uuid}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/users/{user:uuid}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
+        
+        // Ações específicas
+        Route::post('/users/{user:uuid}/assign-role', [App\Http\Controllers\Admin\UserController::class, 'assignRole'])->name('admin.users.assign-role');
+        Route::delete('/users/{user:uuid}/roles/{role}', [App\Http\Controllers\Admin\UserController::class, 'removeRole'])->name('admin.users.remove-role');
+        Route::post('/users/{user:uuid}/toggle-vip', [App\Http\Controllers\Admin\UserController::class, 'toggleVip'])->name('admin.users.toggle-vip');
+        Route::post('/users/{user:uuid}/toggle-staff', [App\Http\Controllers\Admin\UserController::class, 'toggleStaff'])->name('admin.users.toggle-staff');
     });
     
     Route::middleware(['permission:characters.view'])->group(function () {

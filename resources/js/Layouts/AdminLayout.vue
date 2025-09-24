@@ -39,8 +39,9 @@ const showingNavigationDropdown = ref(false);
                                 
                                 <!-- Futuras rotas administrativas -->
                                 <NavLink
-                                    href="#"
-                                    class="text-gray-600 hover:text-medieval-bronze font-medium opacity-60"
+                                    :href="route('admin.users.index')"
+                                    :active="route().current('admin.users.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
                                 >
                                     <i class="fas fa-users mr-2"></i>
                                     Usuários
