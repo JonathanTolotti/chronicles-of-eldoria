@@ -9,6 +9,7 @@ use App\Models\BattleInstance;
 use App\Models\Monster;
 use App\Models\Item;
 use App\Models\Equipment;
+use App\Models\ShopItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -33,6 +34,9 @@ class AdminController extends Controller
             'total_items' => Item::count(),
             'items_by_type' => Item::selectRaw('type, COUNT(*) as count')->groupBy('type')->get(),
             'total_equipment' => Equipment::count(),
+            'total_shop_items' => ShopItem::count(),
+            'available_shop_items' => ShopItem::where('is_available', true)->count(),
+            'featured_shop_items' => ShopItem::where('is_featured', true)->count(),
             'staff_members' => User::where('is_staff', true)->count(),
             'vip_users' => User::where('is_vip', true)->count(),
             'active_users_today' => User::whereDate('last_seen_at', today())->count(),

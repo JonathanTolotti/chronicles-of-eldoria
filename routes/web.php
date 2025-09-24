@@ -229,6 +229,21 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
         Route::post('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'update'])->name('admin.equipment.update');
         Route::delete('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'destroy'])->name('admin.equipment.destroy');
     });
+
+    // Gerenciamento da Loja
+    Route::prefix('shop')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ShopController::class, 'index'])->name('admin.shop.index');
+        Route::get('/create', [App\Http\Controllers\Admin\ShopController::class, 'create'])->name('admin.shop.create');
+        Route::post('/', [App\Http\Controllers\Admin\ShopController::class, 'store'])->name('admin.shop.store');
+        Route::get('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'show'])->name('admin.shop.show');
+        Route::get('/{shopItem:uuid}/edit', [App\Http\Controllers\Admin\ShopController::class, 'edit'])->name('admin.shop.edit');
+        Route::post('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'update'])->name('admin.shop.update');
+        Route::delete('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'destroy'])->name('admin.shop.destroy');
+        
+        // Ações específicas
+        Route::post('/{shopItem:uuid}/toggle-availability', [App\Http\Controllers\Admin\ShopController::class, 'toggleAvailability'])->name('admin.shop.toggle-availability');
+        Route::post('/{shopItem:uuid}/toggle-featured', [App\Http\Controllers\Admin\ShopController::class, 'toggleFeatured'])->name('admin.shop.toggle-featured');
+    });
     
     // Rotas que requerem role de admin
     Route::middleware(['role:admin'])->group(function () {

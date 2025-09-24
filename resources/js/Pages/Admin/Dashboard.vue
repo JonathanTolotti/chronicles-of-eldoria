@@ -114,6 +114,45 @@ defineProps({
                             </div>
                         </div>
 
+                        <!-- Total de Itens da Loja -->
+                        <div class="card-medieval p-6 border-l-4 border-green-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-store text-3xl text-green-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total de Itens da Loja</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_shop_items ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Itens Disponíveis na Loja -->
+                        <div class="card-medieval p-6 border-l-4 border-emerald-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-3xl text-emerald-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Itens Disponíveis</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.available_shop_items ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Itens em Destaque -->
+                        <div class="card-medieval p-6 border-l-4 border-yellow-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-star text-3xl text-yellow-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Itens em Destaque</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.featured_shop_items ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Membros da Equipe -->
                         <div class="card-medieval p-6 border-l-4 border-medieval-gold">
                             <div class="flex items-center">
@@ -273,6 +312,11 @@ defineProps({
                         <Link :href="route('admin.equipment.index')" class="btn-medieval">
                             <i class="fas fa-shield-alt mr-2"></i>
                             Gerenciar Equipamentos
+                        </Link>
+                        
+                        <Link :href="route('admin.shop.index')" class="btn-medieval">
+                            <i class="fas fa-store mr-2"></i>
+                            Gerenciar Loja
                         </Link>
                         
                         <button class="btn-medieval">

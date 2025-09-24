@@ -162,7 +162,7 @@ const toggleActive = (monster) => {
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="monster in monsters.data || []" :key="monster.id" class="hover:bg-gray-50">
+                                <tr v-for="monster in monsters.data || []" :key="monster.id" class="hover:bg-amber-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
@@ -252,14 +252,14 @@ const toggleActive = (monster) => {
                                 <Link
                                     v-if="monsters.prev_page_url"
                                     :href="monsters.prev_page_url"
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-amber-50"
                                 >
                                     Anterior
                                 </Link>
                                 <Link
                                     v-if="monsters.next_page_url"
                                     :href="monsters.next_page_url"
-                                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-amber-50"
                                 >
                                     Próximo
                                 </Link>
@@ -286,7 +286,7 @@ const toggleActive = (monster) => {
                                                 :class="[
                                                     link.active 
                                                         ? 'z-10 bg-medieval-bronze border-medieval-bronze text-white' 
-                                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                                                        : 'bg-white border-gray-300 text-gray-500 hover:bg-amber-50',
                                                     'relative inline-flex items-center px-4 py-2 border text-sm font-medium'
                                                 ]"
                                             />

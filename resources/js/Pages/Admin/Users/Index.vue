@@ -182,7 +182,7 @@ function toggleSort(field) {
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" @click="toggleSort('name')">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-amber-100" @click="toggleSort('name')">
                                         <i class="fas fa-user mr-1"></i>
                                         Usuário
                                         <i v-if="sortBy === 'name'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="ml-1"></i>
@@ -195,7 +195,7 @@ function toggleSort(field) {
                                         <i class="fas fa-info-circle mr-1"></i>
                                         Status
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" @click="toggleSort('created_at')">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-amber-100" @click="toggleSort('created_at')">
                                         <i class="fas fa-calendar mr-1"></i>
                                         Criado em
                                         <i v-if="sortBy === 'created_at'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="ml-1"></i>
@@ -207,7 +207,7 @@ function toggleSort(field) {
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr v-for="user in (users.data || [])" :key="user.id" class="hover:bg-gray-50">
+                                <tr v-for="user in (users.data || [])" :key="user.id" class="hover:bg-amber-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
@@ -303,7 +303,7 @@ function toggleSort(field) {
                                         'px-3 py-2 text-sm font-medium rounded-md',
                                         link.active
                                             ? 'bg-medieval-bronze text-white'
-                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                                            : 'text-gray-500 hover:text-gray-700 hover:bg-amber-100'
                                     ]"
                                 />
                             </div>

@@ -138,73 +138,98 @@ const getTypeIcon = (type) => {
 
                 <!-- Lista de Equipamentos -->
                 <div class="card-medieval">
-                    <div class="p-6">
-                        <div v-if="equipment.data && equipment.data.length > 0" class="space-y-4">
-                            <div
-                                v-for="equip in equipment.data"
-                                :key="equip.id"
-                                class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
-                            >
-                                <div class="flex items-center space-x-4">
-                                    <!-- Imagem -->
-                                    <div class="flex-shrink-0">
-                                        <div v-if="equip.image" class="h-16 w-16 rounded-full overflow-hidden">
-                                            <img :src="equip.image" :alt="equip.name" class="h-full w-full object-cover" />
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-amber-100" @click="toggleSort('name')">
+                                        <i class="fas fa-shield-alt mr-1"></i>
+                                        Equipamento
+                                        <i v-if="sortBy === 'name'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="ml-1"></i>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-amber-100" @click="toggleSort('type')">
+                                        <i class="fas fa-tag mr-1"></i>
+                                        Tipo
+                                        <i v-if="sortBy === 'type'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="ml-1"></i>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-chart-line mr-1"></i>
+                                        Bônus
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <i class="fas fa-cogs mr-1"></i>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr v-for="equip in equipment.data || []" :key="equip.id" class="hover:bg-amber-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div v-if="equip.image" class="h-10 w-10 rounded-full overflow-hidden">
+                                                    <img :src="equip.image" :alt="equip.name" class="w-full h-full object-cover" />
+                                                </div>
+                                                <div v-else class="h-10 w-10 rounded-full bg-medieval-bronze flex items-center justify-center">
+                                                    <i :class="getTypeIcon(equip.type)" class="text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ equip.name }}</div>
+                                                <div class="text-sm text-gray-500">{{ getTypeLabel(equip.type) }}</div>
+                                            </div>
                                         </div>
-                                        <div v-else class="h-16 w-16 rounded-full bg-medieval-bronze flex items-center justify-center">
-                                            <i :class="getTypeIcon(equip.type)" class="text-white text-xl"></i>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                            {{ getTypeLabel(equip.type) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-xs text-gray-500">
+                                            <div><i class="fas fa-fist-raised mr-1"></i> Força: {{ equip.strength_bonus }}</div>
+                                            <div><i class="fas fa-running mr-1"></i> Destreza: {{ equip.dexterity_bonus }}</div>
+                                            <div><i class="fas fa-heart mr-1"></i> HP: {{ equip.hp_bonus }}</div>
+                                            <div><i class="fas fa-magic mr-1"></i> MP: {{ equip.mp_bonus }}</div>
                                         </div>
-                                    </div>
-
-                                    <!-- Informações -->
-                                    <div class="flex-1">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center space-x-2">
-                                            <h3 class="text-lg font-semibold text-gray-900">{{ equip.name }}</h3>
-                                            <span class="text-sm text-gray-600">{{ getTypeLabel(equip.type) }}</span>
+                                            <Link
+                                                :href="route('admin.equipment.show', { equipment: equip.uuid })"
+                                                class="text-medieval-bronze hover:text-medieval-gold"
+                                                title="Ver detalhes"
+                                            >
+                                                <i class="fas fa-eye"></i>
+                                            </Link>
+                                            <Link
+                                                :href="route('admin.equipment.edit', { equipment: equip.uuid })"
+                                                class="text-blue-600 hover:text-blue-900"
+                                                title="Editar"
+                                            >
+                                                <i class="fas fa-edit"></i>
+                                            </Link>
                                         </div>
-                                        <p v-if="equip.description" class="text-sm text-gray-500 mt-1">
-                                            {{ equip.description.substring(0, 100) }}{{ equip.description.length > 100 ? '...' : '' }}
-                                        </p>
-                                        <div class="mt-2 flex items-center space-x-4 text-xs text-gray-500">
-                                            <span><i class="fas fa-fist-raised mr-1"></i> Força: {{ equip.strength_bonus }}</span>
-                                            <span><i class="fas fa-running mr-1"></i> Destreza: {{ equip.dexterity_bonus }}</span>
-                                            <span><i class="fas fa-heart mr-1"></i> HP: {{ equip.hp_bonus }}</span>
-                                            <span><i class="fas fa-magic mr-1"></i> MP: {{ equip.mp_bonus }}</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                                <!-- Ações -->
-                                <div class="flex space-x-2">
-                                    <Link
-                                        :href="route('admin.equipment.show', { equipment: equip.uuid })"
-                                        class="text-medieval-bronze hover:text-medieval-gold"
-                                    >
-                                        <i class="fas fa-eye"></i>
-                                    </Link>
-                                    <Link
-                                        :href="route('admin.equipment.edit', { equipment: equip.uuid })"
-                                        class="text-blue-600 hover:text-blue-900"
-                                    >
-                                        <i class="fas fa-edit"></i>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Estado vazio -->
-                        <div v-else class="text-center py-12">
-                            <i class="fas fa-shield-alt text-gray-400 text-6xl mb-4"></i>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum equipamento encontrado</h3>
-                            <p class="text-gray-500 mb-4">Comece criando seu primeiro equipamento.</p>
-                            <Link
-                                :href="route('admin.equipment.create')"
-                                class="btn-medieval bg-medieval-gold hover:bg-medieval-bronze text-white"
-                            >
-                                <i class="fas fa-plus mr-2"></i>
-                                Criar Equipamento
-                            </Link>
-                        </div>
+                <!-- Estado vazio -->
+                <div v-if="!equipment.data || equipment.data.length === 0" class="card-medieval">
+                    <div class="text-center py-12">
+                        <i class="fas fa-shield-alt text-gray-400 text-6xl mb-4"></i>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum equipamento encontrado</h3>
+                        <p class="text-gray-500 mb-4">Comece criando seu primeiro equipamento.</p>
+                        <Link
+                            :href="route('admin.equipment.create')"
+                            class="btn-medieval bg-medieval-gold hover:bg-medieval-bronze text-white"
+                        >
+                            <i class="fas fa-plus mr-2"></i>
+                            Criar Equipamento
+                        </Link>
                     </div>
                 </div>
 
@@ -221,7 +246,7 @@ const getTypeIcon = (type) => {
                                     'px-3 py-2 text-sm border rounded-md',
                                     link.active
                                         ? 'bg-medieval-bronze text-white border-medieval-bronze'
-                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50',
+                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-amber-50',
                                     !link.url ? 'opacity-50 cursor-not-allowed' : 'hover:border-medieval-bronze'
                                 ]"
                             />

@@ -69,6 +69,15 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                                 
                                 <NavLink
+                                    :href="route('admin.shop.index')"
+                                    :active="route().current('admin.shop.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
+                                >
+                                    <i class="fas fa-store mr-2"></i>
+                                    Loja
+                                </NavLink>
+                                
+                                <NavLink
                                     href="#"
                                     class="text-gray-600 hover:text-medieval-bronze font-medium opacity-60"
                                 >
