@@ -207,6 +207,17 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
         Route::post('/{monster:uuid}/toggle-active', [App\Http\Controllers\Admin\MonsterController::class, 'toggleActive'])->name('admin.monsters.toggle-active');
         Route::post('/{monster:uuid}/reset-hp', [App\Http\Controllers\Admin\MonsterController::class, 'resetHp'])->name('admin.monsters.reset-hp');
     });
+
+    // Gerenciamento de Itens
+    Route::prefix('items')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\ItemController::class, 'index'])->name('admin.items.index');
+        Route::get('/create', [App\Http\Controllers\Admin\ItemController::class, 'create'])->name('admin.items.create');
+        Route::post('/', [App\Http\Controllers\Admin\ItemController::class, 'store'])->name('admin.items.store');
+        Route::get('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'show'])->name('admin.items.show');
+        Route::get('/{item:uuid}/edit', [App\Http\Controllers\Admin\ItemController::class, 'edit'])->name('admin.items.edit');
+        Route::post('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'update'])->name('admin.items.update');
+        Route::delete('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'destroy'])->name('admin.items.destroy');
+    });
     
     // Rotas que requerem role de admin
     Route::middleware(['role:admin'])->group(function () {

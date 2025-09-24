@@ -88,6 +88,19 @@ defineProps({
                             </div>
                         </div>
 
+                        <!-- Total de Itens -->
+                        <div class="card-medieval p-6 border-l-4 border-purple-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-gem text-3xl text-purple-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total de Itens</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_items ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Membros da Equipe -->
                         <div class="card-medieval p-6 border-l-4 border-medieval-gold">
                             <div class="flex items-center">
@@ -237,6 +250,11 @@ defineProps({
                         <Link :href="route('admin.monsters.index')" class="btn-medieval">
                             <i class="fas fa-dragon mr-2"></i>
                             Gerenciar Monstros
+                        </Link>
+                        
+                        <Link :href="route('admin.items.index')" class="btn-medieval">
+                            <i class="fas fa-gem mr-2"></i>
+                            Gerenciar Itens
                         </Link>
                         
                         <button class="btn-medieval">
