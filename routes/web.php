@@ -164,4 +164,29 @@ Route::middleware('auth')->group(function () {
     // Route::get('/game/guild', [GuildController::class, 'index'])->name('game.guild');
 });
 
+// ROTAS DO PAINEL ADMINISTRATIVO - Apenas para staff com roles
+Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
+    // Dashboard principal - qualquer staff pode acessar
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Rotas que requerem permissões específicas
+    Route::middleware(['permission:users.view'])->group(function () {
+        // Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users');
+    });
+    
+    Route::middleware(['permission:characters.view'])->group(function () {
+        // Route::get('/characters', [AdminCharacterController::class, 'index'])->name('admin.characters');
+    });
+    
+    Route::middleware(['permission:battles.view'])->group(function () {
+        // Route::get('/battles', [AdminBattleController::class, 'index'])->name('admin.battles');
+    });
+    
+    // Rotas que requerem role de admin
+    Route::middleware(['role:admin'])->group(function () {
+        // Route::get('/system/settings', [AdminSystemController::class, 'settings'])->name('admin.system.settings');
+        // Route::get('/roles', [AdminRoleController::class, 'index'])->name('admin.roles');
+    });
+});
+
 require __DIR__.'/auth.php';

@@ -24,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'email.verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'maintenance' => \App\Http\Middleware\MaintenanceMode::class,
+            'staff' => \App\Http\Middleware\EnsureUserIsStaff::class,
+            'role' => \App\Http\Middleware\EnsureUserHasRole::class,
+            'permission' => \App\Http\Middleware\EnsureUserHasPermission::class,
         ]);
 
         // Aplicar middleware global de verificação de email

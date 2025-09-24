@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\ResetPasswordMedieval;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -92,6 +93,96 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->is_staff;
     }
 
+    /**
+     * Roles do usuário
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user')
+            ->withPivot(['assigned_at', 'assigned_by'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Permissões do usuário (através dos roles)
+     */
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'role_user', 'user_id', 'role_id')
+            ->join('permission_role', 'roles.id', '=', 'permission_role.role_id')
+            ->join('permissions', 'permission_role.permission_id', '=', 'permissions.id')
+            ->select('permissions.*')
+            ->distinct();
+    }
+
+    /**
+     * Verifica se o usuário tem um role específico
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    /**
+     * Verifica se o usuário tem uma permissão específica
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()->where('name', $permission)->exists();
+    }
+
+    /**
+     * Verifica se o usuário tem qualquer um dos roles especificados
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    /**
+     * Verifica se o usuário tem qualquer uma das permissões especificadas
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        return $this->permissions()->whereIn('name', $permissions)->exists();
+    }
+
+    /**
+     * Atribui um role ao usuário
+     */
+    public function assignRole(Role $role, ?User $assignedBy = null): void
+    {
+        $this->roles()->syncWithoutDetaching([
+            $role->id => [
+                'assigned_at' => now(),
+                'assigned_by' => $assignedBy?->id,
+            ]
+        ]);
+    }
+
+    /**
+     * Remove um role do usuário
+     */
+    public function removeRole(Role $role): void
+    {
+        $this->roles()->detach($role->id);
+    }
+
+    /**
+     * Verifica se o usuário é administrador
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Verifica se o usuário é moderador ou superior
+     */
+    public function isModerator(): bool
+    {
+        return $this->hasAnyRole(['admin', 'moderator']);
+    }
 
     /**
      * Send the password reset notification.
