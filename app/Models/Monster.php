@@ -20,9 +20,9 @@ class Monster extends Model
         'gold_reward',
         'exp_reward',
         'stamina_cost',
-        'image',
         'image_path',
         'is_active',
+        'uuid',
     ];
 
     protected function casts(): array

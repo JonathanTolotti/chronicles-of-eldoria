@@ -193,6 +193,21 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
         // Route::get('/battles', [AdminBattleController::class, 'index'])->name('admin.battles');
     });
     
+    // Rotas de monstros - qualquer staff pode gerenciar monstros
+    Route::prefix('monsters')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\MonsterController::class, 'index'])->name('admin.monsters.index');
+        Route::get('/create', [App\Http\Controllers\Admin\MonsterController::class, 'create'])->name('admin.monsters.create');
+        Route::post('/', [App\Http\Controllers\Admin\MonsterController::class, 'store'])->name('admin.monsters.store');
+        Route::get('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'show'])->name('admin.monsters.show');
+        Route::get('/{monster:uuid}/edit', [App\Http\Controllers\Admin\MonsterController::class, 'edit'])->name('admin.monsters.edit');
+        Route::post('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'update'])->name('admin.monsters.update');
+        Route::delete('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'destroy'])->name('admin.monsters.destroy');
+        
+        // Ações específicas
+        Route::post('/{monster:uuid}/toggle-active', [App\Http\Controllers\Admin\MonsterController::class, 'toggleActive'])->name('admin.monsters.toggle-active');
+        Route::post('/{monster:uuid}/reset-hp', [App\Http\Controllers\Admin\MonsterController::class, 'resetHp'])->name('admin.monsters.reset-hp');
+    });
+    
     // Rotas que requerem role de admin
     Route::middleware(['role:admin'])->group(function () {
         // Route::get('/system/settings', [AdminSystemController::class, 'settings'])->name('admin.system.settings');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Character;
 use App\Models\BattleInstance;
+use App\Models\Monster;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,6 +26,8 @@ class AdminController extends Controller
             'total_users' => User::count(),
             'total_characters' => Character::count(),
             'total_battles' => BattleInstance::count(),
+            'total_monsters' => Monster::count(),
+            'active_monsters' => Monster::where('is_active', true)->count(),
             'staff_members' => User::where('is_staff', true)->count(),
             'vip_users' => User::where('is_vip', true)->count(),
             'active_users_today' => User::whereDate('last_seen_at', today())->count(),

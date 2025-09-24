@@ -48,6 +48,15 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                                 
                                 <NavLink
+                                    :href="route('admin.monsters.index')"
+                                    :active="route().current('admin.monsters.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
+                                >
+                                    <i class="fas fa-dragon mr-2"></i>
+                                    Monstros
+                                </NavLink>
+                                
+                                <NavLink
                                     href="#"
                                     class="text-gray-600 hover:text-medieval-bronze font-medium opacity-60"
                                 >
