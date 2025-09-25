@@ -153,6 +153,58 @@ defineProps({
                             </div>
                         </div>
 
+                        <!-- Total de Roles -->
+                        <div class="card-medieval p-6 border-l-4 border-purple-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-user-shield text-3xl text-purple-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total de Roles</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_roles ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Roles Ativos -->
+                        <div class="card-medieval p-6 border-l-4 border-indigo-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-user-check text-3xl text-indigo-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Roles Ativos</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.active_roles ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total de Permissões -->
+                        <div class="card-medieval p-6 border-l-4 border-pink-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-key text-3xl text-pink-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total de Permissões</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.total_permissions ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Permissões Ativas -->
+                        <div class="card-medieval p-6 border-l-4 border-rose-600">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-unlock text-3xl text-rose-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Permissões Ativas</p>
+                                    <p class="text-2xl font-bold text-medieval-bronze">{{ stats.active_permissions ?? 0 }}</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Membros da Equipe -->
                         <div class="card-medieval p-6 border-l-4 border-medieval-gold">
                             <div class="flex items-center">
@@ -317,6 +369,16 @@ defineProps({
                         <Link :href="route('admin.shop.index')" class="btn-medieval">
                             <i class="fas fa-store mr-2"></i>
                             Gerenciar Loja
+                        </Link>
+                        
+                        <Link :href="route('admin.roles.index')" class="btn-medieval">
+                            <i class="fas fa-user-shield mr-2"></i>
+                            Gerenciar Roles
+                        </Link>
+                        
+                        <Link :href="route('admin.permissions.index')" class="btn-medieval">
+                            <i class="fas fa-key mr-2"></i>
+                            Gerenciar Permissões
                         </Link>
                         
                         <button class="btn-medieval">

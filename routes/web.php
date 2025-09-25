@@ -193,56 +193,96 @@ Route::prefix('admin')->middleware(['auth', 'staff'])->group(function () {
         // Route::get('/battles', [AdminBattleController::class, 'index'])->name('admin.battles');
     });
     
-    // Rotas de monstros - qualquer staff pode gerenciar monstros
-    Route::prefix('monsters')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\MonsterController::class, 'index'])->name('admin.monsters.index');
-        Route::get('/create', [App\Http\Controllers\Admin\MonsterController::class, 'create'])->name('admin.monsters.create');
-        Route::post('/', [App\Http\Controllers\Admin\MonsterController::class, 'store'])->name('admin.monsters.store');
-        Route::get('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'show'])->name('admin.monsters.show');
-        Route::get('/{monster:uuid}/edit', [App\Http\Controllers\Admin\MonsterController::class, 'edit'])->name('admin.monsters.edit');
-        Route::post('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'update'])->name('admin.monsters.update');
-        Route::delete('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'destroy'])->name('admin.monsters.destroy');
-        
-        // Ações específicas
-        Route::post('/{monster:uuid}/toggle-active', [App\Http\Controllers\Admin\MonsterController::class, 'toggleActive'])->name('admin.monsters.toggle-active');
-        Route::post('/{monster:uuid}/reset-hp', [App\Http\Controllers\Admin\MonsterController::class, 'resetHp'])->name('admin.monsters.reset-hp');
+    // Rotas de monstros - requer permissão monsters.view
+    Route::middleware(['permission:monsters.view'])->group(function () {
+        Route::prefix('monsters')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\MonsterController::class, 'index'])->name('admin.monsters.index');
+            Route::get('/create', [App\Http\Controllers\Admin\MonsterController::class, 'create'])->name('admin.monsters.create');
+            Route::post('/', [App\Http\Controllers\Admin\MonsterController::class, 'store'])->name('admin.monsters.store');
+            Route::get('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'show'])->name('admin.monsters.show');
+            Route::get('/{monster:uuid}/edit', [App\Http\Controllers\Admin\MonsterController::class, 'edit'])->name('admin.monsters.edit');
+            Route::post('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'update'])->name('admin.monsters.update');
+            Route::delete('/{monster:uuid}', [App\Http\Controllers\Admin\MonsterController::class, 'destroy'])->name('admin.monsters.destroy');
+            
+            // Ações específicas
+            Route::post('/{monster:uuid}/toggle-active', [App\Http\Controllers\Admin\MonsterController::class, 'toggleActive'])->name('admin.monsters.toggle-active');
+            Route::post('/{monster:uuid}/reset-hp', [App\Http\Controllers\Admin\MonsterController::class, 'resetHp'])->name('admin.monsters.reset-hp');
+        });
     });
 
-    // Gerenciamento de Itens
-    Route::prefix('items')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\ItemController::class, 'index'])->name('admin.items.index');
-        Route::get('/create', [App\Http\Controllers\Admin\ItemController::class, 'create'])->name('admin.items.create');
-        Route::post('/', [App\Http\Controllers\Admin\ItemController::class, 'store'])->name('admin.items.store');
-        Route::get('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'show'])->name('admin.items.show');
-        Route::get('/{item:uuid}/edit', [App\Http\Controllers\Admin\ItemController::class, 'edit'])->name('admin.items.edit');
-        Route::post('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'update'])->name('admin.items.update');
-        Route::delete('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'destroy'])->name('admin.items.destroy');
+    // Gerenciamento de Itens - requer permissão items.view
+    Route::middleware(['permission:items.view'])->group(function () {
+        Route::prefix('items')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\ItemController::class, 'index'])->name('admin.items.index');
+            Route::get('/create', [App\Http\Controllers\Admin\ItemController::class, 'create'])->name('admin.items.create');
+            Route::post('/', [App\Http\Controllers\Admin\ItemController::class, 'store'])->name('admin.items.store');
+            Route::get('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'show'])->name('admin.items.show');
+            Route::get('/{item:uuid}/edit', [App\Http\Controllers\Admin\ItemController::class, 'edit'])->name('admin.items.edit');
+            Route::post('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'update'])->name('admin.items.update');
+            Route::delete('/{item:uuid}', [App\Http\Controllers\Admin\ItemController::class, 'destroy'])->name('admin.items.destroy');
+        });
     });
 
-    // Gerenciamento de Equipamentos
-    Route::prefix('equipment')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment.index');
-        Route::get('/create', [App\Http\Controllers\Admin\EquipmentController::class, 'create'])->name('admin.equipment.create');
-        Route::post('/', [App\Http\Controllers\Admin\EquipmentController::class, 'store'])->name('admin.equipment.store');
-        Route::get('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'show'])->name('admin.equipment.show');
-        Route::get('/{equipment:uuid}/edit', [App\Http\Controllers\Admin\EquipmentController::class, 'edit'])->name('admin.equipment.edit');
-        Route::post('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'update'])->name('admin.equipment.update');
-        Route::delete('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'destroy'])->name('admin.equipment.destroy');
+    // Gerenciamento de Equipamentos - requer permissão equipment.view
+    Route::middleware(['permission:equipment.view'])->group(function () {
+        Route::prefix('equipment')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\EquipmentController::class, 'index'])->name('admin.equipment.index');
+            Route::get('/create', [App\Http\Controllers\Admin\EquipmentController::class, 'create'])->name('admin.equipment.create');
+            Route::post('/', [App\Http\Controllers\Admin\EquipmentController::class, 'store'])->name('admin.equipment.store');
+            Route::get('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'show'])->name('admin.equipment.show');
+            Route::get('/{equipment:uuid}/edit', [App\Http\Controllers\Admin\EquipmentController::class, 'edit'])->name('admin.equipment.edit');
+            Route::post('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'update'])->name('admin.equipment.update');
+            Route::delete('/{equipment:uuid}', [App\Http\Controllers\Admin\EquipmentController::class, 'destroy'])->name('admin.equipment.destroy');
+        });
     });
 
-    // Gerenciamento da Loja
-    Route::prefix('shop')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\ShopController::class, 'index'])->name('admin.shop.index');
-        Route::get('/create', [App\Http\Controllers\Admin\ShopController::class, 'create'])->name('admin.shop.create');
-        Route::post('/', [App\Http\Controllers\Admin\ShopController::class, 'store'])->name('admin.shop.store');
-        Route::get('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'show'])->name('admin.shop.show');
-        Route::get('/{shopItem:uuid}/edit', [App\Http\Controllers\Admin\ShopController::class, 'edit'])->name('admin.shop.edit');
-        Route::post('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'update'])->name('admin.shop.update');
-        Route::delete('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'destroy'])->name('admin.shop.destroy');
-        
-        // Ações específicas
-        Route::post('/{shopItem:uuid}/toggle-availability', [App\Http\Controllers\Admin\ShopController::class, 'toggleAvailability'])->name('admin.shop.toggle-availability');
-        Route::post('/{shopItem:uuid}/toggle-featured', [App\Http\Controllers\Admin\ShopController::class, 'toggleFeatured'])->name('admin.shop.toggle-featured');
+    // Gerenciamento da Loja - requer permissão shop.view
+    Route::middleware(['permission:shop.view'])->group(function () {
+        Route::prefix('shop')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\ShopController::class, 'index'])->name('admin.shop.index');
+            Route::get('/create', [App\Http\Controllers\Admin\ShopController::class, 'create'])->name('admin.shop.create');
+            Route::post('/', [App\Http\Controllers\Admin\ShopController::class, 'store'])->name('admin.shop.store');
+            Route::get('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'show'])->name('admin.shop.show');
+            Route::get('/{shopItem:uuid}/edit', [App\Http\Controllers\Admin\ShopController::class, 'edit'])->name('admin.shop.edit');
+            Route::post('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'update'])->name('admin.shop.update');
+            Route::delete('/{shopItem:uuid}', [App\Http\Controllers\Admin\ShopController::class, 'destroy'])->name('admin.shop.destroy');
+            
+            // Ações específicas
+            Route::post('/{shopItem:uuid}/toggle-availability', [App\Http\Controllers\Admin\ShopController::class, 'toggleAvailability'])->name('admin.shop.toggle-availability');
+            Route::post('/{shopItem:uuid}/toggle-featured', [App\Http\Controllers\Admin\ShopController::class, 'toggleFeatured'])->name('admin.shop.toggle-featured');
+        });
+    });
+
+    // Gerenciamento de Roles - requer permissão roles.view
+    Route::middleware(['permission:roles.view'])->group(function () {
+        Route::prefix('roles')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('admin.roles.index');
+            Route::get('/create', [App\Http\Controllers\Admin\RoleController::class, 'create'])->name('admin.roles.create');
+            Route::post('/', [App\Http\Controllers\Admin\RoleController::class, 'store'])->name('admin.roles.store');
+            Route::get('/{role}', [App\Http\Controllers\Admin\RoleController::class, 'show'])->name('admin.roles.show');
+            Route::get('/{role}/edit', [App\Http\Controllers\Admin\RoleController::class, 'edit'])->name('admin.roles.edit');
+            Route::put('/{role}', [App\Http\Controllers\Admin\RoleController::class, 'update'])->name('admin.roles.update');
+            Route::delete('/{role}', [App\Http\Controllers\Admin\RoleController::class, 'destroy'])->name('admin.roles.destroy');
+            
+            // Ações específicas
+            Route::post('/{role}/toggle-active', [App\Http\Controllers\Admin\RoleController::class, 'toggleActive'])->name('admin.roles.toggle-active');
+        });
+    });
+
+    // Gerenciamento de Permissões - requer permissão permissions.view
+    Route::middleware(['permission:permissions.manage'])->group(function () {
+        Route::prefix('permissions')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PermissionController::class, 'index'])->name('admin.permissions.index');
+            Route::get('/create', [App\Http\Controllers\Admin\PermissionController::class, 'create'])->name('admin.permissions.create');
+            Route::post('/', [App\Http\Controllers\Admin\PermissionController::class, 'store'])->name('admin.permissions.store');
+            Route::get('/{permission}', [App\Http\Controllers\Admin\PermissionController::class, 'show'])->name('admin.permissions.show');
+            Route::get('/{permission}/edit', [App\Http\Controllers\Admin\PermissionController::class, 'edit'])->name('admin.permissions.edit');
+            Route::put('/{permission}', [App\Http\Controllers\Admin\PermissionController::class, 'update'])->name('admin.permissions.update');
+            Route::delete('/{permission}', [App\Http\Controllers\Admin\PermissionController::class, 'destroy'])->name('admin.permissions.destroy');
+            
+            // Ações específicas
+            Route::post('/{permission}/toggle-active', [App\Http\Controllers\Admin\PermissionController::class, 'toggleActive'])->name('admin.permissions.toggle-active');
+        });
     });
     
     // Rotas que requerem role de admin

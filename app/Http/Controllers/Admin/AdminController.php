@@ -10,6 +10,8 @@ use App\Models\Monster;
 use App\Models\Item;
 use App\Models\Equipment;
 use App\Models\ShopItem;
+use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -37,6 +39,10 @@ class AdminController extends Controller
             'total_shop_items' => ShopItem::count(),
             'available_shop_items' => ShopItem::where('is_available', true)->count(),
             'featured_shop_items' => ShopItem::where('is_featured', true)->count(),
+            'total_roles' => Role::count(),
+            'active_roles' => Role::where('is_active', true)->count(),
+            'total_permissions' => Permission::count(),
+            'active_permissions' => Permission::where('is_active', true)->count(),
             'staff_members' => User::where('is_staff', true)->count(),
             'vip_users' => User::where('is_vip', true)->count(),
             'active_users_today' => User::whereDate('last_seen_at', today())->count(),

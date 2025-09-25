@@ -78,6 +78,24 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                                 
                                 <NavLink
+                                    :href="route('admin.roles.index')"
+                                    :active="route().current('admin.roles.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
+                                >
+                                    <i class="fas fa-user-shield mr-2"></i>
+                                    Roles
+                                </NavLink>
+                                
+                                <NavLink
+                                    :href="route('admin.permissions.index')"
+                                    :active="route().current('admin.permissions.*')"
+                                    class="text-gray-600 hover:text-medieval-bronze font-medium"
+                                >
+                                    <i class="fas fa-key mr-2"></i>
+                                    Permissões
+                                </NavLink>
+                                
+                                <NavLink
                                     href="#"
                                     class="text-gray-600 hover:text-medieval-bronze font-medium opacity-60"
                                 >
