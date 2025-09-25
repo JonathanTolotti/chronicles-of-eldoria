@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::table('monsters', function (Blueprint $table) {
+            $table->uuid('uuid')->nullable()->after('id');
+        });
+
         // Verificar se a coluna uuid existe e se tem valores vazios
         $hasEmptyUuids = DB::table('monsters')->whereNull('uuid')->orWhere('uuid', '')->exists();
         
